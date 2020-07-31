@@ -1,30 +1,32 @@
-﻿# include "Game.hpp"
+# include "Game.hpp"
 
 Game::Game(const InitData& init)
-    : IScene(init) {
+: IScene(init) {
     // 塔読み込み
     for (int i = 0; i < TW_NUM; i++) {
         tower[i] = Texture(U"tower" + Format(i + 1) + U".png");
     }
     // プレイヤー初期化
     playerInit();
-
+    
     // 足場の初期化
     footInit();
 }
 
 
 void Game::update() {
-    towerUpdate();
     playerUpdate();
+    towerUpdate();
     footUpdate();
 }
 
 
 void Game::draw() const {
+    
+    footDrawBefore();
     towerDraw();
-    playerDraw();
     footDraw();
+    playerDraw();
 }
 
 
@@ -32,14 +34,14 @@ void Game::towerUpdate() {
     // 塔の描画位置Yのずれを計算
     // ずれを二段分以下に抑える
     towerPosY = int(player.posY) % 80;
-
+    
     // 描画する当の種類を選択
     if (KeyRight.pressed()) towerSelect += 0.02;
     if (KeyLeft.pressed()) towerSelect -= 0.02;
-
+    
     if (towerSelect < 0.0)towerSelect = 0.6;
     if (towerSelect > 0.6)towerSelect = 0.0;
-
+    
     if (towerSelect > 0.5) { tower1 = tower[0]; tower2 = tower[3]; }
     else if (towerSelect > 0.4) { tower1 = tower[1]; tower2 = tower[4]; }
     else if (towerSelect > 0.3) { tower1 = tower[2]; tower2 = tower[5]; }
@@ -65,18 +67,18 @@ void Game::playerInit() {
 
 void Game::playerUpdate() {
     player.speedY -= player.accY;
-
+    
     // ジャンプ
     if (KeySpace.down()) {
         player.speedY = 10;
     }
-
+    
     player.speedY *= 0.99;
-
+    
     //---------------
     // ToDo当たり判定？
     //---------------
-
+    
     player.posY -= player.speedY;
 }
 
@@ -91,8 +93,8 @@ void Game::footInit() {
         footTextures[i] = Texture(Image(U"Tower" + Format(i + 1) + U".png").scale(FT_TEX_WIDTH, FT_TEX_HEIGHT));
     }
     for (int i = 0; i < FT_NUM; i++) {
-        foots[i].dirR = Random<double>(0, Math::TwoPi);
-        foots[i].dirL = foots[i].dirR + 1;
+        foots[i].dirL = Random<double>(0, Math::TwoPi);
+        foots[i].dirR = foots[i].dirL + 1;
         foots[i].posY = i * 100;
         foots[i].drawPosY = foots[i].posY;
     }
@@ -101,36 +103,75 @@ void Game::footInit() {
 void Game::footUpdate() {
     // 回転
     for(int i = 0; i < FT_NUM; i++) {
-       foots[i].dirR = rotate(foots[i].dirR);  
-       foots[i].dirL = rotate(foots[i].dirL);
+        foots[i].dirR = rotate(foots[i].dirR);
+        foots[i].dirL = rotate(foots[i].dirL);
         
-       foots[i].posRootXL = calcPos(foots[i].dirL, FT_ROOT_R);
-       foots[i].posRootXR = calcPos(foots[i].dirR, FT_ROOT_R);
-       foots[i].posXL = calcPos(foots[i].dirL, FT_R);
-       foots[i].posXR = calcPos(foots[i].dirR, FT_R);
+        foots[i].posRootXL = calcPos(foots[i].dirL, FT_ROOT_R);
+        foots[i].posRootXR = calcPos(foots[i].dirR, FT_ROOT_R);
+        foots[i].posXL = calcPos(foots[i].dirL, FT_R);
+        foots[i].posXR = calcPos(foots[i].dirR, FT_R);
+        foots[i].isFrontR = isFront(foots[i].dirR);
+        foots[i].isFrontL = isFront(foots[i].dirL);
+        foots[i].drawPosY = foots[i].posY - player.posY;
+        if(foots[i].drawPosY > 800){
+            foots[i].posY -= 100 * FT_NUM;
+            foots[i].dirL = Random<double>(0, Math::TwoPi);
+            foots[i].dirR = foots[i].dirL + 1;
+        }
+    }
+}
+
+void Game::footDrawBefore() const {
+    for(int i = 0; i< FT_NUM; i++){
+        // 左右の壁の描画
+        if(!foots[i].isFrontL) {
+            drawBox(foots[i].posRootXL, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Palette::Red);
+        }
+        if(!foots[i].isFrontR) {
+            drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(Palette::Blue);
+        }
     }
 }
 
 void Game::footDraw() const {
     for(int i = 0; i < FT_NUM; i++) {
-        // 左の壁
-        if(Math::Pi <= foots[i].dirL && foots[i].dirL <= Math::TwoPi) {
-             
+        // 左右の壁の描画
+        if(foots[i].isFrontL) {
+            drawBox(foots[i].posRootXL, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Palette::Red);
         }
+        if(foots[i].isFrontR) {
+            drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(Palette::Blue);
+        }
+        
+        // 足場のまるい壁
+        if(foots[i].isFrontL && foots[i].isFrontR){
+            drawBox(foots[i].posXR, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Palette::Orange);
+        }else if(foots[i].isFrontR && !foots[i].isFrontL){
+            drawBox(TW_CENTER_X - FT_R, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(Palette::Orange);
+        }else if(!foots[i].isFrontR && foots[i].isFrontL){
+            drawBox(TW_CENTER_X + FT_R, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Palette::Orange);
+        }
+        
     }
 }
 
 
-double Game::rotate(double arg) {
-    if(KeyRight.pressed()) arg += 0.05;
-    if(KeyLeft.pressed()) arg -= 0.05;
 
+double Game::rotate(double arg) {
+    if(KeyRight.pressed()) arg -= 0.05;
+    if(KeyLeft.pressed()) arg += 0.05;
+    
     if(arg < 0) arg += Math::TwoPi;
     if(arg > Math::TwoPi) arg -= Math::TwoPi;
-
+    
     return arg;
 }
 
 double Game::calcPos(double arg, double r) {
-    return TW_CENTER_X + r * cos(arg); 
+    return TW_CENTER_X + r * cos(arg);
+}
+
+bool Game::isFront(double arg) {
+    if(Math::Pi <= arg && arg <= Math::TwoPi) return true;
+    else return false;
 }

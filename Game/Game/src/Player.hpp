@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 struct Player {
     int width = 50;     // 横幅
