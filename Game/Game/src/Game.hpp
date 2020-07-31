@@ -1,32 +1,30 @@
-﻿
-# pragma once
-# include "Common.hpp"
+﻿# pragma once
+#include "Common.hpp"
+#include "Player.hpp"
+#include "Foot.hpp"
+
+constexpr int TW_NUM = 6;		// 塔の段の種類数
+constexpr int TW_CENTER_X = 350;	// 塔の描画中心座標X
+constexpr int TW_WIDTH = 500;	// 塔の段の横幅
+constexpr int TW_HEIGHT = 40;	// 塔の段の高さ
 
 // ゲームシーン
 class Game : public MyApp::Scene
 {
 private:
+	// 塔
+	Texture tower[TW_NUM];	// 塔の画像
+	Texture tower1; //上段
+	Texture tower2; // 下段
+	double towerSelect = 0.3; // 塔の種類
+	int towerPosY;	// 塔の描画位置Yのずれ
 
-	// ブロックのサイズ
-	static constexpr Size blockSize = Size(40, 20);
+	// プレイヤー
+	Player player;
 
-	// ボールの速さ
-	static constexpr double speed = 480.0;
-
-	// ブロックの配列
-	Array<Rect> m_blocks;
-
-	// ボールの速度
-	Vec2 m_ballVelocity = Vec2(0, -speed);
-
-	// ボール
-	Circle m_ball = Circle(400, 400, 8);
-
-	// パドル
-	Rect m_paddle = Rect(Arg::center(Cursor::Pos().x, 500), 60, 10);
-
-	// スコア
-	int32 m_score = 0;
+	// 足場
+	Foot foots[FT_NUM];
+	Texture footTextures[FT_TEX_NUM];
 
 public:
 
@@ -35,4 +33,23 @@ public:
 	void update() override;
 
 	void draw() const override;
+
+
+	void towerUpdate();
+	void towerDraw() const;
+
+	void playerInit();
+	void playerUpdate();
+	void playerDraw() const;
+
+	void footInit();
+	void footUpdate();
+	void footDraw() const;
+	// 足場の横壁を描画
+	//void drawFootSide(double rootX, double X, double arg);
+	
+	// キー入力による角度の回転
+	double rotate(double arg);
+	// 半径と角度から画面上のX座標を返す
+	double calcPos(double arg, double r);
 };

@@ -19,3 +19,7 @@ struct GameData
 
 // シーン管理クラス
 using MyApp = SceneManager<State, GameData>;
+
+// 画面サイズ
+constexpr int WINDOW_WIDTH = 800;
+constexpr int WINDOW_HEIGHT = 600;

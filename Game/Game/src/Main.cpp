@@ -1,5 +1,4 @@
-﻿
-//
+﻿//
 // OpenSiv3D v0.4.3 ゲームテンプレート
 //
 
@@ -18,25 +17,18 @@ void Main()
 	//System::SetTerminationTriggers(UserAction::CloseButtonClicked);
 
 	// タイトルを設定
-	Window::SetTitle(U"ブロックくずし");
+	Window::SetTitle(U"ダンゴムシ");
+	// 画面サイズを変更
+	Window::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	Scene::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-	// 背景色を設定
-	Scene::SetBackground(ColorF(0.2, 0.8, 0.4));
 
-	// 使用するフォントアセットを登録
-	FontAsset::Register(U"Title", 120, U"example/font/AnnyantRoman/AnnyantRoman.ttf");
-	FontAsset::Register(U"Menu", 30, Typeface::Regular);
-	FontAsset::Register(U"Score", 36, Typeface::Bold);
 
 	// シーンと遷移時の色を設定
 	MyApp manager;
 	manager
 		.add<Title>(State::Title)
-		.add<Game>(State::Game)
-		.setFadeColor(ColorF(1.0));
-
-	// （ゲームシーンから開始する場合はコメントを外す）
-	//manager.init(State::Game);
+		.add<Game>(State::Game);
 
 	while (System::Update())
 	{

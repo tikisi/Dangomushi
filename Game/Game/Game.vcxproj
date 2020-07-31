@@ -15,6 +15,7 @@
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Game</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Dangomusi</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -238,7 +239,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.hpp" />
+    <ClInclude Include="src\Foot.hpp" />
     <ClInclude Include="src\Game.hpp" />
+    <ClInclude Include="src\Player.hpp" />
     <ClInclude Include="src\Title.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

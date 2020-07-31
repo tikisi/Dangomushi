@@ -1,83 +1,136 @@
-
-# include "Game.hpp"
+ï»¿# include "Game.hpp"
 
 Game::Game(const InitData& init)
-	: IScene(init)
-{
-	// ‰¡ (Scene::Width() / blockSize.x) ŒÂAc 5 ŒÂ‚ÌƒuƒƒbƒN‚ğ”z—ñ‚É’Ç‰Á‚·‚é
-	for (auto p : step(Size((Scene::Width() / blockSize.x), 5)))
-	{
-		m_blocks << Rect(p.x * blockSize.x, 60 + p.y * blockSize.y, blockSize);
-	}
+    : IScene(init) {
+    // å¡”èª­ã¿è¾¼ã¿
+    for (int i = 0; i < TW_NUM; i++) {
+        tower[i] = Texture(U"tower" + Format(i + 1) + U".png");
+    }
+    // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼åˆæœŸåŒ–
+    playerInit();
+
+    // è¶³å ´ã®åˆæœŸåŒ–
+    footInit();
 }
 
-void Game::update()
-{
-	// ƒpƒhƒ‹‚ğ‘€ì
-	m_paddle = Rect(Arg::center(Cursor::Pos().x, 500), 60, 10);
 
-	// ƒ{[ƒ‹‚ğˆÚ“®
-	m_ball.moveBy(m_ballVelocity * Scene::DeltaTime());
-
-	// ƒuƒƒbƒN‚ğ‡‚Éƒ`ƒFƒbƒN
-	for (auto it = m_blocks.begin(); it != m_blocks.end(); ++it)
-	{
-		// ƒ{[ƒ‹‚ÆƒuƒƒbƒN‚ªŒğ·‚µ‚Ä‚¢‚½‚ç
-		if (it->intersects(m_ball))
-		{
-			// ƒ{[ƒ‹‚ÌŒü‚«‚ğ”½“]‚·‚é
-			(it->bottom().intersects(m_ball) || it->top().intersects(m_ball) ? m_ballVelocity.y : m_ballVelocity.x) *= -1;
-
-			// ƒuƒƒbƒN‚ğ”z—ñ‚©‚çíœiƒCƒeƒŒ[ƒ^‚ª–³Œø‚É‚È‚é‚Ì‚Å’ˆÓj
-			m_blocks.erase(it);
-
-			// ƒXƒRƒA‚ğ‰ÁZ
-			++m_score;
-
-			// ‚±‚êˆÈãƒ`ƒFƒbƒN‚µ‚È‚¢  
-			break;
-		}
-	}
-
-	// “Vˆä‚É‚Ô‚Â‚©‚Á‚½‚ç‚Í‚Ë•Ô‚é
-	if (m_ball.y < 0 && m_ballVelocity.y < 0)
-	{
-		m_ballVelocity.y *= -1;
-	}
-
-	if (m_ball.y > Scene::Height())
-	{
-		changeScene(State::Title);
-		getData().highScore = Max(getData().highScore, m_score);
-	}
-
-	// ¶‰E‚Ì•Ç‚É‚Ô‚Â‚©‚Á‚½‚ç‚Í‚Ë•Ô‚é
-	if ((m_ball.x < 0 && m_ballVelocity.x < 0) || (Scene::Width() < m_ball.x && m_ballVelocity.x > 0))
-	{
-		m_ballVelocity.x *= -1;
-	}
-
-	// ƒpƒhƒ‹‚É‚ ‚½‚Á‚½‚ç‚Í‚Ë•Ô‚é
-	if (m_ballVelocity.y > 0 && m_paddle.intersects(m_ball))
-	{
-		// ƒpƒhƒ‹‚Ì’†S‚©‚ç‚Ì‹——£‚É‰‚¶‚Ä‚Í‚Ë•Ô‚éŒü‚«‚ğ•Ï‚¦‚é
-		m_ballVelocity = Vec2((m_ball.x - m_paddle.center().x) * 10, -m_ballVelocity.y).setLength(speed);
-	}
+void Game::update() {
+    towerUpdate();
+    playerUpdate();
+    footUpdate();
 }
 
-void Game::draw() const
-{
-	FontAsset(U"Score")(m_score).drawAt(Scene::Center().x, 30);
 
-	// ‚·‚×‚Ä‚ÌƒuƒƒbƒN‚ğ•`‰æ‚·‚é
-	for (const auto& block : m_blocks)
-	{
-		block.stretched(-1).draw(HSV(block.y - 40));
-	}
+void Game::draw() const {
+    towerDraw();
+    playerDraw();
+    footDraw();
+}
 
-	// ƒ{[ƒ‹‚ğ•`‚­
-	m_ball.draw();
 
-	// ƒpƒhƒ‹‚ğ•`‚­
-	m_paddle.draw();
+void Game::towerUpdate() {
+    // å¡”ã®æç”»ä½ç½®Yã®ãšã‚Œã‚’è¨ˆç®—
+    // ãšã‚Œã‚’äºŒæ®µåˆ†ä»¥ä¸‹ã«æŠ‘ãˆã‚‹
+    towerPosY = int(player.posY) % 80;
+
+    // æç”»ã™ã‚‹å½“ã®ç¨®é¡ã‚’é¸æŠ
+    if (KeyRight.pressed()) towerSelect += 0.02;
+    if (KeyLeft.pressed()) towerSelect -= 0.02;
+
+    if (towerSelect < 0.0)towerSelect = 0.6;
+    if (towerSelect > 0.6)towerSelect = 0.0;
+
+    if (towerSelect > 0.5) { tower1 = tower[0]; tower2 = tower[3]; }
+    else if (towerSelect > 0.4) { tower1 = tower[1]; tower2 = tower[4]; }
+    else if (towerSelect > 0.3) { tower1 = tower[2]; tower2 = tower[5]; }
+    else if (towerSelect > 0.2) { tower1 = tower[3]; tower2 = tower[0]; }
+    else if (towerSelect > 0.1) { tower1 = tower[4]; tower2 = tower[1]; }
+    else { tower1 = tower[5]; tower2 = tower[2]; }
+}
+
+
+void Game::towerDraw() const {
+    for (int i = 0; i < 18; i++) {
+        tower1.resized(TW_WIDTH, TW_HEIGHT).drawAt(TW_CENTER_X, 2 * i * TW_HEIGHT - TW_HEIGHT - towerPosY);
+        tower2.resized(TW_WIDTH, TW_HEIGHT).drawAt(TW_CENTER_X, 2 * (i - 1) * TW_HEIGHT - towerPosY);
+    }
+}
+
+
+void Game::playerInit() {
+    player.drawPosX = TW_CENTER_X - (player.width / 2);  // å¡”ã®ä¸­å¿ƒ
+    player.drawPosY = 400;
+}
+
+
+void Game::playerUpdate() {
+    player.speedY -= player.accY;
+
+    // ã‚¸ãƒ£ãƒ³ãƒ—
+    if (KeySpace.down()) {
+        player.speedY = 10;
+    }
+
+    player.speedY *= 0.99;
+
+    //---------------
+    // ToDoå½“ãŸã‚Šåˆ¤å®šï¼Ÿ
+    //---------------
+
+    player.posY -= player.speedY;
+}
+
+
+void Game::playerDraw() const {
+    Rect(player.drawPosX, player.drawPosY, player.width, player.height).draw(Palette::Red);
+}
+
+void Game::footInit() {
+    // è¶³å ´åˆæœŸåŒ–
+    for (int i = 0; i < FT_TEX_NUM; i++) {
+        footTextures[i] = Texture(Image(U"Tower" + Format(i + 1) + U".png").scale(FT_TEX_WIDTH, FT_TEX_HEIGHT));
+    }
+    for (int i = 0; i < FT_NUM; i++) {
+        foots[i].dirR = Random<double>(0, Math::TwoPi);
+        foots[i].dirL = foots[i].dirR + 1;
+        foots[i].posY = i * 100;
+        foots[i].drawPosY = foots[i].posY;
+    }
+}
+
+void Game::footUpdate() {
+    // å›è»¢
+    for(int i = 0; i < FT_NUM; i++) {
+       foots[i].dirR = rotate(foots[i].dirR);  
+       foots[i].dirL = rotate(foots[i].dirL);
+        
+       foots[i].posRootXL = calcPos(foots[i].dirL, FT_ROOT_R);
+       foots[i].posRootXR = calcPos(foots[i].dirR, FT_ROOT_R);
+       foots[i].posXL = calcPos(foots[i].dirL, FT_R);
+       foots[i].posXR = calcPos(foots[i].dirR, FT_R);
+    }
+}
+
+void Game::footDraw() const {
+    for(int i = 0; i < FT_NUM; i++) {
+        // å·¦ã®å£
+        if(Math::Pi <= foots[i].dirL && foots[i].dirL <= Math::TwoPi) {
+             
+        }
+    }
+}
+
+
+double Game::rotate(double arg) {
+    if(KeyRight.pressed()) arg += 0.05;
+    if(KeyLeft.pressed()) arg -= 0.05;
+
+    if(arg < 0) arg += Math::TwoPi;
+    if(arg > Math::TwoPi) arg -= Math::TwoPi;
+
+    return arg;
+}
+
+double Game::calcPos(double arg, double r) {
+    return TW_CENTER_X + r * cos(arg); 
 }
