@@ -1,4 +1,4 @@
-# include "Game.hpp"
+﻿# include "Game.hpp"
 
 Game::Game(const InitData& init)
 : IScene(init) {
