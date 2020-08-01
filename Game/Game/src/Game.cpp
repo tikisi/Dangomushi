@@ -36,8 +36,8 @@ void Game::towerUpdate() {
     towerPosY = int(player.posY) % 80;
     
     // 描画する当の種類を選択
-    if (KeyRight.pressed()) towerSelect += 0.02;
-    if (KeyLeft.pressed()) towerSelect -= 0.02;
+    if (KeyRight.pressed()) towerSelect += 0.08;
+    if (KeyLeft.pressed()) towerSelect -= 0.08;
     
     if (towerSelect < 0.0)towerSelect = 0.6;
     if (towerSelect > 0.6)towerSelect = 0.0;
@@ -73,6 +73,12 @@ void Game::playerUpdate() {
         player.speedY = 10;
     }
     
+    // デバッグ用
+    if (KeyUp.pressed()) {
+        player.speedY = 10;
+    }
+    
+    
     player.speedY *= 0.99;
     
     //---------------
@@ -80,11 +86,15 @@ void Game::playerUpdate() {
     //---------------
     
     player.posY -= player.speedY;
+    
+    if(player.posY < -10000)changeScene(State::Battle);
 }
 
 
 void Game::playerDraw() const {
     Rect(player.drawPosX, player.drawPosY, player.width, player.height).draw(Palette::Red);
+    ClearPrint();
+    Print << -round(player.posY);
 }
 
 void Game::footInit() {
@@ -93,10 +103,12 @@ void Game::footInit() {
         footTextures[i] = Texture(Image(U"Tower" + Format(i + 1) + U".png").scale(FT_TEX_WIDTH, FT_TEX_HEIGHT));
     }
     for (int i = 0; i < FT_NUM; i++) {
-        foots[i].dirL = Random<double>(0, Math::TwoPi);
+        // 足場の位置のズレを制限
+        if(i == FT_NUM - 1) foots[i].dirL = foots[0].dirL + Random<double>(-1.5, 1.5);
+        else foots[i].dirL = foots[i+1].dirL + Random<double>(-1.5, 1.5);
         foots[i].dirR = foots[i].dirL + 1;
         foots[i].posY = i * 100;
-        foots[i].drawPosY = foots[i].posY;
+        foots[i].drawPosY = foots[i].posY - player.posY;
     }
 }
 
@@ -113,10 +125,15 @@ void Game::footUpdate() {
         foots[i].isFrontR = isFront(foots[i].dirR);
         foots[i].isFrontL = isFront(foots[i].dirL);
         foots[i].drawPosY = foots[i].posY - player.posY;
+        
+        // 再出現
         if(foots[i].drawPosY > 800){
             foots[i].posY -= 100 * FT_NUM;
-            foots[i].dirL = Random<double>(0, Math::TwoPi);
-            foots[i].dirR = foots[i].dirL + 1;
+            
+            // 足場の位置のズレを制限
+            if(i == FT_NUM - 1) foots[i].dirL = foots[0].dirL + Random<double>(-1.5, 1.5);
+            else foots[i].dirL = foots[i+1].dirL + Random<double>(-1.5, 1.5);
+            foots[i].dirR = foots[i].dirL + Random<double>(0.6, 1.0);
         }
     }
 }

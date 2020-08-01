@@ -1,4 +1,4 @@
-﻿//
+//
 // OpenSiv3D v0.4.3 ゲームテンプレート
 //
 
@@ -10,6 +10,7 @@
 # include "Common.hpp"
 # include "Title.hpp"
 # include "Game.hpp"
+# include "Battle.hpp"
 
 void Main()
 {
@@ -28,7 +29,8 @@ void Main()
 	MyApp manager;
 	manager
 		.add<Title>(State::Title)
-		.add<Game>(State::Game);
+		.add<Game>(State::Game)
+    .add<Battle>(State::Battle);
 
 	while (System::Update())
 	{

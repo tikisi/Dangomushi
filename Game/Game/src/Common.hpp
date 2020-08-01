@@ -7,7 +7,9 @@ enum class State
 {
 	Title,
 
-	Game
+	Game,
+    
+    Battle,
 };
 
 // ゲームデータ
