@@ -110,7 +110,7 @@ void Game::playerUpdate() {
         if (player.animCount > 20) player.animCount = 0;
     }
 
-    if(player.posY < -10000)changeScene(State::Battle);
+    // if(player.posY < -10000)changeScene(State::Battle);
 }
 
 void Game::collisionY() {
