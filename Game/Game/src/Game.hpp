@@ -40,6 +40,7 @@ public:
 
 	void playerInit();
 	void playerUpdate();
+	void collisionY();
 	void playerDraw() const;
 
 	void footInit();
