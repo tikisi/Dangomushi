@@ -16,7 +16,7 @@ struct Item {
     double posX;   // 描画座標X
     bool isFront;  // 後ろに回ったアイテムは消える
     
-    bool isThere;　// アイテムの存在
+    bool isThere; // アイテムの存在
     
 };
 
