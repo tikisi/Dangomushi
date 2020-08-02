@@ -12,4 +12,8 @@ struct Player {
     double drawPosY;    // 画面上での描画座標Y
 
     bool isGround;     // 地面にいるかどうかのフラグ
+
+    int isWalk;     // 歩いているか立っているか
+    int orRight;     // どっちに向いているのか（右なら1、左なら０）
+    int animCount;     // アニメーションのカウンター
 };

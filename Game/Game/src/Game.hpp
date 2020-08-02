@@ -21,6 +21,11 @@ private:
 
 	// プレイヤー
 	Player player;
+	Texture j1dango;
+	Texture j2dango;
+	Texture j3dango;
+	Texture s1dango;
+	Texture s2dango;
 
 	// 足場
 	Foot foots[FT_NUM];
@@ -43,6 +48,7 @@ public:
 	void collisionY();
 	void collisionX();
 	void playerDraw() const;
+	void playerDrawByDir(Texture texture, int x, int y, int orRight) const;
 
 	void footInit();
 	void footUpdate();
