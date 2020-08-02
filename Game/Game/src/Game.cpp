@@ -124,6 +124,12 @@ void Game::footInit() {
     for (int i = 0; i < FT_TEX_NUM; i++) {
         footTextures[i] = Texture(Image(U"Tower" + Format(i + 1) + U".png").scale(FT_TEX_WIDTH, FT_TEX_HEIGHT));
     }
+
+    for(int i = 0; i < FT_NUM; i++) {
+        foots[i].dirR = 0.0;
+        foots[i].dirL = 0.0;
+    }
+
     for (int i = 0; i < FT_NUM; i++) {
         // 足場の位置のズレを制限
         if(i == FT_NUM - 1) foots[i].dirL = foots[0].dirL + Random<double>(-1.5, 1.5);
