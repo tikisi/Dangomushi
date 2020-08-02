@@ -16,6 +16,7 @@ Game::Game(const InitData& init)
 
 void Game::update() {
     playerUpdate();
+    collisionY();
     towerUpdate();
     footUpdate();
 }
@@ -23,7 +24,7 @@ void Game::update() {
 
 void Game::draw() const {
     footDrawBefore();
-    //towerDraw();
+    towerDraw();
     footDraw();
     playerDraw();
 }
@@ -75,20 +76,18 @@ void Game::playerUpdate() {
 
     player.speedY *= 0.99;
     player.posY -= player.speedY;
-
-    collisionY();
 }
 
 void Game::collisionY() {
     RectF playerRect(player.drawPosX, player.posY, player.width, player.height);
-    playerRect.draw(Palette::Green);
+    //playerRect.draw(Palette::Green);
     Print << player.posY;
 
     player.isGround = false;
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].isFrontL && foots[i].isFrontR) {
             RectF footRect(foots[i].posXR, foots[i].posY, foots[i].posXL - foots[i].posXR, FT_HEIGHT);
-            footRect.draw(Palette::White);
+            //footRect.draw(Palette::White);
              if (playerRect.intersects(footRect)) {
                 Print << U"collision";
                 if (player.speedY < 0.0) {   // 上からぶつかったとき
@@ -117,8 +116,9 @@ void Game::footInit() {
         footTextures[i] = Texture(Image(U"Tower" + Format(i + 1) + U".png").scale(FT_TEX_WIDTH, FT_TEX_HEIGHT));
     }
     for (int i = 0; i < FT_NUM; i++) {
-        foots[i].dirL = Random<double>(0, Math::TwoPi);
-        foots[i].dirR = foots[i].dirL + 1;
+        foots[i].dirR = Random<double>(0, Math::TwoPi);
+        //foots[i].dirR = foots[i].dirL + 1;
+        foots[i].dirL = foots[i].dirR + 1;
         foots[i].posY = i * 100;
         foots[i].drawPosY = foots[i].posY;
     }
@@ -137,11 +137,11 @@ void Game::footUpdate() {
         foots[i].isFrontR = isFront(foots[i].dirR);
         foots[i].isFrontL = isFront(foots[i].dirL);
         foots[i].drawPosY = foots[i].posY + (player.drawPosY - player.posY);
-        /*if (foots[i].drawPosY > 800) {
+        if (foots[i].drawPosY > 800) {
             foots[i].posY -= 100 * FT_NUM;
-            foots[i].dirL = Random<double>(0, Math::TwoPi);
-            foots[i].dirR = foots[i].dirL + 1;
-        }*/
+            foots[i].dirR = Random<double>(0, Math::TwoPi);
+            foots[i].dirL = foots[i].dirR + 1;
+        }
     }
 }
 
@@ -171,13 +171,12 @@ void Game::footDraw() const {
         if (foots[i].isFrontL && foots[i].isFrontR) {
             drawBox(foots[i].posXR, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Palette::Orange);
         }
-        else if (foots[i].isFrontR && !foots[i].isFrontL) {
-            drawBox(TW_CENTER_X - FT_R, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(Palette::Orange);
-        }
         else if (!foots[i].isFrontR && foots[i].isFrontL) {
-            drawBox(TW_CENTER_X + FT_R, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Palette::Orange);
+            drawBox(TW_CENTER_X - FT_R, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Palette::Orange);
         }
-
+        else if (foots[i].isFrontR && !foots[i].isFrontL) {
+            drawBox(TW_CENTER_X + FT_R, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(Palette::Orange);
+        }
     }
 }
 
