@@ -10,7 +10,6 @@
 # include "Common.hpp"
 # include "Title.hpp"
 # include "Game.hpp"
-# include "Battle.hpp"
 
 void Main()
 {
@@ -29,8 +28,7 @@ void Main()
 	MyApp manager;
 	manager
 		.add<Title>(State::Title)
-		.add<Game>(State::Game)
-    .add<Battle>(State::Battle);
+    .add<Game>(State::Game);
 
 	while (System::Update())
 	{
