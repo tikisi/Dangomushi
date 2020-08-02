@@ -82,7 +82,7 @@ void Game::playerUpdate() {
     player.speedY *= 0.99;
     player.posY -= player.speedY;
     
-    if(player.posY < -10000)changeScene(State::Battle);
+    // if(player.posY < -10000)changeScene(State::Battle);
 }
 
 void Game::collisionY() {
