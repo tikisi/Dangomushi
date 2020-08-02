@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #define FT_NUM 20       // 足場の配列サイズ
 #define FT_TEX_NUM 6    // 足場の画像数
 #define FT_TEX_HEIGHT 40 // 足場の画像サイズY
@@ -8,6 +8,7 @@
 #define FT_ROOT_R 200   // 足場の根元の半径
 
 struct Foot {
+    int type = 0;           // 足場の種類
     double dirL;         // 角度L
     double dirR;         // 角度R
     double drawPosY;    // 描画する座標Y
@@ -19,5 +20,8 @@ struct Foot {
     double posRootXL;  // 根元の描画座用XL
     bool isFrontR;  // 後ろに回った足場の横の壁は消える
     bool isFrontL;  // 後ろに回った足場の横の壁は消える
+    
+    double withDraw; // 乗っていた足場が引っこむ
+    double time;
 };
 

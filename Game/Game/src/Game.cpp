@@ -1,16 +1,19 @@
-﻿# include "Game.hpp"
+# include "Game.hpp"
 
 Game::Game(const InitData& init)
-    : IScene(init) {
+: IScene(init) {
     // 塔読み込み
     for (int i = 0; i < TW_NUM; i++) {
         tower[i] = Texture(U"tower" + Format(i + 1) + U".png");
     }
     // プレイヤー初期化
     playerInit();
-
+    
     // 足場の初期化
     footInit();
+    
+    // アイテムの初期化
+    itemInit();
 }
 
 
@@ -19,13 +22,16 @@ void Game::update() {
     collisionY();
     towerUpdate();
     footUpdate();
+    itemUpdate();
 }
 
 
 void Game::draw() const {
     footDrawBefore();
+    itemDrawBefore();
     towerDraw();
     footDraw();
+    itemDraw();
     playerDraw();
 }
 
@@ -34,14 +40,14 @@ void Game::towerUpdate() {
     // 塔の描画位置Yのずれを計算
     // ずれを二段分以下に抑える
     towerPosY = int(player.posY) % 80;
-
+    
     // 描画する当の種類を選択
     if (KeyRight.pressed()) towerSelect += 0.02;
     if (KeyLeft.pressed()) towerSelect -= 0.02;
     
     if (towerSelect < 0.0)towerSelect = 0.6;
     if (towerSelect > 0.6)towerSelect = 0.0;
-
+    
     if (towerSelect > 0.5) { tower1 = tower[0]; tower2 = tower[3]; }
     else if (towerSelect > 0.4) { tower1 = tower[1]; tower2 = tower[4]; }
     else if (towerSelect > 0.3) { tower1 = tower[2]; tower2 = tower[5]; }
@@ -68,7 +74,7 @@ void Game::playerInit() {
 
 void Game::playerUpdate() {
     player.speedY -= player.accY;
-
+    
     // ジャンプ
     if (KeySpace.down()) {
         player.speedY = 10;
@@ -89,13 +95,13 @@ void Game::collisionY() {
     RectF playerRect(player.drawPosX, player.posY, player.width, player.height);
     //playerRect.draw(Palette::Green);
     Print << player.posY;
-
+    
     player.isGround = false;
     for (int i = 0; i < FT_NUM; i++) {
-        if (foots[i].isFrontL && foots[i].isFrontR) {
+        if (foots[i].isFrontL && foots[i].isFrontR && foots[i].withDraw < 30) {
             RectF footRect(foots[i].posXR, foots[i].posY, foots[i].posXL - foots[i].posXR, FT_HEIGHT);
             //footRect.draw(Palette::White);
-             if (playerRect.intersects(footRect)) {
+            if (playerRect.intersects(footRect)) {
                 Print << U"collision";
                 if (player.speedY < 0.0) {   // 上からぶつかったとき
                     player.posY = foots[i].posY - player.height;
@@ -104,12 +110,12 @@ void Game::collisionY() {
                 else {    //  下からぶつかったとき
                     player.posY = foots[i].posY + FT_HEIGHT;
                 }
-
+                
                 player.speedY = 0.0;
             }
         }
     }
-
+    
 }
 
 
@@ -117,19 +123,22 @@ void Game::playerDraw() const {
     Rect(player.drawPosX, player.drawPosY, player.width, player.height).draw(Palette::Red);
     ClearPrint();
     Print << -round(player.posY);
+    Print << foots[1].time;
 }
 
 void Game::footInit() {
     // 足場初期化
     for (int i = 0; i < FT_TEX_NUM; i++) {
+        foots[i].type = RandomBool(0.2);
         footTextures[i] = Texture(Image(U"Tower" + Format(i + 1) + U".png").scale(FT_TEX_WIDTH, FT_TEX_HEIGHT));
     }
-
+    
     for(int i = 0; i < FT_NUM; i++) {
         foots[i].dirR = 0.0;
         foots[i].dirL = 0.0;
+        foots[i].withDraw = 0.0;
     }
-
+    
     for (int i = 0; i < FT_NUM; i++) {
         // 足場の位置のズレを制限
         if(i == FT_NUM - 1) foots[i].dirL = foots[0].dirL + Random<double>(-1.5, 1.5);
@@ -146,11 +155,11 @@ void Game::footUpdate() {
     for (int i = 0; i < FT_NUM; i++) {
         foots[i].dirR = rotate(foots[i].dirR);
         foots[i].dirL = rotate(foots[i].dirL);
-
+        
         foots[i].posRootXL = calcPos(foots[i].dirL, FT_ROOT_R);
         foots[i].posRootXR = calcPos(foots[i].dirR, FT_ROOT_R);
-        foots[i].posXL = calcPos(foots[i].dirL, FT_R);
-        foots[i].posXR = calcPos(foots[i].dirR, FT_R);
+        foots[i].posXL = calcPos(foots[i].dirL, FT_R - foots[i].withDraw);
+        foots[i].posXR = calcPos(foots[i].dirR, FT_R - foots[i].withDraw);
         foots[i].isFrontR = isFront(foots[i].dirR);
         foots[i].isFrontL = isFront(foots[i].dirL);
         foots[i].drawPosY = foots[i].posY + (player.drawPosY - player.posY);
@@ -158,12 +167,35 @@ void Game::footUpdate() {
         // 再出現
         if(foots[i].drawPosY > 800){
             foots[i].posY -= 100 * FT_NUM;
+            foots[i].type = RandomBool(0.2);
+            foots[i].withDraw = 0.0;
             
-            // 足場の位置のズレを制限
+            // 足場の位置のズレと大きさを制限
             if(i == FT_NUM - 1) foots[i].dirL = foots[0].dirL + Random<double>(-1.5, 1.5);
             else foots[i].dirL = foots[i+1].dirL + Random<double>(-1.5, 1.5);
             foots[i].dirR = foots[i].dirL - Random<double>(0.6, 1.0);
+            
+            // アイテムの再出現
+            
+            if(foots[i].dirR < foots[i].dirL){
+                items[i].dir = Random(foots[i].dirR, foots[i].dirL);
+            }else{
+                items[i].dir = Random(foots[i].dirR, foots[i].dirL + Math::TwoPi);
+                
+                if (items[i].dir > Math::TwoPi) items[i].dir -= Math::TwoPi;
+            }
+            
+            items[i].posY = foots[i].posY - 30;
+            items[i].isThere = RandomBool(0.2);
+            
+
         }
+
+        foots[i].time += 0.01;
+        if (foots[i].time > Math::TwoPi) foots[i].time -= Math::TwoPi;
+        
+        if(foots[i].type == 1) foots[i].withDraw = cos(foots[i].time) * 50;
+        if(foots[i].withDraw > FT_R - FT_ROOT_R + 5) foots[i].withDraw = FT_R - FT_ROOT_R + 5;
     }
 }
 
@@ -188,29 +220,85 @@ void Game::footDraw() const {
         if (foots[i].isFrontR) {
             drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(Palette::Blue);
         }
-
+        
         // 足場のまるい壁
         if (foots[i].isFrontL && foots[i].isFrontR) {
             drawBox(foots[i].posXR, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Palette::Orange);
         }
         else if (!foots[i].isFrontR && foots[i].isFrontL) {
-            drawBox(TW_CENTER_X - FT_R, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Palette::Orange);
+            drawBox(TW_CENTER_X - FT_R + foots[i].withDraw, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Palette::Orange);
         }
         else if (foots[i].isFrontR && !foots[i].isFrontL) {
-            drawBox(TW_CENTER_X + FT_R, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(Palette::Orange);
+            drawBox(TW_CENTER_X + FT_R - foots[i].withDraw, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(Palette::Orange);
+        }
+    }
+}
+
+
+void Game::itemInit() {
+    // アイテム初期化
+    for(int i = 0; i < FT_NUM; i++) {
+        items[i].type = RandomBool(0.2);
+        
+        if(foots[i].dirR < foots[i].dirL){
+            items[i].dir = Random(foots[i].dirR, foots[i].dirL);
+        }else{
+            items[i].dir = Random(foots[i].dirR, foots[i].dirL + Math::TwoPi);
+            
+            if (items[i].dir > Math::TwoPi) items[i].dir -= Math::TwoPi;
+        }
+        
+        items[i].posY = foots[i].posY - 30;
+        items[i].isThere = RandomBool(0.2);
+    }
+}
+
+void Game::itemUpdate() {
+    // 回転
+    for (int i = 0; i < FT_NUM; i++) {
+        items[i].dir = rotate(items[i].dir);
+        items[i].posX = calcPos(items[i].dir, FT_R);
+        items[i].posY = foots[i].posY - 30;
+        items[i].isFront = isFront(items[i].dir);
+        items[i].drawPosY = items[i].posY + (player.drawPosY - player.posY);
+    }
+}
+
+void Game::itemDrawBefore() const {
+    for (int i = 0; i < FT_NUM; i++) {
+        // 後ろのアイテム
+        if (!items[i].isFront && items[i].isThere) {
+            RectF(Arg::center(items[i].posX, items[i].drawPosY), 30, 30).draw(Palette::Aqua);
+        }
+    }
+}
+
+void Game::itemDraw() const {
+    for (int i = 0; i < FT_NUM; i++) {
+        // 前のアイテム
+        if (items[i].isFront && items[i].isThere) {
+            RectF(Arg::center(items[i].posX, items[i].drawPosY), 30, 30).draw(Palette::Aqua);
         }
     }
 }
 
 
 
+
+
+
+
+
+
+
+
 double Game::rotate(double arg) {
     if (KeyRight.pressed()) arg -= 0.05;
     if (KeyLeft.pressed()) arg += 0.05;
-
+    
     if (arg < 0) arg += Math::TwoPi;
     if (arg > Math::TwoPi) arg -= Math::TwoPi;
-
+    
     return arg;
 }
 
