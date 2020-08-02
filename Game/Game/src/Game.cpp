@@ -60,9 +60,19 @@ void Game::towerDraw() const {
 
 
 void Game::playerInit() {
+    j1dango = Texture(U"player/dangomushi/j1dangomushi.png");
+    j2dango = Texture(U"player/dangomushi/j2dangomushi.png");
+    j3dango = Texture(U"player/dangomushi/j3dangomushi.png");
+    s1dango = Texture(U"player/dangomushi/s1dangomushi.png");
+    s2dango = Texture(U"player/dangomushi/s2dangomushi.png");
+
     player.drawPosX = TW_CENTER_X - (player.width / 2);  // 塔の中心
     player.drawPosY = 400;
     player.posY = player.drawPosY;
+
+    player.isWalk = 0;
+    player.animCount = 0;
+    player.orRight = 1;
 }
 
 
@@ -82,6 +92,24 @@ void Game::playerUpdate() {
     player.speedY *= 0.99;
     player.posY -= player.speedY;
     
+    //アニメーション
+    if ((KeyRight.pressed() && KeyLeft.pressed()) || (!KeyRight.pressed() && !KeyLeft.pressed())) {
+        player.isWalk = 0;
+    }
+    else if (KeyRight.pressed() && !KeyLeft.pressed()) {
+        player.isWalk = 1;
+        player.orRight = 1;
+    }
+    else if (!KeyRight.pressed() && KeyLeft.pressed()) {
+        player.isWalk = 1;
+        player.orRight = 0;
+    }
+
+    if (player.isWalk == 1) {
+        player.animCount++;
+        if (player.animCount > 20) player.animCount = 0;
+    }
+
     if(player.posY < -10000)changeScene(State::Battle);
 }
 
@@ -109,14 +137,26 @@ void Game::collisionY() {
             }
         }
     }
+}
+
+void Game::playerDraw() const {
+    if (player.isWalk == 0) {
+        playerDrawByDir(s2dango, player.drawPosX, player.drawPosY, player.orRight);
+    }
+    else {
+        if (player.animCount >= 10) {
+            playerDrawByDir(s2dango, player.drawPosX, player.drawPosY, player.orRight);
+        }
+        else playerDrawByDir(s1dango, player.drawPosX, player.drawPosY, player.orRight);
+    }
 
 }
 
-
-void Game::playerDraw() const {
-    Rect(player.drawPosX, player.drawPosY, player.width, player.height).draw(Palette::Red);
-    ClearPrint();
-    Print << -round(player.posY);
+void Game::playerDrawByDir(Texture texture, int x, int y, int orRight) const {
+    if (orRight == 1)
+        texture.mirrored().draw(x, y);
+    else if (orRight == 0)
+        texture.draw(x,y);
 }
 
 void Game::footInit() {
