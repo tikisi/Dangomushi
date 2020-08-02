@@ -41,14 +41,13 @@ public:
 	void playerInit();
 	void playerUpdate();
 	void collisionY();
+	void collisionX();
 	void playerDraw() const;
 
 	void footInit();
 	void footUpdate();
     void footDrawBefore() const;
 	void footDraw() const;
-	// 足場の横壁を描画
-	//void drawFootSide(double rootX, double X, double arg);
 	
 	// キー入力による角度の回転
 	double rotate(double arg);

@@ -38,7 +38,7 @@ void Game::towerUpdate() {
     // 描画する当の種類を選択
     if (KeyRight.pressed()) towerSelect += 0.02;
     if (KeyLeft.pressed()) towerSelect -= 0.02;
-    
+
     if (towerSelect < 0.0)towerSelect = 0.6;
     if (towerSelect > 0.6)towerSelect = 0.0;
 
@@ -73,30 +73,27 @@ void Game::playerUpdate() {
     if (KeySpace.down()) {
         player.speedY = 10;
     }
-    
+
     // デバッグ用
     if (KeyUp.pressed()) {
         player.speedY = 10;
     }
-    
+
     player.speedY *= 0.99;
     player.posY -= player.speedY;
-    
+
     // if(player.posY < -10000)changeScene(State::Battle);
 }
 
 void Game::collisionY() {
     RectF playerRect(player.drawPosX, player.posY, player.width, player.height);
-    //playerRect.draw(Palette::Green);
-    Print << player.posY;
 
     player.isGround = false;
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].isFrontL && foots[i].isFrontR) {
             RectF footRect(foots[i].posXR, foots[i].posY, foots[i].posXL - foots[i].posXR, FT_HEIGHT);
-            //footRect.draw(Palette::White);
-             if (playerRect.intersects(footRect)) {
-                Print << U"collision";
+            if (playerRect.intersects(footRect)) {
+                Print << U"collisionY";
                 if (player.speedY < 0.0) {   // 上からぶつかったとき
                     player.posY = foots[i].posY - player.height;
                     player.isGround = true;     // 地面にいるフラグを立てる
@@ -109,6 +106,27 @@ void Game::collisionY() {
             }
         }
     }
+}
+
+void Game::collisionX() {
+   /* RectF playerRect(player.drawPosX, player.posY, player.width, player.height);
+    double arg = 0.0;
+
+    if (KeyRight.pressed()) arg -= 0.05;
+    if (KeyLeft.pressed()) arg += 0.05;
+
+    for (int i = 0; i < FT_NUM; i++) {
+        if (foots[i].isFrontL && foots[i].isFrontR) {
+            double posXR = calcPos(foots[i].dirR + arg, FT_R);
+            double posXL = calcPos(foots[i].dirL + arg, FT_R);
+            RectF footRect(posXR, foots[i].posY, posXL - posXR, FT_HEIGHT);
+            if (playerRect.intersects(footRect)) {
+                if (KeyRight.pressed()) {
+                    posXR = 
+                }
+            }
+        }
+    }*/
 
 }
 
@@ -125,17 +143,17 @@ void Game::footInit() {
         footTextures[i] = Texture(Image(U"Tower" + Format(i + 1) + U".png").scale(FT_TEX_WIDTH, FT_TEX_HEIGHT));
     }
 
-    for(int i = 0; i < FT_NUM; i++) {
+    for (int i = 0; i < FT_NUM; i++) {
         foots[i].dirR = 0.0;
         foots[i].dirL = 0.0;
     }
 
     for (int i = 0; i < FT_NUM; i++) {
         // 足場の位置のズレを制限
-        if(i == FT_NUM - 1) foots[i].dirL = foots[0].dirL + Random<double>(-1.5, 1.5);
-        else foots[i].dirL = foots[i+1].dirL + Random<double>(-1.5, 1.5);
+        if (i == FT_NUM - 1) foots[i].dirL = foots[0].dirL + Random<double>(-1.5, 1.5);
+        else foots[i].dirL = foots[i + 1].dirL + Random<double>(-1.5, 1.5);
         foots[i].dirR = foots[i].dirL - 1;
-        
+
         foots[i].posY = i * 100;
         foots[i].drawPosY = foots[i].posY - player.posY;
     }
@@ -154,14 +172,14 @@ void Game::footUpdate() {
         foots[i].isFrontR = isFront(foots[i].dirR);
         foots[i].isFrontL = isFront(foots[i].dirL);
         foots[i].drawPosY = foots[i].posY + (player.drawPosY - player.posY);
-        
+
         // 再出現
-        if(foots[i].drawPosY > 800){
+        if (foots[i].drawPosY > 800) {
             foots[i].posY -= 100 * FT_NUM;
-            
+
             // 足場の位置のズレを制限
-            if(i == FT_NUM - 1) foots[i].dirL = foots[0].dirL + Random<double>(-1.5, 1.5);
-            else foots[i].dirL = foots[i+1].dirL + Random<double>(-1.5, 1.5);
+            if (i == FT_NUM - 1) foots[i].dirL = foots[0].dirL + Random<double>(-1.5, 1.5);
+            else foots[i].dirL = foots[i + 1].dirL + Random<double>(-1.5, 1.5);
             foots[i].dirR = foots[i].dirL - Random<double>(0.6, 1.0);
         }
     }
