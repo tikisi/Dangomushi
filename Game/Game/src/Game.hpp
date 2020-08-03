@@ -17,7 +17,8 @@ private:
 	Texture tower[TW_NUM];	// 塔の画像
 	Texture tower1; //上段
 	Texture tower2; // 下段
-	double towerSelect = 0.3; // 塔の種類
+	int towerSelect = 0; // 塔の種類
+    double towerDir = 0;
 	int towerPosY;	// 塔の描画位置Yのずれ
 
 	// プレイヤー
@@ -29,6 +30,7 @@ private:
     
     // アイテム
     Item items[FT_NUM];
+    
 
 public:
 

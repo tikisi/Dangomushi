@@ -14,15 +14,17 @@ Game::Game(const InitData& init)
     
     // アイテムの初期化
     itemInit();
+    
 }
 
 
 void Game::update() {
     playerUpdate();
     collisionY();
-    towerUpdate();
     footUpdate();
+    towerUpdate();
     itemUpdate();
+    
 }
 
 
@@ -40,20 +42,40 @@ void Game::towerUpdate() {
     // 塔の描画位置Yのずれを計算
     // ずれを二段分以下に抑える
     towerPosY = int(player.posY) % 80;
+    towerDir = rotate(towerDir);
     
-    // 描画する当の種類を選択
-    if (KeyRight.pressed()) towerSelect += 0.02;
-    if (KeyLeft.pressed()) towerSelect -= 0.02;
+    // 描画する塔の種類を選択
+    double a = towerDir;
+    towerSelect = 0;
+    while(a>0){
+        if (towerSelect == 5) towerSelect = 0;
+        else towerSelect += 1;
+        a -= Math::TwoPi/72.0;
+    }
+   
     
-    if (towerSelect < 0.0)towerSelect = 0.6;
-    if (towerSelect > 0.6)towerSelect = 0.0;
+    if(towerSelect == 0) {tower1 = tower[0]; tower2 = tower[3];
+    }else if(towerSelect == 1) {tower1 = tower[1]; tower2 = tower[4];
+    }else if(towerSelect == 2) {tower1 = tower[2]; tower2 = tower[5];
+    }else if(towerSelect == 3) {tower1 = tower[3]; tower2 = tower[0];
+    }else if(towerSelect == 4) {tower1 = tower[4]; tower2 = tower[1];
+    }else if(towerSelect == 5) {tower1 = tower[5]; tower2 = tower[2];
+    }
     
-    if (towerSelect > 0.5) { tower1 = tower[0]; tower2 = tower[3]; }
-    else if (towerSelect > 0.4) { tower1 = tower[1]; tower2 = tower[4]; }
-    else if (towerSelect > 0.3) { tower1 = tower[2]; tower2 = tower[5]; }
-    else if (towerSelect > 0.2) { tower1 = tower[3]; tower2 = tower[0]; }
-    else if (towerSelect > 0.1) { tower1 = tower[4]; tower2 = tower[1]; }
-    else { tower1 = tower[5]; tower2 = tower[2]; }
+    
+//    if (KeyRight.pressed()) towerSelect += 0.02;
+//    if (KeyLeft.pressed()) towerSelect -= 0.02;
+//
+    
+//    if (towerSelect < 0.0)towerSelect = 0.6;
+//    if (towerSelect > 0.6)towerSelect = 0.0;
+    
+//    if (towerSelect > 0.5) { tower1 = tower[0]; tower2 = tower[3]; }
+//    else if (towerSelect > 0.4) { tower1 = tower[1]; tower2 = tower[4]; }
+//    else if (towerSelect > 0.3) { tower1 = tower[2]; tower2 = tower[5]; }
+//    else if (towerSelect > 0.2) { tower1 = tower[3]; tower2 = tower[0]; }
+//    else if (towerSelect > 0.1) { tower1 = tower[4]; tower2 = tower[1]; }
+//    else { tower1 = tower[5]; tower2 = tower[2]; }
 }
 
 
@@ -74,11 +96,40 @@ void Game::playerInit() {
 
 void Game::playerUpdate() {
     player.speedY -= player.accY;
+    player.speedX *= 0.99;
+    if (player.isGround && !KeyRight.pressed() && !KeyLeft.pressed()) player.speedX *= 0.7;
     
     // ジャンプ
-    if (KeySpace.down()) {
-        player.speedY = 10;
+    if(KeySpace.down()) {
+        if(player.isGround) {
+            player.jump = 1;
+            player.speedY += 8.0;
+        }
     }
+    if(!player.isGround && player.jump != 0) {
+        if(KeySpace.pressed()) {
+            player.speedY += 0.7;
+        } else {
+            player.jump = 0;
+        }
+        if(player.jump++ > 8) {
+            player.jump = 0;
+        }
+    }
+
+    /*if(KeySpace.up() || player.jump > 10) {
+        player.speedY = player.jump;
+        player.jump = 0;
+    }
+    
+    if(KeySpace.down() && player.isGround) player.speedY = 12;
+    */
+    
+    // 左右の加速
+    if(KeyRight.pressed()) player.speedX += player.accX;
+    if(KeyLeft.pressed()) player.speedX -= player.accX;
+    
+    
     
     // デバッグ用
     if (KeyUp.pressed()) {
@@ -124,16 +175,20 @@ void Game::playerDraw() const {
     ClearPrint();
     Print << -round(player.posY);
     Print << foots[1].time;
+    Print << towerSelect;
+    Print << U"towerDir:" << towerDir;
+    
 }
 
 void Game::footInit() {
     // 足場初期化
     for (int i = 0; i < FT_TEX_NUM; i++) {
-        foots[i].type = RandomBool(0.2);
         footTextures[i] = Texture(Image(U"Tower" + Format(i + 1) + U".png").scale(FT_TEX_WIDTH, FT_TEX_HEIGHT));
     }
     
     for(int i = 0; i < FT_NUM; i++) {
+        foots[i].time = 0;
+        foots[i].type = RandomBool(0.2);
         foots[i].dirR = 0.0;
         foots[i].dirL = 0.0;
         foots[i].withDraw = 0.0;
@@ -181,20 +236,21 @@ void Game::footUpdate() {
                 items[i].dir = Random(foots[i].dirR, foots[i].dirL);
             }else{
                 items[i].dir = Random(foots[i].dirR, foots[i].dirL + Math::TwoPi);
-                
                 if (items[i].dir > Math::TwoPi) items[i].dir -= Math::TwoPi;
             }
             
             items[i].posY = foots[i].posY - 30;
             items[i].isThere = RandomBool(0.2);
-            
-
         }
+        
 
-        foots[i].time += 0.01;
+        foots[i].time += 0.02;
         if (foots[i].time > Math::TwoPi) foots[i].time -= Math::TwoPi;
         
         if(foots[i].type == 1) foots[i].withDraw = cos(foots[i].time) * 50;
+        
+        if(foots[i].type == 0 && foots[i].posY > player.posY + 10) foots[i].withDraw += 0.0;
+        
         if(foots[i].withDraw > FT_R - FT_ROOT_R + 5) foots[i].withDraw = FT_R - FT_ROOT_R + 5;
     }
 }
@@ -293,8 +349,10 @@ void Game::itemDraw() const {
 
 
 double Game::rotate(double arg) {
-    if (KeyRight.pressed()) arg -= 0.05;
-    if (KeyLeft.pressed()) arg += 0.05;
+    arg -= player.speedX;
+    
+//    if (KeyRight.pressed()) arg -= 0.05;
+//    if (KeyLeft.pressed()) arg += 0.05;
     
     if (arg < 0) arg += Math::TwoPi;
     if (arg > Math::TwoPi) arg -= Math::TwoPi;
