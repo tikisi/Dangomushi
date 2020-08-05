@@ -88,6 +88,11 @@ void Game::playerInit() {
 
 
 void Game::playerUpdate() {
+    // デバッグ用
+    if (KeyUp.pressed()) {
+        player.speedY = 10;
+    }
+    
     // ジャンプ
     if(KeySpace.down()) {
         player.spinCount = 0;
@@ -95,7 +100,8 @@ void Game::playerUpdate() {
             player.jump = 1;
             player.speedY += 8.0;
         }
-    }    
+    }
+    
     if(!player.isGround && player.jump != 0) {
         if(player.jump++ > 8) {
             player.jump = 0;
@@ -120,6 +126,7 @@ void Game::playerUpdate() {
     if (player.isGround && !KeyRight.pressed() && !KeyLeft.pressed()) player.speedX *= 0.5;
     
     // yの加速
+    player.speedY -= player.accY;
     player.speedY *= 0.99;
     player.posY -= player.speedY;
     
@@ -142,11 +149,6 @@ void Game::playerUpdate() {
         if(player.jump) dango = dango3;
         else if(player.spinCount<=10)dango = dango4;
         else dango = dango5;
-    }
-    
-    // デバッグ用
-    if (KeyUp.pressed()) {
-        player.speedY = 10;
     }
 }
 
