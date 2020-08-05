@@ -14,4 +14,6 @@ struct Player {
 
     bool isGround;     // 地面にいるかどうかのフラグ
     int jump = 0;
+    bool isRight;     // どっちに向いているのか（右なら1、左なら０）
+    int spinCount;  // 回転のアニメーション
 };

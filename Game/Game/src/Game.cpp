@@ -21,8 +21,8 @@ Game::Game(const InitData& init)
 void Game::update() {
     playerUpdate();
     collisionY();
-    footUpdate();
     towerUpdate();
+    footUpdate();
     itemUpdate();
     
 }
@@ -61,21 +61,7 @@ void Game::towerUpdate() {
     }else if(towerSelect == 4) {tower1 = tower[4]; tower2 = tower[1];
     }else if(towerSelect == 5) {tower1 = tower[5]; tower2 = tower[2];
     }
-    
-    
-//    if (KeyRight.pressed()) towerSelect += 0.02;
-//    if (KeyLeft.pressed()) towerSelect -= 0.02;
-//
-    
-//    if (towerSelect < 0.0)towerSelect = 0.6;
-//    if (towerSelect > 0.6)towerSelect = 0.0;
-    
-//    if (towerSelect > 0.5) { tower1 = tower[0]; tower2 = tower[3]; }
-//    else if (towerSelect > 0.4) { tower1 = tower[1]; tower2 = tower[4]; }
-//    else if (towerSelect > 0.3) { tower1 = tower[2]; tower2 = tower[5]; }
-//    else if (towerSelect > 0.2) { tower1 = tower[3]; tower2 = tower[0]; }
-//    else if (towerSelect > 0.1) { tower1 = tower[4]; tower2 = tower[1]; }
-//    else { tower1 = tower[5]; tower2 = tower[2]; }
+
 }
 
 
@@ -88,58 +74,80 @@ void Game::towerDraw() const {
 
 
 void Game::playerInit() {
+    dango1 = Texture(U"dangomushi1.png");
+    dango2 = Texture(U"dangomushi2.png");
+    dango3 = Texture(U"dangomushi3.png");
+    dango4 = Texture(U"dangomushi4.png");
+    dango5 = Texture(U"dangomushi5.png");
+    
     player.drawPosX = TW_CENTER_X - (player.width / 2);  // 塔の中心
     player.drawPosY = 400;
     player.posY = player.drawPosY;
 }
 
 
+
 void Game::playerUpdate() {
-    player.speedY -= player.accY;
-    player.speedX *= 0.99;
-    if (player.isGround && !KeyRight.pressed() && !KeyLeft.pressed()) player.speedX *= 0.7;
-    
     // ジャンプ
     if(KeySpace.down()) {
+        player.spinCount = 0;
         if(player.isGround) {
             player.jump = 1;
             player.speedY += 8.0;
         }
-    }
+    }    
     if(!player.isGround && player.jump != 0) {
+        if(player.jump++ > 8) {
+            player.jump = 0;
+        }
         if(KeySpace.pressed()) {
             player.speedY += 0.7;
         } else {
             player.jump = 0;
         }
-        if(player.jump++ > 8) {
-            player.jump = 0;
-        }
     }
-
-    /*if(KeySpace.up() || player.jump > 10) {
-        player.speedY = player.jump;
-        player.jump = 0;
-    }
-    
-    if(KeySpace.down() && player.isGround) player.speedY = 12;
-    */
     
     // 左右の加速
-    if(KeyRight.pressed()) player.speedX += player.accX;
-    if(KeyLeft.pressed()) player.speedX -= player.accX;
+    if(KeyRight.pressed()) {
+        player.speedX += player.accX;
+        player.isRight = true;
+    }
     
+    if(KeyLeft.pressed()) {
+        player.speedX -= player.accX;
+        player.isRight = false;
+    }
+    if (player.isGround && !KeyRight.pressed() && !KeyLeft.pressed()) player.speedX *= 0.5;
     
+    // yの加速
+    player.speedY *= 0.99;
+    player.posY -= player.speedY;
+    
+    // アニメーション
+    if(player.isGround){
+        // プレイヤーの歩くアニメーション
+        double b = towerDir;
+        bool walkflag = 0;
+        while(b>0){
+            walkflag = !walkflag;
+            if(walkflag)dango = dango1;
+            else dango = dango2;
+            b -= Math::TwoPi/72.0;
+        }
+    } else{
+        player.spinCount++;
+        if(player.spinCount>15)player.spinCount = 6;
+        
+        
+        if(player.jump) dango = dango3;
+        else if(player.spinCount<=10)dango = dango4;
+        else dango = dango5;
+    }
     
     // デバッグ用
     if (KeyUp.pressed()) {
         player.speedY = 10;
     }
-    
-    player.speedY *= 0.99;
-    player.posY -= player.speedY;
-    
-    if(player.posY < -10000)changeScene(State::Battle);
 }
 
 void Game::collisionY() {
@@ -166,17 +174,21 @@ void Game::collisionY() {
             }
         }
     }
-    
 }
 
 
 void Game::playerDraw() const {
-    Rect(player.drawPosX, player.drawPosY, player.width, player.height).draw(Palette::Red);
+    if(player.isRight) dango.mirrored().draw(player.drawPosX, player.drawPosY);
+    else dango.draw(player.drawPosX, player.drawPosY);
+    
+    // デバッグ用表示
     ClearPrint();
     Print << -round(player.posY);
     Print << foots[1].time;
     Print << towerSelect;
     Print << U"towerDir:" << towerDir;
+    Print << U"JUMP:" << player.jump;
+    Print << U"GROUND" << player.isGround;
     
 }
 
@@ -279,13 +291,13 @@ void Game::footDraw() const {
         
         // 足場のまるい壁
         if (foots[i].isFrontL && foots[i].isFrontR) {
-            drawBox(foots[i].posXR, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Palette::Orange);
+            drawBox(foots[i].posXR, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Color(170, 100+foots[i].withDraw*1.5, 100+foots[i].withDraw*1.5)).drawFrame(2, 0, Palette::Black);
         }
         else if (!foots[i].isFrontR && foots[i].isFrontL) {
-            drawBox(TW_CENTER_X - FT_R + foots[i].withDraw, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Palette::Orange);
+            drawBox(TW_CENTER_X - FT_R + foots[i].withDraw, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Color(170, 100+foots[i].withDraw*1.5, 100+foots[i].withDraw*1.5)).drawFrame(2, 0, Palette::Black);
         }
         else if (foots[i].isFrontR && !foots[i].isFrontL) {
-            drawBox(TW_CENTER_X + FT_R - foots[i].withDraw, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(Palette::Orange);
+            drawBox(TW_CENTER_X + FT_R - foots[i].withDraw, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(Color(170, 100+foots[i].withDraw*1.5, 100+foots[i].withDraw*1.5)).drawFrame(2, 0, Palette::Black);
         }
     }
 }
@@ -339,21 +351,8 @@ void Game::itemDraw() const {
 }
 
 
-
-
-
-
-
-
-
-
-
 double Game::rotate(double arg) {
     arg -= player.speedX;
-    
-//    if (KeyRight.pressed()) arg -= 0.05;
-//    if (KeyLeft.pressed()) arg += 0.05;
-    
     if (arg < 0) arg += Math::TwoPi;
     if (arg > Math::TwoPi) arg -= Math::TwoPi;
     

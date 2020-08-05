@@ -23,6 +23,12 @@ private:
 
 	// プレイヤー
 	Player player;
+    Texture dango1;
+    Texture dango2;
+    Texture dango3;
+    Texture dango4;
+    Texture dango5;
+    Texture dango;
 
 	// 足場
 	Foot foots[FT_NUM];
