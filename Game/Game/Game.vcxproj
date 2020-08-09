@@ -241,6 +241,7 @@
     <ClInclude Include="src\Common.hpp" />
     <ClInclude Include="src\Foot.hpp" />
     <ClInclude Include="src\Game.hpp" />
+    <ClInclude Include="src\Item.hpp" />
     <ClInclude Include="src\Player.hpp" />
     <ClInclude Include="src\Title.hpp" />
   </ItemGroup>

@@ -44,6 +44,7 @@
 /* Begin PBXFileReference section */
 		23900DC124D3C5EB0026C163 /* Foot.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Foot.hpp; sourceTree = "<group>"; };
 		23900DC224D3C5F40026C163 /* Player.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Player.hpp; sourceTree = "<group>"; };
+		23900DCB24D6A3FA0026C163 /* Item.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Item.hpp; sourceTree = "<group>"; };
 		2C1778841CE0A9EA00BB8AD0 /* Game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Game.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C1778921CE0A9EA00BB8AD0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C1778991CE0AA7C00BB8AD0 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Main.cpp; sourceTree = "<group>"; };
@@ -148,6 +149,7 @@
 				23900DC224D3C5F40026C163 /* Player.hpp */,
 				23900DC124D3C5EB0026C163 /* Foot.hpp */,
 				2C971A58239732F900E66570 /* Common.hpp */,
+				23900DCB24D6A3FA0026C163 /* Item.hpp */,
 				2C971A57239732F900E66570 /* Game.cpp */,
 				2C971A59239732F900E66570 /* Game.hpp */,
 				2C1778991CE0AA7C00BB8AD0 /* Main.cpp */,

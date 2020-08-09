@@ -2,6 +2,7 @@
 #include "Common.hpp"
 #include "Player.hpp"
 #include "Foot.hpp"
+#include "Item.hpp"
 
 constexpr int TW_NUM = 6;		// 塔の段の種類数
 constexpr int TW_CENTER_X = 350;	// 塔の描画中心座標X
@@ -16,15 +17,26 @@ private:
 	Texture tower[TW_NUM];	// 塔の画像
 	Texture tower1; //上段
 	Texture tower2; // 下段
-	double towerSelect = 0.3; // 塔の種類
+	int towerSelect = 0; // 塔の種類
+    double towerDir = 0;
 	int towerPosY;	// 塔の描画位置Yのずれ
 
 	// プレイヤー
 	Player player;
+    Texture dango1;
+    Texture dango2;
+    Texture dango3;
+    Texture dango4;
+    Texture dango5;
+    Texture dango;
 
 	// 足場
 	Foot foots[FT_NUM];
 	Texture footTextures[FT_TEX_NUM];
+    
+    // アイテム
+    Item items[FT_NUM];
+    
 
 public:
 
@@ -47,6 +59,12 @@ public:
 	void footUpdate();
     void footDrawBefore() const;
 	void footDraw() const;
+    
+    void itemInit();
+    void itemUpdate();
+    void itemDrawBefore() const;
+    void itemDraw() const;
+    
 	// 足場の横壁を描画
 	//void drawFootSide(double rootX, double X, double arg);
 	
