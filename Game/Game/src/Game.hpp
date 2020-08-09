@@ -23,6 +23,7 @@ private:
 
 	// プレイヤー
 	Player player;
+
     Texture dango1;
     Texture dango2;
     Texture dango3;
@@ -54,6 +55,7 @@ public:
 	void playerUpdate();
 	void collisionY();
 	void playerDraw() const;
+	void playerDrawByDir(Texture texture, int x, int y, int orRight) const;
 
 	void footInit();
 	void footUpdate();

@@ -191,7 +191,6 @@ void Game::collisionY() {
     }
 }
 
-
 void Game::playerDraw() const {
     if(player.isRight) dango.mirrored().draw(player.drawPosX, player.drawPosY);
     else dango.draw(player.drawPosX, player.drawPosY);
@@ -206,7 +205,6 @@ void Game::playerDraw() const {
     Print << U"towerDir:" << towerDir;
     Print << U"JUMP:" << player.jump;
     Print << U"GROUND" << player.isGround;
-    
 }
 
 void Game::footInit() {
