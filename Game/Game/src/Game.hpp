@@ -54,6 +54,7 @@ public:
 	void playerInit();
 	void playerUpdate();
 	void collisionY();
+	void collisionX();
 	void playerDraw() const;
 	void playerDrawByDir(Texture texture, int x, int y, int orRight) const;
 

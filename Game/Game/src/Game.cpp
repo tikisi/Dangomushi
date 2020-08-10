@@ -21,6 +21,7 @@ Game::Game(const InitData& init)
 void Game::update() {
     playerUpdate();
     collisionY();
+    collisionX();
     towerUpdate();
     footUpdate();
     itemUpdate();
@@ -121,18 +122,21 @@ void Game::playerUpdate() {
         if (player.isGround) {
             player.jump = 1;
             player.speedY += 10.0;
+            player.width = 30;
         }
     }
 
     if (!player.isGround && player.jump != 0) {
         if (player.jump++ > 8) {
             player.jump = 0;
+            player.width = 50;
         }
         if (KeySpace.pressed()) {
             player.speedY += 0.7;
         }
         else {
             player.jump = 0;
+            player.width = 50;
         }
     }
 
@@ -146,6 +150,7 @@ void Game::playerUpdate() {
         player.speedX -= player.accX;
         player.isRight = false;
     }
+    player.speedX *= 0.98;
     if (player.isGround && !KeyRight.pressed() && !KeyLeft.pressed()) player.speedX *= 0.5;
     // yの加速
     player.speedY -= player.accY;
@@ -182,7 +187,6 @@ void Game::collisionY() {
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].isFrontL && foots[i].isFrontR && foots[i].withDraw < 30) {
             RectF footRect(foots[i].posXR, foots[i].posY, foots[i].posXL - foots[i].posXR, FT_HEIGHT);
-            //footRect.draw(Palette::White);
             if (playerRect.intersects(footRect)) {
                 Print << U"collision";
                 if (player.speedY < 0.0) {   // 上からぶつかったとき
@@ -199,6 +203,35 @@ void Game::collisionY() {
                 player.speedY = 0.0;
             }
             else player.isGround = false;
+        }
+    }
+}
+
+void Game::collisionX() {
+    RectF playerRect(player.drawPosX, player.posY, player.width, player.height);
+
+    for (int i = 0; i < FT_NUM; i++) {
+        if (foots[i].isFrontL && foots[i].isFrontR && foots[i].withDraw < 30) {
+            // 移動後の角度と座標を計算 
+            double dirR = rotate(foots[i].dirR);
+            double dirL = rotate(foots[i].dirL);
+            double  posXL = calcPos(dirL, FT_R - foots[i].withDraw);
+            double posXR = calcPos(dirR, FT_R - foots[i].withDraw);
+            // 当たり判定 
+            RectF footRect(posXR, foots[i].posY, posXL - posXR, FT_HEIGHT);
+            if (playerRect.intersects(footRect)) {
+                // speedXを逆算する
+                if (player.speedX > 0) {
+                    posXR = player.drawPosX + player.width + 0.1;   // くい込むので0.1マージンを確保
+                    dirR =  Math::TwoPi - acos((posXR - TW_CENTER_X) / (FT_R - foots[i].withDraw));
+                    player.speedX = foots[i].dirR - dirR;
+                }
+                else {
+                    posXL = player.drawPosX;
+                    dirL = Math::TwoPi - acos((posXL - TW_CENTER_X) / (FT_R - foots[i].withDraw));
+                    player.speedX = foots[i].dirL - dirL;
+                }
+            }
         }
     }
 }
