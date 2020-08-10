@@ -6,13 +6,13 @@
 class Title : public MyApp::Scene
 {
 private:
-	const Font font50;
+    const Font font50;
 
 public:
 
-	Title(const InitData& init) : font50(50), IScene(init) {}
+    Title(const InitData& init) : font50(50), IScene(init) {}
 
-	void update() override;
+    void update() override;
 
-	void draw() const override;
+    void draw() const override;
 };
