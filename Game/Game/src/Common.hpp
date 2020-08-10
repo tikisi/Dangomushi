@@ -5,18 +5,18 @@
 // シーンの名前
 enum class State
 {
-	Title,
+    Title,
 
-	Game,
-    
+    Game,
+
     Battle,
 };
 
 // ゲームデータ
 struct GameData
 {
-	// ハイスコア
-	int32 highScore = 0;
+    // ハイスコア
+    int32 highScore = 0;
 };
 
 // シーン管理クラス

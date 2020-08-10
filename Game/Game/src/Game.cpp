@@ -223,7 +223,7 @@ void Game::collisionX() {
                 // speedXを逆算する
                 if (player.speedX > 0) {
                     posXR = player.drawPosX + player.width + 0.1;   // くい込むので0.1マージンを確保
-                    dirR =  Math::TwoPi - acos((posXR - TW_CENTER_X) / (FT_R - foots[i].withDraw));
+                    dirR = Math::TwoPi - acos((posXR - TW_CENTER_X) / (FT_R - foots[i].withDraw));
                     player.speedX = foots[i].dirR - dirR;
                 }
                 else {

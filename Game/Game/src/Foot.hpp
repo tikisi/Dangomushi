@@ -20,7 +20,7 @@ struct Foot {
     double posRootXL;  // 根元の描画座用XL
     bool isFrontR;  // 後ろに回った足場の横の壁は消える
     bool isFrontL;  // 後ろに回った足場の横の壁は消える
-    
+
     double withDraw; // 乗っていた足場が引っこむ
     double time;
 };
