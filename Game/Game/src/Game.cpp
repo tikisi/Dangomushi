@@ -402,6 +402,13 @@ void Game::itemUpdate() {
         items[i].posY = foots[i].posY - 30;
         items[i].isFront = isFront(items[i].dir);
         items[i].drawPosY = items[i].posY + (player.drawPosY - player.posY);
+        RectF itemRect(Arg::center(items[i].posX, items[i].drawPosY), 30, 30);
+        RectF playerRect(player.drawPosX, player.drawPosY, player.width, player.height);
+        if(playerRect.intersects(itemRect) && items[i].isThere){
+            items[i].isThere = 0;
+            player.HP += 100;
+        }
+        
     }
 }
 
