@@ -8,6 +8,7 @@ constexpr int TW_NUM = 6;		// 塔の段の種類数
 constexpr int TW_CENTER_X = 350;	// 塔の描画中心座標X
 constexpr int TW_WIDTH = 400;	// 塔の段の横幅
 constexpr int TW_HEIGHT = 40;	// 塔の段の高さ
+constexpr int LV_NUM = 2;   // 足場の生成アルゴリズムの数
 
 // ゲームシーン
 class Game : public MyApp::Scene
@@ -34,11 +35,15 @@ private:
     // 足場
     Foot foots[FT_NUM];
     Texture footTextures[FT_TEX_NUM];
+    int Lv;
+    std::function<void()> FTGeneraters[LV_NUM] ;
+    std::function<void()> FTGeneratersInit[LV_NUM];
+    
 
     // アイテム
     Item items[FT_NUM];
 
-
+    const Font font30;
 public:
 
     Game(const InitData& init);
@@ -56,7 +61,6 @@ public:
     void collisionY();
     void collisionX();
     void playerDraw() const;
-    void playerDrawByDir(Texture texture, int x, int y, int orRight) const;
 
     void footInit();
     void footUpdate();
@@ -68,9 +72,6 @@ public:
     void itemDrawBefore() const;
     void itemDraw() const;
 
-    // 足場の横壁を描画
-    //void drawFootSide(double rootX, double X, double arg);
-
     // キー入力による角度の回転
     double rotate(double arg);
     // 半径と角度から画面上のX座標を返す
@@ -79,4 +80,12 @@ public:
     Rect drawBox(double x1, double y1, double x2, double height) const {
         return Rect(x1, y1, x2 - x1, height);
     }
+
+    // 足場の生成アルゴリズム
+    void generate();            // 足場の生成アルゴリズムを選択
+    void generateInit();        // 足場の初期生成アルゴリズムを選択
+    void generateLv1Init();
+    void generateLv1();
+    void generateLv2Init() {};
+    void generateLv2() {};
 };

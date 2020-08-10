@@ -234,6 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\GenerateFoot.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Title.cpp" />
   </ItemGroup>
