@@ -1,4 +1,5 @@
-﻿#pragma once
+#pragma once
+#include "Foot.hpp"
 
 struct Player {
     int width = 50;     // 横幅
@@ -17,4 +18,6 @@ struct Player {
     bool isRight;     // どっちに向いているのか（右なら1、左なら０）
     int spinCount;  // 回転のアニメーション
     int HP;
+    bool damageFlag;
+    Foot::Type footType;
 };

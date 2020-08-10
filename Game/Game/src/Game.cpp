@@ -1,7 +1,7 @@
-﻿# include "Game.hpp"
+# include "Game.hpp"
 
 Game::Game(const InitData& init)
-: IScene(init) {
+: font30(15), IScene(init) {
     // 塔読み込み
     for (int i = 0; i < TW_NUM; i++) {
         tower[i] = Texture(U"tower" + Format(i + 1) + U".png");
@@ -15,6 +15,9 @@ Game::Game(const InitData& init)
     // アイテムの初期化
     itemInit();
     
+    // 敵の初期化
+    enemyInit();
+    
 }
 
 
@@ -24,6 +27,7 @@ void Game::update() {
     towerUpdate();
     footUpdate();
     itemUpdate();
+    enemyUpdate();
     
 }
 
@@ -35,6 +39,7 @@ void Game::draw() const {
     footDraw();
     itemDraw();
     playerDraw();
+    enemyDraw();
 }
 
 
@@ -84,20 +89,14 @@ void Game::playerInit() {
     player.drawPosY = 400;
     player.posY = player.drawPosY;
     player.HP = 500;
+    player.damageFlag = 0;
 }
 
 
 
 void Game::playerUpdate() {
     
-    RectF playerRect(player.drawPosX, player.posY, player.width, player.height);
-    for(int i =0; i<FT_NUM; i++){
-        
-        RectF footRect(foots[i].posXR, foots[i].posY, foots[i].posXL - foots[i].posXR, FT_HEIGHT);
-        if(playerRect.intersects(footRect) && foots[i].type == 2){
-            player.HP -= 1;
-        }
-    }
+    
     
     // デバッグ用
     if (KeyUp.pressed()) {
@@ -109,7 +108,7 @@ void Game::playerUpdate() {
         player.spinCount = 0;
         if(player.isGround) {
             player.jump = 1;
-            player.speedY += 10.0;
+            player.speedY += 5.0;
         }
     }
     
@@ -118,13 +117,17 @@ void Game::playerUpdate() {
             player.jump = 0;
         }
         if(KeySpace.pressed()) {
-            player.speedY += 0.7;
+            player.speedY += 1.5;
+            //player.speedY += (10 - player.jump)/10.0 + 0.6;
         } else {
             player.jump = 0;
         }
     }
     
     // 左右の加速
+    if(player.footType == Foot::Type::ice)player.accX = 0.0005;
+    else player.accX = 0.001;
+    
     if(KeyRight.pressed()) {
         player.speedX += player.accX;
         player.isRight = true;
@@ -134,14 +137,16 @@ void Game::playerUpdate() {
         player.speedX -= player.accX;
         player.isRight = false;
     }
-    if (player.isGround && !KeyRight.pressed() && !KeyLeft.pressed()) player.speedX *= 0.5;
+    if (player.footType != Foot::Type::ice && player.isGround && !KeyRight.pressed() && !KeyLeft.pressed()) player.speedX *= 0.5;
     // yの加速
     player.speedY -= player.accY;
     player.speedY *= 0.98;
+    player.speedX *= 0.98;
     player.posY -= player.speedY;
     
     // アニメーション
     if(player.isGround){
+        
         // プレイヤーの歩くアニメーション
         double b = towerDir;
         bool walkflag = 0;
@@ -151,6 +156,12 @@ void Game::playerUpdate() {
             else dango = dango2;
             b -= Math::TwoPi/72.0;
         }
+        
+        if (walkflag == player.damageFlag && player.footType == Foot::Type::spike){
+            player.HP -= 10;
+            player.damageFlag = !player.damageFlag;
+        }
+        
     } else{
         player.spinCount++;
         if(player.spinCount>15)player.spinCount = 6;
@@ -160,6 +171,8 @@ void Game::playerUpdate() {
         else if(player.spinCount<=10)dango = dango4;
         else dango = dango5;
     }
+    
+   
 }
 
 void Game::collisionY() {
@@ -175,10 +188,21 @@ void Game::collisionY() {
             if (playerRect.intersects(footRect)) {
                 Print << U"collision";
                 if (player.speedY < 0.0) {   // 上からぶつかったとき
+                    
                     player.posY = foots[i].posY - player.height;
-                    if(flg==false)player.speedX*=0.2;
                     player.isGround = true;     // 地面にいるフラグを立てる
                     player.speedY = 0.0;
+                    
+                    // 刺にあたった瞬間のダメージ
+                    if(player.footType == Foot::Type::norm && foots[i].type == Foot::Type::spike){
+                        player.HP -= 50;
+                    }
+                    if(player.footType == Foot::Type::norm && foots[i].type == Foot::Type::bounce){
+                        player.speedY = 10;
+                        player.jump = 1;
+                    }
+                    player.footType = foots[i].type;
+                    if(flg==false && player.footType != Foot::Type::ice)player.speedX*=0.2;
                     break;
                 }
                 else {    //  下からぶつかったとき
@@ -186,9 +210,12 @@ void Game::collisionY() {
                 }
                 
                 player.speedY = 0.0;
+                
+
             }else player.isGround=false;
         }
     }
+    if(!player.isGround)player.footType = Foot::Type::norm;
 }
 
 
@@ -217,7 +244,7 @@ void Game::footInit() {
     
     for(int i = 0; i < FT_NUM; i++) {
         foots[i].time = 0;
-        foots[i].type = Random<int>(2);
+        foots[i].type = (Foot::Type)Random<int>(4);
         foots[i].dirR = 0.0;
         foots[i].dirL = 0.0;
         foots[i].withDraw = 0.0;
@@ -225,9 +252,9 @@ void Game::footInit() {
     
     for (int i = 0; i < FT_NUM; i++) {
         // 足場の位置のズレを制限
-//        if(i == FT_NUM - 1) foots[i].dirL = foots[0].dirL + Random<double>(-1.5, 1.5);
-//        else foots[i].dirL = foots[i+1].dirL + Random<double>(-1.5, 1.5);
-//        foots[i].dirR = foots[i].dirL - 1;
+        //        if(i == FT_NUM - 1) foots[i].dirL = foots[0].dirL + Random<double>(-1.5, 1.5);
+        //        else foots[i].dirL = foots[i+1].dirL + Random<double>(-1.5, 1.5);
+        //        foots[i].dirR = foots[i].dirL - 1;
         foots[i].dirL = Random<double>(Math::TwoPi);
         foots[i].dirR = foots[i].dirL - Random<double>(0.3, 0.8);
         
@@ -252,14 +279,16 @@ void Game::footUpdate() {
         foots[i].drawPosY = foots[i].posY + (player.drawPosY - player.posY);
         
         // 再出現
-        if(foots[i].drawPosY > 800){
-            foots[i].posY -= FT_HEIGHT * FT_NUM;
-            foots[i].type = Random<int>(2);
+        if(foots[i].drawPosY > 700){
+            //foots[i].posY -= FT_HEIGHT * FT_NUM;
+            if(i == FT_NUM-1)foots[FT_NUM-1].posY = foots[0].posY - Random(FT_HEIGHT, FT_HEIGHT + 50);
+            else foots[i].posY = foots[i+1].posY - Random(FT_HEIGHT, FT_HEIGHT + 70);
+            foots[i].type = (Foot::Type)Random<int>(4);
             foots[i].withDraw = 0.0;
             
             // 足場の位置のズレと大きさを制限
-//            if(i == FT_NUM - 1) foots[i].dirL = foots[0].dirL + Random<double>(-1.5, 1.5);
-//            else foots[i].dirL = foots[i+1].dirL + Random<double>(-1.5, 1.5);
+            //            if(i == FT_NUM - 1) foots[i].dirL = foots[0].dirL + Random<double>(-1.5, 1.5);
+            //            else foots[i].dirL = foots[i+1].dirL + Random<double>(-1.5, 1.5);
             foots[i].dirL = Random<double>(Math::TwoPi);
             foots[i].dirR = foots[i].dirL - Random<double>(0.3, 0.8);
             
@@ -310,16 +339,38 @@ void Game::footDraw() const {
             drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(Palette::Blue);
         }
         
+
+        Color footcolor;
+
+        switch(foots[i].type){
+            case Foot::norm:
+                footcolor = Color(170, 100+foots[i].withDraw*1.5, 100+foots[i].withDraw*1.5);
+                break;
+            case Foot::pull:
+                footcolor = Color(170, 100+foots[i].withDraw*1.5, 100+foots[i].withDraw*1.5);
+                break;
+            case Foot::spike:
+                footcolor = Color(0, 100+foots[i].withDraw*1.5, 100+foots[i].withDraw*1.5);
+                break;
+            case Foot::ice:
+                footcolor = Color(140,210,255);
+                break;
+            case Foot::bounce:
+                footcolor = Color(60,60,60);
+                break;
+        }
+        
+        
         // 足場のまるい壁
         if (foots[i].isFrontL && foots[i].isFrontR) {
-            if(foots[i].type != 2)drawBox(foots[i].posXR, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Color(170, 100+foots[i].withDraw*1.5, 100+foots[i].withDraw*1.5)).drawFrame(2, 0, Palette::Black);
-            else drawBox(foots[i].posXR, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Color(0, 100+foots[i].withDraw*1.5, 100+foots[i].withDraw*1.5)).drawFrame(2, 0, Palette::Black);
+            drawBox(foots[i].posXR, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(footcolor).drawFrame(2, 0, Palette::Black);
+            font30(foots[i].type).draw(foots[i].posXR+5, foots[i].drawPosY+5);
         }
         else if (!foots[i].isFrontR && foots[i].isFrontL) {
-            drawBox(TW_CENTER_X - FT_R + foots[i].withDraw, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Color(170, 100+foots[i].withDraw*1.5, 100+foots[i].withDraw*1.5)).drawFrame(2, 0, Palette::Black);
+            drawBox(TW_CENTER_X - FT_R + foots[i].withDraw, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(footcolor).drawFrame(2, 0, Palette::Black);
         }
         else if (foots[i].isFrontR && !foots[i].isFrontL) {
-            drawBox(TW_CENTER_X + FT_R - foots[i].withDraw, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(Color(170, 100+foots[i].withDraw*1.5, 100+foots[i].withDraw*1.5)).drawFrame(2, 0, Palette::Black);
+            drawBox(TW_CENTER_X + FT_R - foots[i].withDraw, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(footcolor).drawFrame(2, 0, Palette::Black);
         }
     }
 }
@@ -370,6 +421,62 @@ void Game::itemDraw() const {
             RectF(Arg::center(items[i].posX, items[i].drawPosY), 30, 30).draw(Palette::Aqua);
         }
     }
+}
+
+
+void Game::enemyInit() {
+    enemy.isRight = RandomBool(0.5);
+    enemy.type = RandomBool(0.5);
+    enemy.posY = player.posY - 600;
+    enemy.attack = -300;
+    enemy.move = 0;
+}
+
+void Game::enemyUpdate() {
+    // 再出現
+    if(enemy.drawPosY > 900){
+        enemyInit();
+    }
+    
+    
+    if(enemy.attack<0)enemy.attack++;
+    if(enemy.type == 2 && enemy.attack<=0)enemy.move =  -150 + sin(foots[1].time)*200;
+    
+    if(enemy.type == 2 && enemy.attack == 0 && player.isGround && player.speedX == 0)enemy.attack++;
+    if(-5 < player.posY - enemy.posY && player.posY - enemy.posY < 5 && enemy.attack == 0 && player.isGround)enemy.attack++;
+    if(enemy.posY > player.posY - 500 && enemy.attack <= 0){
+        enemy.posY += (player.posY - enemy.posY)/50.0;
+    }
+    if(enemy.attack>0)enemy.attack++;
+    if(enemy.attack>100)enemy.attack = 100;
+    enemy.drawPosY = enemy.posY - player.posY + player.drawPosY + enemy.move;
+    
+    
+}
+
+void Game::enemyDraw() const {
+    if(enemy.attack<0 || 50<enemy.attack)RectF(700, enemy.drawPosY, 80, 50).drawFrame(10, HSV(120*enemy.type, 1.0, 0.8)).draw(Palette::White);
+    else RectF(700, enemy.drawPosY, 80, 50).drawFrame(10, HSV(120*enemy.type, 1.0, 0.8)).draw(Color(255,255-enemy.attack*3,255-enemy.attack));
+    
+    switch (enemy.type) {
+        case 0:
+            if(0 < enemy.attack && enemy.attack <=50)Line(0,enemy.drawPosY, 700, enemy.drawPosY).draw(LineStyle::RoundDot, 3,Palette::Purple);
+            if(50 < enemy.attack && enemy.attack < 100)Line(0,enemy.drawPosY, 700, enemy.drawPosY).draw(LineStyle::RoundCap, enemy.attack/5.0, Palette::Red);
+            break;
+        case 1:
+            if(50 < enemy.attack && enemy.attack < 100){
+                Circle(700 - (enemy.attack-50)*14, enemy.drawPosY, 20).draw(Palette::Red);
+            }
+            break;
+        case 2:
+            if(0 < enemy.attack && enemy.attack <=50) Line(700,enemy.drawPosY, player.drawPosX, player.drawPosY).draw(5, Palette::Purple);
+            if(50 < enemy.attack && enemy.attack < 100)RectF(0,enemy.drawPosY, 700, 10+enemy.attack/10).draw(Palette::Red);
+            
+        default:
+            break;
+    }
+    
+    
 }
 
 

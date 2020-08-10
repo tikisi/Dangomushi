@@ -1,8 +1,9 @@
-﻿# pragma once
+# pragma once
 #include "Common.hpp"
 #include "Player.hpp"
 #include "Foot.hpp"
 #include "Item.hpp"
+#include "Enemy.hpp"
 
 constexpr int TW_NUM = 6;		// 塔の段の種類数
 constexpr int TW_CENTER_X = 350;	// 塔の描画中心座標X
@@ -37,6 +38,9 @@ private:
     // アイテム
     Item items[FT_NUM];
     
+    Enemy enemy;
+    
+    const Font font30;
 
 public:
 
@@ -64,6 +68,11 @@ public:
     void itemUpdate();
     void itemDrawBefore() const;
     void itemDraw() const;
+    
+    void enemyInit();
+    void enemyUpdate();
+    void enemyDraw() const;
+    
     
 	// 足場の横壁を描画
 	//void drawFootSide(double rootX, double X, double arg);
