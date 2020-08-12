@@ -91,6 +91,12 @@ public:
     void generateInit();        // 足場の初期生成アルゴリズムを選択
     void generateLv1Init();
     void generateLv1();
-    void generateLv2Init() {};
-    void generateLv2() {};
+    void generateLv2Init();
+    void generateLv2();
+    void generateLv3Init();
+    void generateLv3();
+    void generateLv4Init();
+    void generateLv4();
+    void generateLv5Init();
+    void generateLv5();
 };

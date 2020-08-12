@@ -105,6 +105,7 @@ void Game::playerInit() {
 
 
 void Game::playerUpdate() {
+    
     // デバッグ用
     if (KeyUp.pressed()) {
         player.speedY = 10;
@@ -116,21 +117,21 @@ void Game::playerUpdate() {
         if (player.isGround) {
             player.jump = 1;
             player.speedY += 5.0;
-            player.width = 30;
         }
     }
     
     if (!player.isGround && player.jump != 0) {
         if (player.jump++ > 8) {
             player.jump = 0;
-            player.width = 50;
         }
         if(KeySpace.pressed()) {
             player.speedY += 1.5;
         } else {
             player.jump = 0;
-            player.width = 50;
         }
+        
+        if(player.isGround)player.width = 50;
+        else player.width = 30;
     }
     
     // 左右の加速
@@ -151,6 +152,7 @@ void Game::playerUpdate() {
     // yの加速
     player.speedY -= player.accY;
     player.speedY *= 0.98;
+    if(KeyDown.pressed())player.speedY = 0;
     player.posY -= player.speedY;
     
     // アニメーション
@@ -233,16 +235,19 @@ void Game::collisionX() {
             RectF footRect(posXR, foots[i].posY, posXL - posXR, FT_HEIGHT);
             if (playerRect.intersects(footRect)) {
                 // speedXを逆算する
-                if (player.speedX > 0) {
-                    posXR = player.drawPosX + player.width + 0.01;   // くい込むので0.1マージンを確保
-                    dirR = Math::TwoPi - acos((posXR - TW_CENTER_X) / (FT_R - foots[i].withDraw));
-                    player.speedX = foots[i].dirR - dirR;
-                }
-                else {
-                    posXL = player.drawPosX;
-                    dirL = Math::TwoPi - acos((posXL - TW_CENTER_X) / (FT_R - foots[i].withDraw));
-                    player.speedX = foots[i].dirL - dirL;
-                }
+//                if (player.speedX > 0) {
+//                    posXR = player.drawPosX + player.width;   // くい込むので0.1マージンを確保
+//                    dirR = Math::TwoPi - acos((posXR - TW_CENTER_X) / (FT_R - foots[i].withDraw));
+//                    player.speedX = foots[i].dirR - dirR;
+//                }
+//                else {
+//                    posXL = player.drawPosX;
+//                    dirL = Math::TwoPi - acos((posXL - TW_CENTER_X) / (FT_R - foots[i].withDraw));
+//                    player.speedX = foots[i].dirL - dirL;
+//                }
+                
+                player.speedX *= -0.5;
+                
             }
         }
     }
@@ -279,7 +284,7 @@ void Game::footInit() {
         foots[i].withDraw = 0.0;
     }
     // 足場の生成
-    Lv = 1;
+    Lv = 3;
     generateInit();
 }
 
