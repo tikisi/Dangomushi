@@ -14,7 +14,7 @@ def convert(file_name):
         f.write(original)
 
 src = glob.glob("*")
-src.remove('test2.py')
+src.remove('encoding.py')
 
 for i in src:
     if(not is_utf8_file_with_bom(i)):
