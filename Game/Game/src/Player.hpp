@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Foot.hpp"
 
 struct Player {
