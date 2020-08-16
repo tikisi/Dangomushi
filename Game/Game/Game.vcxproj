@@ -234,12 +234,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\GenerateFoot.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CharaSelect.h" />
     <ClInclude Include="src\Common.hpp" />
+    <ClInclude Include="src\Enemy.hpp" />
     <ClInclude Include="src\Foot.hpp" />
     <ClInclude Include="src\Game.hpp" />
     <ClInclude Include="src\Item.hpp" />

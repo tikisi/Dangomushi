@@ -380,6 +380,9 @@
     <ClCompile Include="src\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\GenerateFoot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.hpp">
@@ -401,6 +404,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\CharaSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Enemy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

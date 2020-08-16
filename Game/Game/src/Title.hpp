@@ -6,7 +6,7 @@
 class Title : public MyApp::Scene
 {
 private:
-	const Font font50;
+    const Font font50;
 
 public:
 
@@ -15,7 +15,7 @@ public:
 		ClearPrint();
 	}
 
-	void update() override;
+    void update() override;
 
-	void draw() const override;
+    void draw() const override;
 };
