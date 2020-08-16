@@ -10,7 +10,10 @@ private:
 
 public:
 
-	Title(const InitData& init) : font50(50), IScene(init) {}
+	Title(const InitData& init) : font50(50), IScene(init) {
+		Scene::SetBackground(Palette::Black);
+		ClearPrint();
+	}
 
 	void update() override;
 

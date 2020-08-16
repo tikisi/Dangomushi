@@ -10,6 +10,7 @@
 # include "Common.hpp"
 # include "Title.hpp"
 # include "Game.hpp"
+# include "CharaSelect.h"
 
 void Main()
 {
@@ -28,7 +29,8 @@ void Main()
 	MyApp manager;
 	manager
 		.add<Title>(State::Title)
-    .add<Game>(State::Game);
+		.add<Game>(State::Game)
+		.add<CharaSelect>(State::CharaSelect);
 
 	while (System::Update())
 	{

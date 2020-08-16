@@ -7,6 +7,8 @@ enum class State
 {
 	Title,
 
+	CharaSelect,
+
 	Game,
     
     Battle,
