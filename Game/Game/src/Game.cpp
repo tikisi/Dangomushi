@@ -1,4 +1,4 @@
-# include "Game.hpp"
+﻿# include "Game.hpp"
 
 
 Game::Game(const InitData& init) : font30(30), IScene(init) {
@@ -318,10 +318,10 @@ void Game::footUpdate() {
 void Game::footDrawBefore() const {
     for (int i = 0; i < FT_NUM; i++) {
         // 左右の壁の描画
-        if (!foots[i].isFrontL) {
+        if (!foots[i].isFrontL && foots[i].dirL > Math::HalfPi) {
             drawBox(foots[i].posRootXL, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Palette::Red);
         }
-        if (!foots[i].isFrontR) {
+        if (!foots[i].isFrontR && foots[i].dirR < Math::HalfPi) {
             drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(Palette::Blue);
         }
     }
@@ -330,10 +330,10 @@ void Game::footDrawBefore() const {
 void Game::footDraw() const {
     for (int i = 0; i < FT_NUM; i++) {
         // 左右の壁の描画
-        if (foots[i].isFrontL) {
+        if (foots[i].isFrontL && foots[i].dirL < Math::HalfPi * 3) {
             drawBox(foots[i].posRootXL, foots[i].drawPosY, foots[i].posXL, FT_HEIGHT).draw(Palette::Red);
         }
-        if (foots[i].isFrontR) {
+        if (foots[i].isFrontR && foots[i].dirR > Math::HalfPi * 3) {
             drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, FT_HEIGHT).draw(Palette::Blue);
         }
         

@@ -240,6 +240,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.hpp" />
+    <ClInclude Include="src\Enemy.hpp" />
     <ClInclude Include="src\Foot.hpp" />
     <ClInclude Include="src\Game.hpp" />
     <ClInclude Include="src\Item.hpp" />
