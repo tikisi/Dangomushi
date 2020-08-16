@@ -4,6 +4,7 @@
 void Title::update()
 {
 	if(SimpleGUI::ButtonAt(U"Start", Scene::Center().movedBy(0, 50))) {
+		getData().SelectNum = 1; // ダンゴムシに設定
 		changeScene(State::Game);
 	}
 	if (SimpleGUI::ButtonAt(U"CharaSelect", Scene::Center().movedBy(0, 100))) {

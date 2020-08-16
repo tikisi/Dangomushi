@@ -58,6 +58,7 @@ public:
     void towerDraw() const;
     
     void playerInit();
+    void loadPlayer(int selectNum);
     void playerUpdate();
     void collisionY();
     void collisionX();

@@ -94,6 +94,7 @@ public:
 	{
 		if(SelectNUM <= species){
 			if ((SimpleGUI::Button(U"Start", Point(500, 500), unspecified)) || KeyEnter.down()) {
+				getData().SelectNum = 5;
 				changeScene(State::Game);
 				//Scene::SetBackground(ColorF(Palette::Black));
 				//ClearPrint();
