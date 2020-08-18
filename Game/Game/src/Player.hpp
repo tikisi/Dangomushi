@@ -13,8 +13,6 @@ struct Player {
     double drawPosX;    // 画面上での描画座標X
     double drawPosY;    // 画面上での描画座標Y
 
-    double dirL;        // 角度L(不変値)
-    double dirR;        // 角度R(不変値)
 
     bool isGround;     // 地面にいるかどうかのフラグ
     int jump = 0;
@@ -26,7 +24,9 @@ struct Player {
 
 
     /*角度を使った当たり判定*/
-    /*bool intersects(Foot& foot) const {
+    /*double dirL;        // 角度L(不変値)
+    double dirR;        // 角度R(不変値)
+    bool intersects(Foot& foot) const {
         if (abs((posY + height / 2) - (foot.posY + FT_HEIGHT / 2)) < (height + FT_HEIGHT) / 2) {
             if (abs(((dirR + dirL) / 2) - ((foot.dirR + foot.dirL) / 2)) < ((dirL - dirR) + (foot.dirL - foot.dirR)) / 2) {
                 return true;
