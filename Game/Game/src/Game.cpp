@@ -190,7 +190,7 @@ void Game::collisionY() {
                 Print << U"collision";
                 if (player.speedY < 0.0) {   // 上からぶつかったとき
 
-                    player.posY = foots[i].posY - player.height;
+                    player.posY = foots[i].posY - player.height - 0.00001;
                     player.isGround = true;     // 地面にいるフラグを立てる
                     player.speedY = 0.0;
 
@@ -207,7 +207,7 @@ void Game::collisionY() {
                     break;
                 }
                 else {    //  下からぶつかったとき
-                    player.posY = foots[i].posY + FT_HEIGHT;
+                    player.posY = foots[i].posY + FT_HEIGHT + 0.00001;
                 }
 
                 player.speedY = 0.0;
@@ -233,12 +233,12 @@ void Game::collisionX() {
             if (playerRect.intersects(footRect)) {
                 // speedXを逆算する
                 if (player.speedX > 0) {
-                    posXR = player.drawPosX + player.width + 0.01;   // くい込むので0.1マージンを確保
+                    posXR = player.drawPosX + player.width + 0.00001;   // くい込むので0.1マージンを確保
                     dirR = Math::TwoPi - acos((posXR - TW_CENTER_X) / (FT_R - foots[i].withDraw));
                     player.speedX = foots[i].dirR - dirR;
                 }
                 else {
-                    posXL = player.drawPosX;
+                    posXL = player.drawPosX - 0.00001;
                     dirL = Math::TwoPi - acos((posXL - TW_CENTER_X) / (FT_R - foots[i].withDraw));
                     player.speedX = foots[i].dirL - dirL;
                 }
