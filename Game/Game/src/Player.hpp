@@ -24,14 +24,19 @@ struct Player {
 
 
     /*角度を使った当たり判定*/
-    /*double dirL;        // 角度L(不変値)
+    double dirL;        // 角度L(不変値)
     double dirR;        // 角度R(不変値)
+
     bool intersects(Foot& foot) const {
+        // TwoPiを超えて -= TwoPiされたものを戻す
+        double fdirL = foot.dirL > foot.dirR ? foot.dirL : foot.dirL + Math::TwoPi; 
+        double fdirR = foot.dirR;
+        
         if (abs((posY + height / 2) - (foot.posY + FT_HEIGHT / 2)) < (height + FT_HEIGHT) / 2) {
-            if (abs(((dirR + dirL) / 2) - ((foot.dirR + foot.dirL) / 2)) < ((dirL - dirR) + (foot.dirL - foot.dirR)) / 2) {
+            if (abs(((this->dirR + this->dirL) / 2) - ((fdirR + fdirL) / 2)) < ((this->dirL - this->dirR) + (fdirL - fdirR)) / 2) {
                 return true;
             }
         }
         return false;
-    }*/
+    }
 };

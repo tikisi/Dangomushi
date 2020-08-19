@@ -23,9 +23,9 @@ Game::Game(const InitData& init) : font30(30), IScene(init) {
 void Game::update() {
     playerUpdate();
     collisionY();
-    collisionX();
     towerUpdate();
     footUpdate();
+    collisionX();
     itemUpdate();
     enemyUpdate();
 }
@@ -96,6 +96,9 @@ void Game::playerInit() {
     player.posY = player.drawPosY;
     player.HP = 500;
     player.damageFlag = 0;
+
+    player.dirR = Math::TwoPi - acos((player.drawPosX - TW_CENTER_X) / FT_R);
+    player.dirL = Math::TwoPi - acos((player.drawPosX + player.width - TW_CENTER_X) / FT_R);
 }
 
 
@@ -181,12 +184,10 @@ void Game::playerUpdate() {
 }
 
 void Game::collisionY() {
-    RectF playerRect(player.drawPosX, player.posY, player.width, player.height);
     bool flg = player.isGround;
     for (int i = 0; i < FT_NUM; i++) {
-        if (foots[i].isFrontL && foots[i].isFrontR && foots[i].withDraw < 30) {
-            RectF footRect(foots[i].posXR, foots[i].posY, foots[i].posXL - foots[i].posXR, FT_HEIGHT);
-            if (playerRect.intersects(footRect)) {
+        if (foots[i].withDraw < 30) {
+            if (player.intersects(foots[i])) {
                 Print << U"collision";
                 if (player.speedY < 0.0) {   // 上からぶつかったとき
 
@@ -219,30 +220,24 @@ void Game::collisionY() {
 }
 
 void Game::collisionX() {
-    RectF playerRect(player.drawPosX, player.posY, player.width, player.height);
-
     for (int i = 0; i < FT_NUM; i++) {
-        if (foots[i].isFrontL && foots[i].isFrontR && foots[i].withDraw < 30) {
-            // 移動後の角度と座標を計算
-            double dirR = rotate(foots[i].dirR);
-            double dirL = rotate(foots[i].dirL);
-            double  posXL = calcPos(dirL, FT_R - foots[i].withDraw);
-            double posXR = calcPos(dirR, FT_R - foots[i].withDraw);
-            // 当たり判定
-            RectF footRect(posXR, foots[i].posY, posXL - posXR, FT_HEIGHT);
-            if (playerRect.intersects(footRect)) {
-                // speedXを逆算する
-                if (player.speedX > 0) {
-                    posXR = player.drawPosX + player.width + 0.00001;   // くい込むので0.1マージンを確保
-                    dirR = Math::TwoPi - acos((posXR - TW_CENTER_X) / (FT_R - foots[i].withDraw));
-                    player.speedX = foots[i].dirR - dirR;
-                }
-                else {
-                    posXL = player.drawPosX - 0.00001;
-                    dirL = Math::TwoPi - acos((posXL - TW_CENTER_X) / (FT_R - foots[i].withDraw));
-                    player.speedX = foots[i].dirL - dirL;
-                }
+        // 当たり判定
+        if (foots[i].withDraw < 30 && player.intersects(foots[i])) {
+            double tmp = player.speedX; // 退避
+            player.speedX *= -1.0 - 0.00001;
+
+            for (int j = 0; j < FT_NUM; j++) {
+                foots[j].dirR = rotate(foots[j].dirR);
+                foots[j].dirL = rotate(foots[j].dirL);
+                foots[j].posRootXL = calcPos(foots[j].dirL, FT_ROOT_R);
+                foots[j].posRootXR = calcPos(foots[j].dirR, FT_ROOT_R);
+                foots[j].posXL = calcPos(foots[j].dirL, FT_R - foots[j].withDraw);
+                foots[j].posXR = calcPos(foots[j].dirR, FT_R - foots[j].withDraw);
+                foots[j].isFrontR = isFront(foots[j].dirR);
+                foots[j].isFrontL = isFront(foots[j].dirL);
             }
+
+            player.speedX = tmp * -0.5;
         }
     }
 }
@@ -498,7 +493,7 @@ bool Game::isFront(double arg) {
 
 void Game::loadPlayer(int selectNum) {
     const static String path = U"player/"; // ディレクトリのパス
-    
+
     switch (selectNum) {
     case 1:
         dango1 = Texture(path + U"dangomushi/s1dangomushi.png");
