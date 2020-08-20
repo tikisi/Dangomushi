@@ -27,16 +27,23 @@ struct Player {
     double dirL;        // 角度L(不変値)
     double dirR;        // 角度R(不変値)
 
-    bool intersects(Foot& foot) const {
+    bool intersects(const Foot& foot) const {
         // TwoPiを超えて -= TwoPiされたものを戻す
-        double fdirL = foot.dirL > foot.dirR ? foot.dirL : foot.dirL + Math::TwoPi; 
+        double fdirL = foot.dirL > foot.dirR ? foot.dirL : foot.dirL + Math::TwoPi;
         double fdirR = foot.dirR;
-        
-        if (abs((posY + height / 2) - (foot.posY + FT_HEIGHT / 2)) < (height + FT_HEIGHT) / 2) {
+
+        if (abs(posY - (foot.posY + FT_HEIGHT / 2)) < (height + FT_HEIGHT) / 2) {
             if (abs(((this->dirR + this->dirL) / 2) - ((fdirR + fdirL) / 2)) < ((this->dirL - this->dirR) + (fdirL - fdirR)) / 2) {
                 return true;
             }
         }
         return false;
+    }
+
+    // 幅を更新
+    void updateWidth(const int width, const int TW_CENTER_X) {
+        this->width = width;
+        dirR = Math::TwoPi - acos((drawPosX - TW_CENTER_X - width / 2) / FT_R);
+        dirL = Math::TwoPi - acos((drawPosX + width / 2 - TW_CENTER_X) / FT_R);
     }
 };

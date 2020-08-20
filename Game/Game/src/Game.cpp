@@ -96,9 +96,7 @@ void Game::playerInit() {
     player.posY = player.drawPosY;
     player.HP = 500;
     player.damageFlag = 0;
-
-    player.dirR = Math::TwoPi - acos((player.drawPosX - TW_CENTER_X) / FT_R);
-    player.dirL = Math::TwoPi - acos((player.drawPosX + player.width - TW_CENTER_X) / FT_R);
+    player.updateWidth(player.width, TW_CENTER_X);
 }
 
 
@@ -115,21 +113,21 @@ void Game::playerUpdate() {
         if (player.isGround) {
             player.jump = 1;
             player.speedY += 5.0;
-            player.width = 30;
+            player.updateWidth(30, TW_CENTER_X);
         }
     }
 
     if (!player.isGround && player.jump != 0) {
         if (player.jump++ > 8) {
             player.jump = 0;
-            player.width = 50;
+            player.updateWidth(50, TW_CENTER_X);
         }
         if (KeySpace.pressed()) {
             player.speedY += 1.5;
         }
         else {
             player.jump = 0;
-            player.width = 50;
+            player.updateWidth(50, TW_CENTER_X);
         }
     }
 
@@ -191,7 +189,7 @@ void Game::collisionY() {
                 Print << U"collision";
                 if (player.speedY < 0.0) {   // 上からぶつかったとき
 
-                    player.posY = foots[i].posY - player.height - 0.00001;
+                    player.posY = foots[i].posY - player.height / 2 - 0.00001;
                     player.isGround = true;     // 地面にいるフラグを立てる
                     player.speedY = 0.0;
 
@@ -208,7 +206,7 @@ void Game::collisionY() {
                     break;
                 }
                 else {    //  下からぶつかったとき
-                    player.posY = foots[i].posY + FT_HEIGHT + 0.00001;
+                    player.posY = foots[i].posY + FT_HEIGHT + (player.height / 2) + 0.00001;
                 }
 
                 player.speedY = 0.0;
@@ -243,8 +241,8 @@ void Game::collisionX() {
 }
 
 void Game::playerDraw() const {
-    if (player.isRight) dango.mirrored().draw(player.drawPosX, player.drawPosY);
-    else dango.draw(player.drawPosX, player.drawPosY);
+    if (player.isRight) dango.mirrored().drawAt(player.drawPosX, player.drawPosY);
+    else dango.drawAt(player.drawPosX, player.drawPosY);
 
     Rect(730, 550 - player.HP, 40, player.HP).draw(Palette::Lightgreen);
 
