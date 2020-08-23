@@ -6,11 +6,12 @@
 class Title : public MyApp::Scene
 {
 private:
+	const Texture backTexture;
     const Font font50;
 
 public:
 
-	Title(const InitData& init) : font50(50), IScene(init) {
+	Title(const InitData& init) : backTexture(U"Title.png") ,font50(50), IScene(init) {
 		Scene::SetBackground(Palette::Black);
 		ClearPrint();
 		AudioAsset(U"Title").setLoop(true);
