@@ -9,6 +9,8 @@ enum class State
 
     Game,
 
+	CharaSelect,
+
     Battle,
     
     GameOver,
@@ -17,8 +19,7 @@ enum class State
 // ゲームデータ
 struct GameData
 {
-    // ハイスコア
-    int32 highScore = 0;
+    int SelectNum;  // キャラクターの種類
 };
 
 // シーン管理クラス

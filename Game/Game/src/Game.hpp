@@ -30,64 +30,62 @@ private:
     int towerSelect = 0; // 塔の種類
     double towerDir = 0;
     int towerPosY;	// 塔の描画位置Yのずれ
-    
+
     // プレイヤー
     Player player;
-    
+
     Texture dango1;
     Texture dango2;
     Texture dango3;
     Texture dango4;
     Texture dango5;
     Texture dango;
-    
+
     // 足場
     Foot foots[FT_NUM];
     Texture footTextures[FT_TEX_NUM];
     int Lv;
-    std::function<void()> FTGeneraters[LV_NUM] ;
-    std::function<void()> FTGeneratersInit[LV_NUM];
-    
-    
+
+
     // アイテム
     Item items[FT_NUM];
     Enemy enemy;
     const Font font30;
 public:
-    
+
     Game(const InitData& init);
-    
+
     void update() override;
-    
+
     void draw() const override;
-    
     
     void backUpdate();
     void backDraw() const;
     
     void towerUpdate();
     void towerDraw() const;
-    
+
     void playerInit();
+    void loadPlayer(int selectNum);
     void playerUpdate();
     void collisionY();
     void collisionX();
     void playerDraw() const;
-    
+
     void footInit();
     void footUpdate();
     void footDrawBefore() const;
     void footDraw() const;
-    
+
     void itemInit();
     void itemUpdate();
     void itemDrawBefore() const;
     void itemDraw() const;
-    
+
     void enemyInit();
     void enemyUpdate();
     void enemyDraw() const;
-    
+
     // キー入力による角度の回転
     double rotate(double arg);
     // 半径と角度から画面上のX座標を返す
@@ -96,7 +94,7 @@ public:
     Rect drawBox(double x1, double y1, double x2, double height) const {
         return Rect(x1, y1, x2 - x1, height);
     }
-    
+
     // 足場の生成アルゴリズム
     void generate();            // 足場の生成アルゴリズムを選択
     void generateInit();        // 足場の初期生成アルゴリズムを選択

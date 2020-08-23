@@ -3,7 +3,6 @@
 #define FT_TEX_NUM 6    // 足場の画像数
 #define FT_TEX_HEIGHT 50 // 足場の画像サイズY
 #define FT_TEX_WIDTH 600    // 足場の画像サイズX
-#define FT_HEIGHT FT_TEX_HEIGHT    // 足場のサイズY
 #define FT_R 250        // 足場の半径
 #define FT_ROOT_R 200   // 足場の根元の半径
 

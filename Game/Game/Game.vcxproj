@@ -239,6 +239,8 @@
     <ClCompile Include="src\Title.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Audio.hpp" />
+    <ClInclude Include="src\CharaSelect.h" />
     <ClInclude Include="src\Common.hpp" />
     <ClInclude Include="src\Enemy.hpp" />
     <ClInclude Include="src\Foot.hpp" />

@@ -403,7 +403,13 @@
     <ClInclude Include="src\Item.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\CharaSelect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="src\Enemy.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Audio.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

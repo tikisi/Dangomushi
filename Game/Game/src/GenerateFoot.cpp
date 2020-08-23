@@ -44,12 +44,14 @@ void Game::generateInit() {
 void Game::generateLv1Init() {
     //foots[0].dirR = Random<double>(Math::Pi, 10 * Math::QuarterPi);
     foots[0].type = Foot::Type::norm;
+    foots[0].height = 30;
     foots[0].dirR = -Math::HalfPi - 0.2;
     foots[0].dirL = foots[0].dirR + (Math::Pi / 7);
     foots[0].posY = player.posY+10;
     foots[0].drawPosY = foots[0].posY - player.posY;
     for (int i = 1; i < FT_NUM; i++) {
         foots[i].type = Foot::Type::norm;
+        foots[i].height = 30;
         if (RandomBool()) {
             foots[i].dirR = foots[i - 1].dirL + Math::Pi / 5 + Random<double>(Math::Pi / 7);
             foots[i].dirL = foots[i].dirR + (Math::Pi / 7);
