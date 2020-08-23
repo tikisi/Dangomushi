@@ -210,7 +210,10 @@ void Game::playerUpdate() {
         else dango = dango5;
     }
 
-    if(player.posY > player.lowest + 300) changeScene(State::GameOver);
+    if(player.posY > player.lowest + 300) {
+        AudioAsset(U"Main_BGM").stop();
+        changeScene(State::GameOver);
+    }
 }
 
 void Game::collisionY() {

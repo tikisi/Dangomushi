@@ -9,12 +9,13 @@
 
 void GameOver::update()
 {
-    if (SimpleGUI::ButtonAt(U"Retart", Scene::Center().movedBy(0, 50))) {
-        changeScene(State::Game);
+    backTexture.draw(0, 0);
+    if (SimpleGUI::ButtonAt(U"Retart", Scene::Center().movedBy(0, WINDOW_HEIGHT / 2 - 50))) {
+        AudioAsset(U"GameOver_BGM").stop();
+        changeScene(State::Title);
     }
 }
 
 void GameOver::draw() const
 {
-    font50(U"GameOver").drawAt(Scene::Center());
 }
