@@ -378,23 +378,16 @@ void Game::footDrawBefore() const {
     for (int i = 0; i < FT_NUM; i++) {
         // 左右の壁の描画
         if (!foots[i].isFrontL && foots[i].dirL > Math::HalfPi) {
-            drawBox(foots[i].posRootXL, foots[i].drawPosY, foots[i].posXL, foots[i].height).draw(Palette::Red);
+            drawBox(foots[i].posRootXL, foots[i].drawPosY, foots[i].posXL, foots[i].height).draw(Palette::Black);
         }
         if (!foots[i].isFrontR && foots[i].dirR < Math::HalfPi) {
-            drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, foots[i].height).draw(Palette::Blue);
+            drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, foots[i].height).draw(Palette::Black);
         }
     }
 }
 
 void Game::footDraw() const {
     for (int i = 0; i < FT_NUM; i++) {
-        // 左右の壁の描画
-        if (foots[i].isFrontL && foots[i].dirL < Math::HalfPi * 3) {
-            drawBox(foots[i].posRootXL, foots[i].drawPosY, foots[i].posXL, foots[i].height).draw(Palette::Red);
-        }
-        if (foots[i].isFrontR && foots[i].dirR > Math::HalfPi * 3) {
-            drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, foots[i].height).draw(Palette::Blue);
-        }
         
         Color footcolor;
         
@@ -416,10 +409,19 @@ void Game::footDraw() const {
                 break;
         }
         
+        // 左右の壁の描画
+        if (foots[i].isFrontL && foots[i].dirL < Math::HalfPi * 3) {
+            drawBox(foots[i].posRootXL, foots[i].drawPosY, foots[i].posXL, foots[i].height).draw(footcolor).drawFrame(5, 0, Palette::Black);
+        }
+        if (foots[i].isFrontR && foots[i].dirR > Math::HalfPi * 3) {
+            drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, foots[i].height).draw(footcolor).drawFrame(5, 0, Palette::Black);
+        }
+        
+        
         
         // 足場のまるい壁
         if (foots[i].isFrontL && foots[i].isFrontR) {
-            drawBox(foots[i].posXR, foots[i].drawPosY, foots[i].posXL, foots[i].height).draw(footcolor).drawFrame(2, 0, Palette::Black);
+            drawBox(foots[i].posXR, foots[i].drawPosY, foots[i].posXL, foots[i].height).draw(footcolor).drawFrame(5, 0, Palette::Green);
             // Debug用
             font30(Format(i)).draw(foots[i].posXR, foots[i].drawPosY, Palette::Black);
             //font30(foots[i].type).draw(foots[i].posXR+5, foots[i].drawPosY+5);
