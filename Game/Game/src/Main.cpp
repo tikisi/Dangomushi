@@ -10,26 +10,45 @@
 # include "Common.hpp"
 # include "Title.hpp"
 # include "Game.hpp"
+# include "GameOver.hpp"
 
 void Main()
 {
+    
+    
+    // 音声ファイルを読み込んで Audio を作成
+    const Audio audio(U"./App/example/test.mp3");
+    
+    // オーディオを再生
+    audio.play();
     // （Esc キーで終了しないようにする場合はコメントを外す）
     //System::SetTerminationTriggers(UserAction::CloseButtonClicked);
-
+    
     // タイトルを設定
     Window::SetTitle(U"ダンゴムシ");
     // 画面サイズを変更
     Window::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
     Scene::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-
-
+    
+    //    // 存在しない音声ファイルを開こうとする
+    //    const Audio audio(U"kaiten.mp3");
+    //
+    //    // オーディオの作成ができていなかったら
+    //    if (!audio)
+    //    {
+    //        // 例外を投げて終了
+    //        throw Error(U"Failed to create Audio");
+    //    }
+    
+    
+    
     // シーンと遷移時の色を設定
     MyApp manager;
     manager
-        .add<Title>(State::Title)
-        .add<Game>(State::Game);
-
+    .add<Title>(State::Title)
+    .add<Game>(State::Game)
+    .add<GameOver>(State::GameOver);
+    
     while (System::Update())
     {
         if (!manager.update())

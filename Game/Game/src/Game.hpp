@@ -1,4 +1,5 @@
 ﻿# pragma once
+#include "Background.hpp"
 #include "Common.hpp"
 #include "Player.hpp"
 #include "Foot.hpp"
@@ -15,6 +16,13 @@ constexpr int LV_NUM = 2;   // 足場の生成アルゴリズムの数
 class Game : public MyApp::Scene
 {
 private:
+    // 背景
+    Background back;
+    Texture texture1;
+    Texture texture2;
+    Texture ground;
+    Texture earth;
+    
     // 塔
     Texture tower[TW_NUM];	// 塔の画像
     Texture tower1; //上段
@@ -53,6 +61,9 @@ public:
     
     void draw() const override;
     
+    
+    void backUpdate();
+    void backDraw() const;
     
     void towerUpdate();
     void towerDraw() const;

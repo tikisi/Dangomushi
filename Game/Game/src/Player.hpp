@@ -19,5 +19,6 @@ struct Player {
     int spinCount;  // 回転のアニメーション
     int HP;
     bool damageFlag;
+    double lowest; // 一番低い足場
     Foot::Type footType;
 };

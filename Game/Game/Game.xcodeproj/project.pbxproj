@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2358A9A424E1729600F246E9 /* GenerateFoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2358A9A324E1729600F246E9 /* GenerateFoot.cpp */; };
+		23D18B6D24F2174C00606D8A /* GameOver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23D18B6B24F2174C00606D8A /* GameOver.cpp */; };
 		2C17789A1CE0AA7C00BB8AD0 /* Main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2C1778991CE0AA7C00BB8AD0 /* Main.cpp */; };
 		2C1778A31CE0B65500BB8AD0 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 2C1778A21CE0B65500BB8AD0 /* icon.icns */; };
 		2C34116722D8ACA4002ADA30 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C34116622D8ACA4002ADA30 /* libogg.a */; };
@@ -48,6 +49,9 @@
 		23900DC124D3C5EB0026C163 /* Foot.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Foot.hpp; sourceTree = "<group>"; };
 		23900DC224D3C5F40026C163 /* Player.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Player.hpp; sourceTree = "<group>"; };
 		23900DCB24D6A3FA0026C163 /* Item.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Item.hpp; sourceTree = "<group>"; };
+		23D18B6B24F2174C00606D8A /* GameOver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameOver.cpp; sourceTree = "<group>"; };
+		23D18B6C24F2174C00606D8A /* GameOver.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameOver.hpp; sourceTree = "<group>"; };
+		23D18B6E24F221F300606D8A /* Background.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Background.hpp; sourceTree = "<group>"; };
 		2C1778841CE0A9EA00BB8AD0 /* Game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Game.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C1778921CE0A9EA00BB8AD0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C1778991CE0AA7C00BB8AD0 /* Main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Main.cpp; sourceTree = "<group>"; };
@@ -155,10 +159,13 @@
 				2C971A58239732F900E66570 /* Common.hpp */,
 				23900DCB24D6A3FA0026C163 /* Item.hpp */,
 				2C971A57239732F900E66570 /* Game.cpp */,
+				23D18B6E24F221F300606D8A /* Background.hpp */,
 				2C971A59239732F900E66570 /* Game.hpp */,
 				2358A9A224DFDFE500F246E9 /* Enemy.hpp */,
 				2C1778991CE0AA7C00BB8AD0 /* Main.cpp */,
 				2C971A5A239732F900E66570 /* Title.cpp */,
+				23D18B6B24F2174C00606D8A /* GameOver.cpp */,
+				23D18B6C24F2174C00606D8A /* GameOver.hpp */,
 				2C971A56239732F900E66570 /* Title.hpp */,
 			);
 			path = src;
@@ -268,6 +275,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2358A9A424E1729600F246E9 /* GenerateFoot.cpp in Sources */,
+				23D18B6D24F2174C00606D8A /* GameOver.cpp in Sources */,
 				2C971A5C239732F900E66570 /* Title.cpp in Sources */,
 				2C17789A1CE0AA7C00BB8AD0 /* Main.cpp in Sources */,
 				2C971A5B239732F900E66570 /* Game.cpp in Sources */,

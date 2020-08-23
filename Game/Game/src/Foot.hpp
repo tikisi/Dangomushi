@@ -1,7 +1,7 @@
 ﻿#pragma once
-#define FT_NUM 20       // 足場の配列サイズ
+#define FT_NUM 40       // 足場の配列サイズ
 #define FT_TEX_NUM 6    // 足場の画像数
-#define FT_TEX_HEIGHT 30 // 足場の画像サイズY
+#define FT_TEX_HEIGHT 50 // 足場の画像サイズY
 #define FT_TEX_WIDTH 600    // 足場の画像サイズX
 #define FT_HEIGHT FT_TEX_HEIGHT    // 足場のサイズY
 #define FT_R 250        // 足場の半径
@@ -20,6 +20,7 @@ struct Foot {
     double dirR;         // 角度R
     double drawPosY;    // 描画する座標Y
     double posY;    // 座標Y
+    double height; // 足場の厚さ
 
     double posXR;   // 描画座標XR
     double posXL;   // 描画座標XL
