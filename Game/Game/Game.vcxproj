@@ -234,6 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\GameOver.cpp" />
     <ClCompile Include="src\GenerateFoot.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Title.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="src\Enemy.hpp" />
     <ClInclude Include="src\Foot.hpp" />
     <ClInclude Include="src\Game.hpp" />
+    <ClInclude Include="src\GameOver.hpp" />
     <ClInclude Include="src\Item.hpp" />
     <ClInclude Include="src\Player.hpp" />
     <ClInclude Include="src\Title.hpp" />

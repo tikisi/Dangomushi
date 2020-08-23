@@ -54,6 +54,9 @@ private:
 public:
 
     Game(const InitData& init);
+    ~Game() {
+        ClearPrint();
+    }
 
     void update() override;
 

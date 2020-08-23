@@ -213,6 +213,7 @@ void Game::playerUpdate() {
     if(player.posY > player.lowest + 300) {
         if(-player.posY > getData().highscore) getData().highscore = round(-player.posY);
         getData().dataLv = Lv;
+        AudioAsset(U"Main_BGM").stop();
         changeScene(State::GameOver);
     }
 }

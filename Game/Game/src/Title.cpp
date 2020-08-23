@@ -3,6 +3,7 @@
 
 void Title::update()
 {
+	backTexture.draw(0, 0);
 	if(SimpleGUI::ButtonAt(U"Start", Scene::Center().movedBy(0, 50))) {
 		AudioAsset(U"Title").stop();
 		getData().SelectNum = 1; // ダンゴムシに設定
