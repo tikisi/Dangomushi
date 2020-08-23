@@ -109,7 +109,7 @@ void Game::generateLv2() {
     foots[0].height = 30;
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].drawPosY > 1000) {
-            //foots[i].type = RandomBool(0.2) ? Foot::Type::spike : Foot::Type::ice;
+            foots[i].type = RandomBool(0.2) ? Foot::Type::spike : Foot::Type::ice;
             //foots[i].type = 
             foots[i].height = Random(30, 100);
             if (RandomBool()) {

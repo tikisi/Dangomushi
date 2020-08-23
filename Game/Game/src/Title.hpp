@@ -13,6 +13,7 @@ public:
 	Title(const InitData& init) : font50(50), IScene(init) {
 		Scene::SetBackground(Palette::Black);
 		ClearPrint();
+        getData().dataLv = 1;
 		AudioAsset(U"Title").setLoop(true);
 		AudioAsset(U"Title").play();
 	}

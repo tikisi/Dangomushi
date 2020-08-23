@@ -17,4 +17,5 @@ void Title::update()
 void Title::draw() const
 {
     font50(U"Title").drawAt(Scene::Center());
+    font50(U"High Score:  " + Format(getData().highscore) + U" cm").draw(10, 10);
 }

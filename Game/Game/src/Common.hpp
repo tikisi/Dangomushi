@@ -20,6 +20,8 @@ enum class State
 struct GameData
 {
     int SelectNum;  // キャラクターの種類
+    double highscore = 0;
+    int dataLv = 1;
 };
 
 // シーン管理クラス
