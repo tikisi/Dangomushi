@@ -25,8 +25,8 @@ struct Player {
 
 
     /*角度を使った当たり判定*/
-    double dirL;        // 角度L(不変値)
-    double dirR;        // 角度R(不変値)
+    double dirL;        // 角度L
+    double dirR;        // 角度R
 
     bool intersects(const Foot& foot) const {
         // TwoPiを超えて -= TwoPiされたものを戻す
@@ -44,7 +44,7 @@ struct Player {
     // 幅を更新
     void updateWidth(const int width, const int TW_CENTER_X) {
         this->width = width;
-        dirR = Math::TwoPi - acos((drawPosX - TW_CENTER_X - (width / 2)) / FT_R);
-        dirL = Math::TwoPi - acos((drawPosX + (width / 2) - TW_CENTER_X) / FT_R);
+        dirR = Math::TwoPi - acos(-(double)(width / 2) / (double)FT_R);
+        dirL = Math::TwoPi - acos((double)(width / 2) / (double)FT_R);
     }
 };
