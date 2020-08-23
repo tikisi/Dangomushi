@@ -6,6 +6,10 @@ Game::Game(const InitData& init) : font30(30), IScene(init) {
     for (int i = 0; i < TW_NUM; i++) {
         tower[i] = Texture(U"tower" + Format(i + 1) + U".png");
     }
+
+    AudioAsset(U"Main_BGM").setLoop(true);
+    AudioAsset(U"Main_BGM").play();
+
     // プレイヤー初期化
     playerInit();
 
@@ -114,20 +118,20 @@ void Game::playerUpdate() {
             player.jump = 1;
             player.speedY += 5.0;
             player.updateWidth(30, TW_CENTER_X);
+            AudioAsset(U"kaiten").play();
         }
     }
 
     if (!player.isGround && player.jump != 0) {
         if (player.jump++ > 8) {
             player.jump = 0;
-            player.updateWidth(50, TW_CENTER_X);
+
         }
         if (KeySpace.pressed()) {
             player.speedY += 1.5;
         }
         else {
             player.jump = 0;
-            player.updateWidth(50, TW_CENTER_X);
         }
     }
 
@@ -182,7 +186,7 @@ void Game::playerUpdate() {
 }
 
 void Game::collisionY() {
-    bool flg = player.isGround;
+    bool beforeFlg = player.isGround;
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].withDraw < 30) {
             if (player.intersects(foots[i])) {
@@ -202,7 +206,14 @@ void Game::collisionY() {
                         player.jump = 1;
                     }
                     player.footType = foots[i].type;
-                    if (flg == false && player.footType != Foot::Type::ice)player.speedX *= 0.2;
+
+                    // ジャンプ中->地面
+                    if (beforeFlg == false && player.footType != Foot::Type::ice) {
+                        player.speedX *= 0.2;
+                        player.updateWidth(50, TW_CENTER_X);
+                        AudioAsset(U"kaiten").stop();
+                        AudioAsset(U"chakuchi").play();
+                    }
                     break;
                 }
                 else {    //  下からぶつかったとき

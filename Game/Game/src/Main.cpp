@@ -11,6 +11,7 @@
 # include "Title.hpp"
 # include "Game.hpp"
 # include "CharaSelect.h"
+# include "Audio.hpp"
 
 void Main()
 {
@@ -29,6 +30,8 @@ void Main()
 		.add<Title>(State::Title)
 		.add<Game>(State::Game)
 		.add<CharaSelect>(State::CharaSelect);
+    
+    AudioAssetRegister();
 
     while (System::Update())
     {

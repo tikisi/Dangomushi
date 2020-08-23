@@ -13,6 +13,8 @@ public:
 	Title(const InitData& init) : font50(50), IScene(init) {
 		Scene::SetBackground(Palette::Black);
 		ClearPrint();
+		AudioAsset(U"Title").setLoop(true);
+		AudioAsset(U"Title").play();
 	}
 
     void update() override;
