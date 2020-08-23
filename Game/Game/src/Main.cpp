@@ -1,4 +1,4 @@
-﻿//
+//
 // OpenSiv3D v0.4.3 ゲームテンプレート
 //
 
@@ -16,13 +16,6 @@
 
 void Main()
 {
-    
-    
-    // 音声ファイルを読み込んで Audio を作成
-    const Audio audio(U"./App/example/test.mp3");
-    
-    // オーディオを再生
-    audio.play();
     // （Esc キーで終了しないようにする場合はコメントを外す）
     //System::SetTerminationTriggers(UserAction::CloseButtonClicked);
     
