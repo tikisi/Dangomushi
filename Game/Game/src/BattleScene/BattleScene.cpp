@@ -9,7 +9,7 @@
 using namespace Battle;
 
 BattleScene::BattleScene(const InitData& init)
-: IScene(init) {
+    : IScene(init) {
     Scene::SetBackground(Palette::White);
     stageInit();
     bossInit();
@@ -20,12 +20,14 @@ void BattleScene::update()
 {
     stageUpdate();
     playerUpdate();
+    shotUpdate();
 }
 
 void BattleScene::draw() const
 {
     stageDraw();
     playerDraw();
+    shotDraw();
 }
 
 void BattleScene::stageInit() {
@@ -59,32 +61,32 @@ void BattleScene::stageInit() {
     stage[3].r = 200;
 }
 
-void BattleScene::stageUpdate(){
-    for(int i=0; i<STAGE_NUM; i++){
-        stage[i].rect.y = stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h/2.0;
+void BattleScene::stageUpdate() {
+    for (int i = 0; i < STAGE_NUM; i++) {
+        stage[i].rect.y = stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h / 2.0;
         stage[i].arg += stage[i].accArg;
-        if(stage[i].arg > Math::TwoPi)stage[i].arg -= Math::TwoPi;
-        if(stage[i].arg < 0)stage[i].arg += Math::TwoPi;
+        if (stage[i].arg > Math::TwoPi)stage[i].arg -= Math::TwoPi;
+        if (stage[i].arg < 0)stage[i].arg += Math::TwoPi;
     }
 }
 
 void BattleScene::stageDraw() const {
-    for(int i = 0; i<STAGE_NUM; i++){
+    for (int i = 0; i < STAGE_NUM; i++) {
         stage[i].rect.draw(Palette::Brown);
     }
 }
 
-void BattleScene::bossInit(){
-    
+void BattleScene::bossInit() {
+
 }
 
-void BattleScene::playerInit(){
+void BattleScene::playerInit() {
     player = Player();
     player.rect.x = 100;
     player.rect.y = 520;
     player.rect.w = 50;
     player.rect.h = 30;
-    
+
     player.speedX = 0.0;   // 横移動の速度
     player.accX = 0.5;    // 横移動の加速度
     player.speedY = 0.0;      // 縦移動の速度
@@ -92,9 +94,9 @@ void BattleScene::playerInit(){
 }
 
 void BattleScene::playerUpdate() {
-    if(KeyRight.pressed()) player.speedX += player.accX;
-    if(KeyLeft.pressed()) player.speedX -= player.accX;
-    
+    if (KeyRight.pressed()) player.speedX += player.accX;
+    if (KeyLeft.pressed()) player.speedX -= player.accX;
+
     if (KeySpace.down()) {
         player.spinCount = 0;
         if (player.isGround) {
@@ -103,7 +105,7 @@ void BattleScene::playerUpdate() {
             AudioAsset(U"kaiten").play();
         }
     }
-    
+
     if (!player.isGround && player.jump != 0) {
         if (player.jump++ > 8) {
             player.jump = 0;
@@ -116,20 +118,20 @@ void BattleScene::playerUpdate() {
         }
 
     }
-    
-    
+
+
     player.speedX *= 0.9;
     player.rect.x += player.speedX;
     player.speedY += player.accY;
     player.rect.y += player.speedY;
-    
+
     player.isGround = 0;
-    for(int i=0; i<STAGE_NUM; i++){
-        
-        if(player.rect.intersects(stage[i].rect) && player.speedY > 0 && stage[i].rect.y - 0.1 < player.rect.y + player.rect.h){
+    for (int i = 0; i < STAGE_NUM; i++) {
+
+        if (player.rect.intersects(stage[i].rect) && player.speedY > 0 && stage[i].rect.y - 0.1 < player.rect.y + player.rect.h) {
             player.rect.y = stage[i].rect.y - player.rect.h + 0.1;
             player.isGround = 1;
-            if(cos(stage[i].arg) > 0) player.speedY = stage[i].r * cos(stage[i].arg) * stage[i].accArg;
+            if (cos(stage[i].arg) > 0) player.speedY = stage[i].r * cos(stage[i].arg) * stage[i].accArg;
             else player.speedY = 0;
         }
     }
@@ -143,13 +145,17 @@ void BattleScene::playerDraw() const {
 }
 
 void BattleScene::shotInit() {
-    
+
 }
 
-void BattleScene::shotUpdate(){
-    
+void BattleScene::shotUpdate() {
+    shotManager.update();
+    if (KeyZ.down()) {
+        //shotManager.genSpiral(Vec2(700, 500));
+        shotManager.genRasen(Vec2(400, 50));
+    }
 }
 
 void BattleScene::shotDraw() const {
-    
+    shotManager.draw();
 }

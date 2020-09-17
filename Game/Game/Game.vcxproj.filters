@@ -392,6 +392,9 @@
     <ClCompile Include="src\BattleScene\BattleScene.cpp">
       <Filter>Header Files\BattleScene</Filter>
     </ClCompile>
+    <ClCompile Include="src\BattleScene\ShotManager.cpp">
+      <Filter>Header Files\BattleScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.hpp">
@@ -434,6 +437,15 @@
       <Filter>Header Files\BattleScene</Filter>
     </ClInclude>
     <ClInclude Include="src\BattleScene\Stage.hpp">
+      <Filter>Header Files\BattleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BattleScene\Shot.hpp">
+      <Filter>Header Files\BattleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BattleScene\ShotManager.hpp">
+      <Filter>Header Files\BattleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BattleScene\ShotGenerator.hpp">
       <Filter>Header Files\BattleScene</Filter>
     </ClInclude>
   </ItemGroup>
