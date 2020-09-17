@@ -12,6 +12,22 @@ public:
     virtual ~ShotGenerator() {};
 };
 
+class RadialGenerator : public ShotGenerator {
+private:
+    Vec2 center;
+    uint32 counter;
+    double randomOffset;
+    
+public:
+    RadialGenerator(ShotAddr * shotAddr, const Vec2& center) : ShotGenerator(shotAddr), center(center), counter(0) {
+        randomOffset = Random<double>(Math::QuarterPi);
+    }
+    virtual ~RadialGenerator() {}
+
+    void update() override;
+    bool isFinish() const override {return counter > 30;}
+};  
+
 class RasenGenerator : public ShotGenerator {
 private:
     Vec2 center;
@@ -23,7 +39,7 @@ public:
     virtual ~RasenGenerator() {};
 
     void update() override;
-    bool isFinish() const override { return counter > 15 ? true : false; };
+    bool isFinish() const override { return counter > 15; };
 };
 
 class SpiralGenerator : public ShotGenerator {

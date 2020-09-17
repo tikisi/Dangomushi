@@ -1,5 +1,13 @@
 ﻿#include "ShotGenerator.hpp"
 
+void RadialGenerator::update() {
+    if(counter++ % 15 == 0) {
+        for(int i = 0; i < 8; i++) {
+            shotAddr -> add(new RadialShot(center, Circular(2.0, randomOffset + Math::QuarterPi * i)));
+        }
+    }
+}
+
 void RasenGenerator::update() {
     if (counter++ % 1 == 0) {
         for (int i = 0; i < 8; i++) {

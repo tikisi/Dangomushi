@@ -281,8 +281,9 @@ void BattleScene::shotUpdate() {
     }
 
     // 生成
-    if (KeyZ.down()) shotManager.genRasen(Vec2(400, 50));
-    if (KeyS.down())  shotManager.genSpiral(Vec2(700, 500), 10, 3);
+    if (KeyD.down()) shotManager.genRadial(Scene::Center());
+    if (KeyZ.down()) shotManager.genRasen(Scene::Center());
+    if (KeyS.down())  shotManager.genSpiral(Scene::Center(), 10, 3);
 }
 
 void BattleScene::shotDraw() const {

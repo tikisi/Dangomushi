@@ -19,6 +19,7 @@ public:
     void draw() const;
     Array<Shot*>& getShots() { return shots; }
 
+    void genRadial(const Vec2& center);
     void genRasen(const Vec2& center);
     void genSpiral(const Vec2& center, uint32 shotNum, uint32 layerNum);
 };
