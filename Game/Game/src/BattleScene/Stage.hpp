@@ -1,11 +1,4 @@
-﻿//
-//  Stage.hpp
-//  Game
-//
-//  Created by Ryoma Usui on 2020/09/17.
-//
-
-#ifndef Stage_h
+﻿#ifndef Stage_h
 #define Stage_h
 #include <Siv3D.hpp>
 
