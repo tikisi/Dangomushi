@@ -78,19 +78,25 @@ void BattleScene::playerInit() {
     player = Player();
     player.rect.x = 100;
     player.rect.y = 520;
-    player.rect.w = 50;
+    player.rect.w = 30;
     player.rect.h = 30;
 
     player.speedX = 0.0;   // 横移動の速度
     player.accX = 0.5;    // 横移動の加速度
     player.speedY = 0.0;      // 縦移動の速度
     player.accY = 0.4;    // 加速度Y
+
+    const static String path = U"player/";
+    dango1 = Texture(path + U"dangomushi/s1dangomushi.png");
+    dango2 = Texture(path + U"dangomushi/s2dangomushi.png");
+    dango3 = Texture(path + U"dangomushi/j1dangomushi.png");
+    dango4 = Texture(path + U"dangomushi/j2dangomushi.png");
+    dango5 = Texture(path + U"dangomushi/j3dangomushi.png");
 }
 
 void BattleScene::playerUpdate() {
     if (KeyRight.pressed()) player.speedX += player.accX;
     if (KeyLeft.pressed()) player.speedX -= player.accX;
-
     if (KeySpace.down()) {
         player.spinCount = 0;
         if (player.isGround) {
@@ -113,12 +119,14 @@ void BattleScene::playerUpdate() {
 
     }
 
+    // 座標の更新
     player.speedX *= 0.9;
     player.rect.x += player.speedX;
     player.speedY += player.accY;
     player.rect.y += player.speedY;
 
-    player.isGround = 0;
+    // ブロックとの当たり判定
+    player.isGround = false;
     for (int i = 0; i < STAGE_NUM; i++) {
 
         if (player.rect.intersects(stage[i].rect) && player.speedY > 0 && stage[i].rect.y - 0.1 < player.rect.y + player.rect.h) {
@@ -128,6 +136,30 @@ void BattleScene::playerUpdate() {
             else player.speedY = 0;
         }
     }
+
+    // アニメーション
+    if (player.isGround) {
+        // 歩行中のアニメーション
+        static int animCounter = 0;
+        if (animCounter < 15) dango = dango1;
+        else dango = dango2;
+
+        if ((KeyRight | KeyLeft).pressed()) {
+            if (animCounter++ == 30) animCounter = 0;
+        }
+
+        if (KeyRight.pressed()) player.isRight = true;
+        else if (KeyLeft.pressed()) player.isRight = false;
+    }
+    else {
+        // ジャンプ中のアニメーション
+        player.spinCount++;
+        if (player.spinCount > 15)player.spinCount = 6;
+        if (player.jump) dango = dango3;
+        else if (player.spinCount <= 10)dango = dango4;
+        else dango = dango5;
+    }
+
 }
 
 void BattleScene::playerDraw() const {
@@ -135,6 +167,8 @@ void BattleScene::playerDraw() const {
     Print << player.speedY;
     Print << U"isGround: " << player.isGround;
     player.rect.draw(Palette::Gray);
+    if (player.isRight) dango.mirrored().drawAt(player.rect.pos + player.rect.size / 2.0);
+    else dango.drawAt(player.rect.pos + player.rect.size / 2.0);
 }
 
 void BattleScene::shotInit() {

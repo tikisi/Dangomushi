@@ -15,7 +15,12 @@ private:
     Boss boss;
     ShotManager shotManager;
 
-    Bullet bullets[30];
+    Texture dango1;
+    Texture dango2;
+    Texture dango3;
+    Texture dango4;
+    Texture dango5;
+    Texture dango;
 
 public:
     BattleScene(const InitData& init);
