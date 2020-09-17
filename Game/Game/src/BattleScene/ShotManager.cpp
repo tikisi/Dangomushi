@@ -1,15 +1,15 @@
-#include "ShotManager.hpp"
+﻿#include "ShotManager.hpp"
 #include "ShotGenerator.hpp"
 
 void ShotManager::genRasen(Vec2 center) { shotGenerators.push_back(new RasenGenerator(this, center)); }
 
 void ShotManager::update() {
-    // �X�V
+    // 更新
     for (auto& i : shots) { i->update(); }
     for (auto& i : shotGenerators) { i->update(); }
 
 
-    // �폜
+    // 削除
     for (auto it = shots.begin(); it != shots.end(); ) {
         /*Circle c = (*it)->getCircle();
         if(c.x < 0 || c.x > Scene::Width() ||

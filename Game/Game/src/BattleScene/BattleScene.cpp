@@ -1,17 +1,11 @@
-﻿//
-//  Battle.cpp
-//  Game
-//
-//  Created by Ryoma Usui on 2020/07/31.
-//
-
-#include "BattleScene.hpp"
+﻿#include "BattleScene.hpp"
 using namespace Battle;
 
 BattleScene::BattleScene(const InitData& init)
     : IScene(init) {
     Scene::SetBackground(Palette::White);
     stageInit();
+    shotInit();
     bossInit();
     playerInit();
 }
@@ -154,8 +148,41 @@ void BattleScene::shotUpdate() {
         //shotManager.genSpiral(Vec2(700, 500));
         shotManager.genRasen(Vec2(400, 50));
     }
+
+
+    if (KeyS.down())bulletInit(10, 1, 0.003);
+    if (KeyD.down())bulletInit(20, 0.5, 0.01);
+    if (KeyF.down())bulletInit(30, 1.5, 0);
+
+    for (int i = 0; i < 30; i++) {
+        if (bullets[i].dist >= 0) {
+            bullets[i].angle += bullets[i].spiral;
+            bullets[i].dist += bullets[i].speed;
+
+            if (bullets[i].dist > 800)bullets[i].dist = -1;
+        }
+    }
 }
 
 void BattleScene::shotDraw() const {
     shotManager.draw();
+
+    Vec2 center(700, 500);
+    for (int i = 0; i < 30; i++) {
+        Circle(center + Circular(bullets[i].dist, bullets[i].angle), 15).draw(Palette::Red);
+    }
+    ClearPrint();
+    Print << bullets[0].angle;
+    Print << bullets[0].dist;
+    Print << bullets[1].angle;
+
+}
+
+void BattleScene::bulletInit(int num, double speed, double spiral) {
+    for(int i=0; i<num; i++){
+        if(bullets[i].angle < 0) bullets[i].angle = Math::TwoPi/double(num) * i;
+        bullets[i].dist = 0;
+        bullets[i].speed = speed;
+        bullets[i].spiral = spiral;
+    }
 }

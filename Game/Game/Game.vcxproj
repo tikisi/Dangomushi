@@ -245,6 +245,7 @@
     <ClInclude Include="src\Audio.hpp" />
     <ClInclude Include="src\BattleScene\BattleScene.hpp" />
     <ClInclude Include="src\BattleScene\Boss.hpp" />
+    <ClInclude Include="src\BattleScene\Bullet.hpp" />
     <ClInclude Include="src\BattleScene\Player.hpp" />
     <ClInclude Include="src\BattleScene\Shot.hpp" />
     <ClInclude Include="src\BattleScene\ShotGenerator.hpp" />
