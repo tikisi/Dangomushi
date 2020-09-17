@@ -88,14 +88,14 @@ void BattleScene::playerInit() {
 
     player.HP = 5;
     player.protectedCounter = 0;
-
-    const static String path = U"player/";
-    dango1 = Texture(path + U"dangomushi/s1dangomushi.png");
-    dango2 = Texture(path + U"dangomushi/s2dangomushi.png");
-    dango3 = Texture(path + U"dangomushi/j1dangomushi.png");
-    dango4 = Texture(path + U"dangomushi/j2dangomushi.png");
-    dango5 = Texture(path + U"dangomushi/j3dangomushi.png");
-
+    
+    int selectNum = getData().SelectNum;
+    dango1 = TextureAsset(U"player" + Format(selectNum) + Format(1));
+    dango2 = TextureAsset(U"player" + Format(selectNum) + Format(2));
+    dango3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
+    dango4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
+    dango5 = TextureAsset(U"player" + Format(selectNum) + Format(5));
+    
     TextureAsset::Register(U"heart", U"pixelheart.png");
 }
 
@@ -202,7 +202,7 @@ void BattleScene::shotUpdate() {
         Array<Shot*>& shots = shotManager.getShots();
         for (auto it = shots.begin(); it != shots.end(); it++) {
             if ((*it)->getCircle().intersects(player.rect)) {
-                player.HP--;
+                if(--player.HP == 0) changeScene(State::GameOver);
                 player.protectedCounter = 1;
                 delete* it;
                 shots.erase(it);

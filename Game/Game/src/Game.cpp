@@ -564,43 +564,9 @@ bool Game::isFront(double arg) {
 }
 
 void Game::loadPlayer(int selectNum) {
-    const static String path = U"player/"; // ディレクトリのパス
-
-    switch (selectNum) {
-    case 1:
-        dango1 = Texture(path + U"dangomushi/s1dangomushi.png");
-        dango2 = Texture(path + U"dangomushi/s2dangomushi.png");
-        dango3 = Texture(path + U"dangomushi/j1dangomushi.png");
-        dango4 = Texture(path + U"dangomushi/j2dangomushi.png");
-        dango5 = Texture(path + U"dangomushi/j3dangomushi.png");
-        break;
-    case 2:
-        dango1 = Texture(path + U"ebi/s1ebi.png");
-        dango2 = Texture(path + U"ebi/s2ebi.png");
-        dango3 = Texture(path + U"ebi/j1ebi.png");
-        dango4 = Texture(path + U"ebi/j2ebi.png");
-        dango5 = Texture(path + U"ebi/j3ebi.png");
-        break;
-    case 3:
-        dango1 = Texture(path + U"yadokari/s1yadokari.png");
-        dango2 = Texture(path + U"yadokari/s2yadokari.png");
-        dango3 = Texture(path + U"yadokari/j1yadokari.png");
-        dango4 = Texture(path + U"yadokari/j2yadokari.png");
-        dango5 = Texture(path + U"yadokari/j3yadokari.png");
-        break;
-    case 4:
-        dango1 = Texture(path + U"gdangomushi/s1gdangomushi.png");
-        dango2 = Texture(path + U"gdangomushi/s2gdangomushi.png");
-        dango3 = Texture(path + U"gdangomushi/j1gdangomushi.png");
-        dango4 = Texture(path + U"gdangomushi/j2gdangomushi.png");
-        dango5 = Texture(path + U"gdangomushi/j3gdangomushi.png");
-        break;
-    case 5:
-        dango1 = Texture(path + U"kurowassan/s1kurowassan.png");
-        dango2 = Texture(path + U"kurowassan/s2kurowassan.png");
-        dango3 = Texture(path + U"kurowassan/j1kurowassan.png");
-        dango4 = Texture(path + U"kurowassan/j2kurowassan.png");
-        dango5 = Texture(path + U"kurowassan/j3kurowassan.png");
-        break;
-    }
+    dango1 = TextureAsset(U"player" + Format(selectNum) + Format(1));
+    dango2 = TextureAsset(U"player" + Format(selectNum) + Format(2));
+    dango3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
+    dango4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
+    dango5 = TextureAsset(U"player" + Format(selectNum) + Format(5));
 }
