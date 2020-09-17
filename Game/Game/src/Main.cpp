@@ -13,6 +13,7 @@
 # include "GameOver.hpp"
 # include "CharaSelect.h"
 # include "Audio.hpp"
+# include "BattleScene/BattleScene.hpp"
 
 void Main()
 {
@@ -24,17 +25,18 @@ void Main()
     // 画面サイズを変更
     Window::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
     Scene::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
-
-	// シーンと遷移時の色を設定
-	MyApp manager;
-	manager
-		.add<Title>(State::Title)
-		.add<Game>(State::Game)
-		.add<CharaSelect>(State::CharaSelect)
-        .add<GameOver>(State::GameOver);
+    
+    // シーンと遷移時の色を設定
+    MyApp manager;
+    manager
+    .add<Title>(State::Title)
+    .add<Game>(State::Game)
+    .add<BattleScene>(State::BattleScene)
+    .add<CharaSelect>(State::CharaSelect)
+    .add<GameOver>(State::GameOver);
     
     AudioAssetRegister();
-
+    
     while (System::Update())
     {
         if (!manager.update())

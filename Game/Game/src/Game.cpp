@@ -180,7 +180,7 @@ void Game::playerUpdate() {
     // yの加速
     player.speedY -= player.accY;
     player.speedY *= 0.98;
-    if(KeyDown.pressed())player.speedY = 0;
+//    if(KeyDown.pressed())player.speedY = 0;
     player.posY -= player.speedY;
     
     // アニメーション
@@ -214,7 +214,8 @@ void Game::playerUpdate() {
         if(-player.posY > getData().highscore) getData().highscore = round(-player.posY);
         getData().dataLv = Lv;
         AudioAsset(U"Main_BGM").stop();
-        changeScene(State::GameOver);
+        //changeScene(State::GameOver);
+        changeScene(State::BattleScene);
     }
 }
 
@@ -244,7 +245,7 @@ void Game::collisionY() {
                         player.speedX *= 0.2;
                         player.updateWidth(50, TW_CENTER_X);
                         AudioAsset(U"kaiten").stop();
-                        AudioAsset(U"chakuchi").play();
+                        //AudioAsset(U"chakuchi").play();
                     }
                     break;
                 }
@@ -394,7 +395,7 @@ void Game::footDraw() const {
         
         switch (foots[i].type) {
             case Foot::norm:
-                footcolor = Color(170, 100 + foots[i].withDraw * 1.5, 100 + foots[i].withDraw * 1.5);
+                footcolor = Color(10, 50 + foots[i].withDraw * 1.5, 50 + foots[i].withDraw * 1.5);
                 break;
             case Foot::pull:
                 footcolor = Color(170, 100 + foots[i].withDraw * 1.5, 100 + foots[i].withDraw * 1.5);

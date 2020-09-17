@@ -13,10 +13,21 @@ def convert(file_name):
         f.write('\ufeff')
         f.write(original)
 
-src = glob.glob("*")
-src.remove('encoding.py')
+src1 = glob.glob("*.hpp")
+src2 = glob.glob("*.cpp");
+src3 = glob.glob("BattleScene/*")
+#src.remove('encoding.py')
 
-for i in src:
+for i in src1:
     if(not is_utf8_file_with_bom(i)):
         print(i)
         convert(i)
+for i in src2:
+    if(not is_utf8_file_with_bom(i)):
+        print(i)
+        convert(i)
+for i in src3:
+    if(not is_utf8_file_with_bom(i)):
+        print(i)
+        convert(i)
+

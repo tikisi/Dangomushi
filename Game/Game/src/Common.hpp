@@ -11,7 +11,7 @@ enum class State
 
 	CharaSelect,
 
-    Battle,
+    BattleScene,
     
     GameOver,
 };
