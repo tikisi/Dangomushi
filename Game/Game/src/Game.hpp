@@ -1,4 +1,4 @@
-﻿# pragma once
+# pragma once
 #include "Background.hpp"
 #include "Common.hpp"
 #include "Player.hpp"
@@ -21,7 +21,9 @@ private:
     Texture texture1;
     Texture texture2;
     Texture ground;
+    Texture sunset;
     Texture earth;
+    Texture white;
     
     // 塔
     Texture tower[TW_NUM];	// 塔の画像

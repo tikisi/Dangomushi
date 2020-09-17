@@ -1,10 +1,12 @@
-﻿# include "Game.hpp"
+# include "Game.hpp"
 
 
 Game::Game(const InitData& init) : font30(30), IScene(init) {
     // 背景読み込み
     ground = Texture(U"ground.png");
+    sunset = Texture(U"pixelsunset.png");
     earth = Texture(U"earthh.png");
+    white = Texture(U"pixelwhite.png");
     
     // 塔読み込み
     for (int i = 0; i < TW_NUM; i++) {
@@ -54,15 +56,27 @@ void Game::draw() const {
 
 void Game::backUpdate() {
     back.Pos1 = -player.posY/30 - 300;
-    texture1 = ground;
-    texture2 = earth;
     back.alpha = 1.0 + player.posY/4000.0;
+    if(back.alpha < -1){
+        texture1 = earth;
+        texture2 = white;
+        back.alpha += 2;
+    }
+    else if(back.alpha < 0){
+        texture1 = sunset;
+        texture2 = earth;
+        back.alpha++;
+    }else{
+        texture1 = ground;
+        texture2 = sunset;
+    }
 }
 
 void Game::backDraw() const {
     texture2.resized(3000).drawAt(400, 1400 + back.Pos1);
     //texture1.resized(800,1000).draw(0, back.Pos1,ColorF(1.0, Periodic::Sine0_1(2s)));
-    texture1.resized(800,1000).draw(0, back.Pos1, ColorF(1.0, back.alpha));
+    //texture1.resized(800,1000).draw(0, back.Pos1, ColorF(1.0, back.alpha));
+    texture1.resized(3000).drawAt(400, back.Pos1, ColorF(1.0, back.alpha));
     Print << back.alpha;
 }
 
