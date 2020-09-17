@@ -86,12 +86,17 @@ void BattleScene::playerInit() {
     player.speedY = 0.0;      // 縦移動の速度
     player.accY = 0.4;    // 加速度Y
 
+    player.HP = 5;
+    player.protectedCounter = 0;
+
     const static String path = U"player/";
     dango1 = Texture(path + U"dangomushi/s1dangomushi.png");
     dango2 = Texture(path + U"dangomushi/s2dangomushi.png");
     dango3 = Texture(path + U"dangomushi/j1dangomushi.png");
     dango4 = Texture(path + U"dangomushi/j2dangomushi.png");
     dango5 = Texture(path + U"dangomushi/j3dangomushi.png");
+
+    TextureAsset::Register(U"heart", U"pixelheart.png");
 }
 
 void BattleScene::playerUpdate() {
@@ -137,6 +142,13 @@ void BattleScene::playerUpdate() {
         }
     }
 
+    // 無敵状態の更新
+    if (player.protectedCounter != 0) {
+        if (player.protectedCounter++ >= 120) {
+            player.protectedCounter = 0;
+        }
+    }
+
     // アニメーション
     if (player.isGround) {
         // 歩行中のアニメーション
@@ -159,16 +171,20 @@ void BattleScene::playerUpdate() {
         else if (player.spinCount <= 10)dango = dango4;
         else dango = dango5;
     }
-
 }
 
 void BattleScene::playerDraw() const {
-    ClearPrint();
-    Print << player.speedY;
-    Print << U"isGround: " << player.isGround;
-    player.rect.draw(Palette::Gray);
-    if (player.isRight) dango.mirrored().drawAt(player.rect.pos + player.rect.size / 2.0);
-    else dango.drawAt(player.rect.pos + player.rect.size / 2.0);
+    // 無敵状態の時は点滅する
+    if (player.protectedCounter == 0 || Periodic::Square0_1(0.5s)) {
+        player.rect.draw(Palette::Gray);
+        if (player.isRight) dango.mirrored().drawAt(player.rect.pos + player.rect.size / 2.0);
+        else dango.drawAt(player.rect.pos + player.rect.size / 2.0);
+    }
+
+    // ライフを表示
+    for (int i = 1; i <= player.HP; i++) {
+        TextureAsset(U"heart").resized(30, 30).draw(Scene::Width() - i * (10 + 30), 10);
+    }
 }
 
 void BattleScene::shotInit() {
@@ -179,14 +195,16 @@ void BattleScene::shotUpdate() {
     shotManager.update();
 
     // 当たり判定
-    Array<Shot*>& shots = shotManager.getShots();
-    for (auto it = shots.begin(); it != shots.end(); ) {
-        if ((*it)->getCircle().intersects(player.rect)) {
-            delete* it;
-            it = shots.erase(it);
-        }
-        else {
-            ++it;
+    if (player.protectedCounter == 0) {
+        Array<Shot*>& shots = shotManager.getShots();
+        for (auto it = shots.begin(); it != shots.end(); it++) {
+            if ((*it)->getCircle().intersects(player.rect)) {
+                player.HP--;
+                player.protectedCounter = 1;
+                delete* it;
+                shots.erase(it);
+                break;
+            }
         }
     }
 

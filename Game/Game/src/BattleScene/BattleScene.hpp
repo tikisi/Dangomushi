@@ -21,7 +21,8 @@ private:
     Texture dango4;
     Texture dango5;
     Texture dango;
-
+    
+    
 public:
     BattleScene(const InitData& init);
 
