@@ -14,12 +14,14 @@ void BattleScene::update()
 {
     stageUpdate();
     playerUpdate();
+    bossUpdate();
     shotUpdate();
 }
 
 void BattleScene::draw() const
 {
     stageDraw();
+    bossDraw();
     playerDraw();
     shotDraw();
 }
@@ -71,7 +73,74 @@ void BattleScene::stageDraw() const {
 }
 
 void BattleScene::bossInit() {
+    boss.rect = RectF(Scene::Width() - 200, Scene::Height() - 125, 200, 100);
+    boss.speedX = 0.0;
+    boss.accX = 0.7;
 
+    boss.state = BossState::Stop;
+    boss.HP = 5;
+    boss.onRight = true;
+}
+
+void BattleScene::bossUpdate() {
+    static Stopwatch stopWatch1(true);
+    static Stopwatch stopWatch2(true);
+
+    switch (boss.state)
+    {
+    case BossState::Stop:
+        // 弾を発射
+        if (stopWatch2.sF() >= 8.0) {
+            //shotManager.genSpiral(boss.rect.pos + boss.rect.size / 2, 5, 4);
+            shotManager.genRasen(boss.rect.pos + boss.rect.size / 2);
+            stopWatch2.restart();
+        }
+
+        // Moveへ
+        if (stopWatch1.sF() >= 24.0) {
+            stopWatch1.restart();
+            boss.speedX = 0;
+            boss.state = BossState::Move;
+        }
+        break;
+    case BossState::Move:
+        if(stopWatch1.sF() <= 2.0) {
+            if(boss.onRight) boss.speedX -= boss.accX;
+            else boss.speedX += boss.accX;
+        }
+
+        boss.speedX *= 0.9;
+        boss.rect.x += boss.speedX;
+        
+        // Stopへ
+        if(boss.rect.x < 0) {
+            boss.rect.x = 0; 
+            boss.onRight = false;
+            stopWatch1.restart();
+            stopWatch2.restart();
+            boss.state = BossState::Stop;
+        }
+        if(boss.rect.x > Scene::Width() - boss.rect.w) {
+            boss.rect.x = Scene::Width() - boss.rect.w;
+            boss.onRight = true;
+            stopWatch1.restart();
+            stopWatch2.restart();
+            boss.state = BossState::Stop;
+        }
+        break;
+
+    default:
+        break;
+    }
+
+    ClearPrint();
+    Print << U"onRight: " << boss.onRight;
+    Print << U"BossState: " << int(boss.state);
+    Print << U"StopWatch1: " << stopWatch1.sF();
+}
+
+void BattleScene::bossDraw() const {
+    boss.rect.draw(Palette::Blueviolet);
 }
 
 void BattleScene::playerInit() {
@@ -88,14 +157,14 @@ void BattleScene::playerInit() {
 
     player.HP = 5;
     player.protectedCounter = 0;
-    
+
     int selectNum = getData().SelectNum;
     dango1 = TextureAsset(U"player" + Format(selectNum) + Format(1));
     dango2 = TextureAsset(U"player" + Format(selectNum) + Format(2));
     dango3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
     dango4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
     dango5 = TextureAsset(U"player" + Format(selectNum) + Format(5));
-    
+
     TextureAsset::Register(U"heart", U"pixelheart.png");
 }
 
@@ -202,7 +271,7 @@ void BattleScene::shotUpdate() {
         Array<Shot*>& shots = shotManager.getShots();
         for (auto it = shots.begin(); it != shots.end(); it++) {
             if ((*it)->getCircle().intersects(player.rect)) {
-                if(--player.HP == 0) changeScene(State::GameOver);
+                // if (--player.HP == 0) changeScene(State::GameOver);
                 player.protectedCounter = 1;
                 delete* it;
                 shots.erase(it);
