@@ -129,6 +129,9 @@ void BattleScene::playerUpdate() {
     player.rect.x += player.speedX;
     player.speedY += player.accY;
     player.rect.y += player.speedY;
+    if (player.rect.x <= 0) player.rect.x = 0;
+    if (player.rect.x + player.rect.w >= Scene::Width()) player.rect.x = Scene::Width() - player.rect.w;
+
 
     // ブロックとの当たり判定
     player.isGround = false;
