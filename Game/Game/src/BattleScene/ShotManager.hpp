@@ -15,7 +15,10 @@ public:
     Array<ShotGenerator*> shotGenerators;
     void add(Shot* s) { shots.push_back(s); }
 
-    void genRasen(Vec2 center);
     void update();
     void draw() const;
+    Array<Shot*>& getShots() { return shots; }
+
+    void genRasen(const Vec2& center);
+    void genSpiral(const Vec2& center, uint32 shotNum, uint32 layerNum);
 };

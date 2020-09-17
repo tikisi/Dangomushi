@@ -113,7 +113,6 @@ void BattleScene::playerUpdate() {
 
     }
 
-
     player.speedX *= 0.9;
     player.rect.x += player.speedX;
     player.speedY += player.accY;
@@ -144,45 +143,24 @@ void BattleScene::shotInit() {
 
 void BattleScene::shotUpdate() {
     shotManager.update();
-    if (KeyZ.down()) {
-        //shotManager.genSpiral(Vec2(700, 500));
-        shotManager.genRasen(Vec2(400, 50));
-    }
 
-
-    if (KeyS.down())bulletInit(10, 1, 0.003);
-    if (KeyD.down())bulletInit(20, 0.5, 0.01);
-    if (KeyF.down())bulletInit(30, 1.5, 0);
-
-    for (int i = 0; i < 30; i++) {
-        if (bullets[i].dist >= 0) {
-            bullets[i].angle += bullets[i].spiral;
-            bullets[i].dist += bullets[i].speed;
-
-            if (bullets[i].dist > 800)bullets[i].dist = -1;
+    // 当たり判定
+    Array<Shot*>& shots = shotManager.getShots();
+    for (auto it = shots.begin(); it != shots.end(); ) {
+        if ((*it)->getCircle().intersects(player.rect)) {
+            delete* it;
+            it = shots.erase(it);
+        }
+        else {
+            ++it;
         }
     }
+
+    // 生成
+    if (KeyZ.down()) shotManager.genRasen(Vec2(400, 50));
+    if (KeyS.down())  shotManager.genSpiral(Vec2(700, 500), 10, 3);
 }
 
 void BattleScene::shotDraw() const {
     shotManager.draw();
-
-    Vec2 center(700, 500);
-    for (int i = 0; i < 30; i++) {
-        Circle(center + Circular(bullets[i].dist, bullets[i].angle), 15).draw(Palette::Red);
-    }
-    ClearPrint();
-    Print << bullets[0].angle;
-    Print << bullets[0].dist;
-    Print << bullets[1].angle;
-
-}
-
-void BattleScene::bulletInit(int num, double speed, double spiral) {
-    for(int i=0; i<num; i++){
-        if(bullets[i].angle < 0) bullets[i].angle = Math::TwoPi/double(num) * i;
-        bullets[i].dist = 0;
-        bullets[i].speed = speed;
-        bullets[i].spiral = spiral;
-    }
 }

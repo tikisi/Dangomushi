@@ -395,6 +395,9 @@
     <ClCompile Include="src\BattleScene\ShotManager.cpp">
       <Filter>Header Files\BattleScene</Filter>
     </ClCompile>
+    <ClCompile Include="src\BattleScene\ShotGenerator.cpp">
+      <Filter>Header Files\BattleScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.hpp">

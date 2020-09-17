@@ -1,7 +1,8 @@
 ﻿#include "ShotManager.hpp"
 #include "ShotGenerator.hpp"
 
-void ShotManager::genRasen(Vec2 center) { shotGenerators.push_back(new RasenGenerator(this, center)); }
+void ShotManager::genRasen(const Vec2 &center) { shotGenerators.push_back(new RasenGenerator(this, center)); }
+void ShotManager::genSpiral(const Vec2 &center, uint32 shotNum, uint32 layerNum) {shotGenerators.push_back(new SpiralGenerator(this, center, shotNum, layerNum));}
 
 void ShotManager::update() {
     // 更新
@@ -11,10 +12,7 @@ void ShotManager::update() {
 
     // 削除
     for (auto it = shots.begin(); it != shots.end(); ) {
-        /*Circle c = (*it)->getCircle();
-        if(c.x < 0 || c.x > Scene::Width() ||
-            c.y < 0 || c.y > Scene::Height())*/
-        if ((*it)->circular.r > 340) {
+        if ((*it)->isFinish()) {
             delete* it;
             it = shots.erase(it);
         }
@@ -23,7 +21,7 @@ void ShotManager::update() {
         }
     }
     for (auto it = shotGenerators.begin(); it != shotGenerators.end();) {
-        if ((*it)->isfinish()) {
+        if ((*it)->isFinish()) {
             delete* it;
             it = shotGenerators.erase(it);
         }

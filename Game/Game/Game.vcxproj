@@ -234,6 +234,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BattleScene\BattleScene.cpp" />
+    <ClCompile Include="src\BattleScene\ShotGenerator.cpp" />
     <ClCompile Include="src\BattleScene\ShotManager.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameOver.cpp" />
