@@ -97,6 +97,9 @@
     <Filter Include="Resource Files\example\zip">
       <UniqueIdentifier>{7962668a-a6a9-4006-b9ef-68e88e8ea073}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\BattleScene">
+      <UniqueIdentifier>{baf738ee-fe7b-49f1-8bfd-55d691d230bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\icon.ico">
@@ -386,6 +389,9 @@
     <ClCompile Include="src\GameOver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\BattleScene\BattleScene.cpp">
+      <Filter>Header Files\BattleScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.hpp">
@@ -417,6 +423,18 @@
     </ClInclude>
     <ClInclude Include="src\GameOver.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BattleScene\BattleScene.hpp">
+      <Filter>Header Files\BattleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BattleScene\Boss.hpp">
+      <Filter>Header Files\BattleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BattleScene\Player.hpp">
+      <Filter>Header Files\BattleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BattleScene\Stage.hpp">
+      <Filter>Header Files\BattleScene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

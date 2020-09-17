@@ -7,7 +7,7 @@
 
 #ifndef Battle_hpp
 #define Battle_hpp
-# include "Common.hpp"
+# include "../Common.hpp"
 # include "Player.hpp"
 # include "Boss.hpp"
 # include "Stage.hpp"

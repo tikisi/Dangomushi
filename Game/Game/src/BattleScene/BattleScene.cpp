@@ -98,9 +98,6 @@ void BattleScene::playerUpdate() {
     if (KeySpace.down()) {
         player.spinCount = 0;
         if (player.isGround) {
-            AudioAsset(U"spin").play();
-            //static const Audio spin(U"example/kaiten.mp3");
-            //spin.play();
             player.jump = 1;
             player.speedY -= 8.0;
             AudioAsset(U"kaiten").play();
