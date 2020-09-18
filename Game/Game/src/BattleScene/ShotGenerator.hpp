@@ -25,7 +25,7 @@ public:
     virtual ~RadialGenerator() {}
 
     void update() override;
-    bool isFinish() const override {return counter > 30;}
+    bool isFinish() const override {return counter > 60;}
 };  
 
 class RasenGenerator : public ShotGenerator {

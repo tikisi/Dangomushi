@@ -2,10 +2,15 @@
 #include <Siv3D.hpp>
 
 enum class BossState {
-    Stop,           // 停止中
-    Move,           // 移動中
-    Protected       // 攻撃された後
+    DownStop,       // 停止中
+    DownMove,       // 移動中
+    DownToUp1,      // 攻撃された後画面外へ
+    DownToUp2,      // 攻撃された後画面内へ
+    UpStop,         // 上で停止中 
+    UptoDown1,      // 画面外へ
+    UptoDown2,      // 画面内へ
 };
+
 
 struct Boss {
     RectF rect;
@@ -14,7 +19,6 @@ struct Boss {
 
     BossState state;
     bool onRight;
-    
 
     int HP;
 };

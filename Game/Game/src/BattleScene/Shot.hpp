@@ -12,7 +12,7 @@ class RadialShot : public Shot {
 public:
     Vec2 pos;
     Vec2 speed;
-    static inline constexpr double r = 10.0;
+    static inline constexpr double r = 5.0;
     RadialShot(const Vec2& start, const Vec2& speed) : pos(start), speed(speed) {}
 
     void update() override { pos += speed; }
@@ -26,7 +26,7 @@ private:
     Circular circular;
 
     static inline constexpr double omega = 0.03;
-    static inline constexpr double r = 10.0;
+    static inline constexpr double r = 5.0;
 
 public:
     RasenShot(Vec2 center, double theta, double r) : center(center), circular(r, theta) {};

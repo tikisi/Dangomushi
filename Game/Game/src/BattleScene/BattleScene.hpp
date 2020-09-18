@@ -47,8 +47,5 @@ public:
     void shotDraw() const;
 
 
-    void homing();
-
-    void bulletInit(int num, double speed, double spiral);
-
+    bool bossIntersects();
 };

@@ -77,7 +77,7 @@ void BattleScene::bossInit() {
     boss.speedX = 0.0;
     boss.accX = 0.7;
 
-    boss.state = BossState::Stop;
+    boss.state = BossState::DownStop;
     boss.HP = 5;
     boss.onRight = true;
 }
@@ -88,11 +88,12 @@ void BattleScene::bossUpdate() {
 
     switch (boss.state)
     {
-    case BossState::Stop:
+    case BossState::DownStop:
         // 弾を発射
         if (stopWatch2.sF() >= 8.0) {
             //shotManager.genSpiral(boss.rect.pos + boss.rect.size / 2, 5, 4);
-            shotManager.genRasen(boss.rect.pos + boss.rect.size / 2);
+            //shotManager.genRasen(boss.rect.pos + boss.rect.size / 2);
+            shotManager.genRadial(boss.rect.pos + boss.rect.size / 2);
             stopWatch2.restart();
         }
 
@@ -100,37 +101,158 @@ void BattleScene::bossUpdate() {
         if (stopWatch1.sF() >= 24.0) {
             stopWatch1.restart();
             boss.speedX = 0;
-            boss.state = BossState::Move;
+            boss.state = BossState::DownMove;
         }
         break;
-    case BossState::Move:
-        if(stopWatch1.sF() <= 2.0) {
-            if(boss.onRight) boss.speedX -= boss.accX;
+
+    case BossState::DownMove:
+        if (stopWatch1.sF() <= 2.0) {
+            if (boss.onRight) boss.speedX -= boss.accX;
             else boss.speedX += boss.accX;
         }
 
         boss.speedX *= 0.9;
         boss.rect.x += boss.speedX;
-        
+
         // Stopへ
-        if(boss.rect.x < 0) {
-            boss.rect.x = 0; 
+        if (boss.rect.x < 0) {
+            boss.rect.x = 0;
             boss.onRight = false;
             stopWatch1.restart();
             stopWatch2.restart();
-            boss.state = BossState::Stop;
+            boss.state = BossState::DownStop;
         }
-        if(boss.rect.x > Scene::Width() - boss.rect.w) {
+        if (boss.rect.x > Scene::Width() - boss.rect.w) {
             boss.rect.x = Scene::Width() - boss.rect.w;
             boss.onRight = true;
             stopWatch1.restart();
             stopWatch2.restart();
-            boss.state = BossState::Stop;
+            boss.state = BossState::DownStop;
         }
+        break;
+
+    case BossState::DownToUp1:
+        if (boss.onRight) boss.speedX -= boss.accX * 2.0;
+        else boss.speedX += boss.accX * 2.0;
+
+        boss.speedX *= 0.9;
+        boss.rect.x += boss.speedX;
+
+        if (boss.rect.x + boss.rect.w < 0) {
+            boss.onRight = false;
+            boss.rect.pos = Vec2(-boss.rect.w, 0);
+            stopWatch1.restart();
+            stopWatch2.restart();
+            boss.state = BossState::DownToUp2;
+        }
+        else if (boss.rect.x > Scene::Width()) {
+            boss.onRight = true;
+            boss.rect.pos = Vec2(Scene::Width(), 0);
+            boss.state = BossState::DownToUp2;
+            stopWatch1.restart();
+            stopWatch2.restart();
+        }
+        break;
+    case BossState::DownToUp2:
+        if (boss.onRight == true) boss.speedX -= boss.accX;
+        else boss.speedX += boss.accX;
+
+        boss.speedX *= 0.9;
+        boss.rect.x += boss.speedX;
+
+        // 移動が完了
+        if (boss.onRight) {
+            if (boss.rect.x < Scene::Center().x - (boss.rect.w / 2.0)) {
+                boss.rect.x = Scene::Center().x - (boss.rect.w / 2.0);
+                stopWatch1.restart();
+                stopWatch2.restart();
+                boss.state = BossState::UpStop;
+            }
+        }
+        else {
+            if (boss.rect.x > Scene::Center().x - (boss.rect.w / 2.0)) {
+                boss.rect.x = Scene::Center().x - (boss.rect.w / 2.0);
+                stopWatch1.restart();
+                stopWatch2.restart();
+                boss.state = BossState::UpStop;
+            }
+        }
+        break;
+
+    case BossState::UpStop:
+        if (stopWatch2.sF() >= 6.0) {
+            shotManager.genRasen(boss.rect.center());
+            stopWatch2.restart();
+        }
+
+        if (stopWatch1.sF() >= 18.0) {
+            boss.onRight = RandomBool();
+            stopWatch1.restart();
+            stopWatch2.restart();
+            boss.state = BossState::UptoDown1;
+        }
+        break;
+
+    case BossState::UptoDown1:
+        boss.speedX += boss.onRight ? boss.accX : -boss.accX;
+
+        boss.speedX *= 0.9;
+        boss.rect.x += boss.speedX;
+
+        // 画面外へ出たら
+        if (boss.rect.x + boss.rect.w < 0 || boss.rect.x > Scene::Width()) {
+            stopWatch1.restart();
+            stopWatch2.restart();
+            boss.rect.y = Scene::Height() - 125;
+            boss.state = BossState::UptoDown2;
+        }
+        break;
+
+    case BossState::UptoDown2:
+        boss.speedX += boss.onRight ? -boss.accX : boss.accX;
+
+        boss.speedX *= 0.9;
+        boss.rect.x += boss.speedX;
+
+        if (boss.onRight) {
+            if (boss.rect.x < Scene::Width() - boss.rect.w) {
+                stopWatch1.restart();
+                stopWatch2.restart();
+                boss.rect.x = Scene::Width() - boss.rect.w;
+                boss.state = BossState::DownStop;
+            }
+        }
+        else {
+            if (boss.rect.x > 0) {
+                stopWatch1.restart();
+                stopWatch2.restart();
+                boss.rect.x = 0;
+                boss.state = BossState::DownStop;
+            }
+        }
+
         break;
 
     default:
         break;
+    }
+
+
+    // プレイヤーとの当たり判定
+    if (player.protectedCounter == 0 && player.rect.intersects(boss.rect)) {
+        // 踏めたとき
+        if (player.rect.intersects(RectF(boss.rect.pos + Vec2(boss.rect.w / 6.0, 0),
+            boss.rect.size - Vec2(boss.rect.w / 3.0, 0)))) {
+            stopWatch1.restart();
+            stopWatch2.restart();
+            boss.state = BossState::DownToUp1;
+            if (--boss.HP == 0) changeScene(State::GameClear);
+        }
+        // ぶつかったとき
+        else {
+            if (--player.HP == 0) changeScene(State::GameOver);
+            player.protectedCounter = 1;
+        }
     }
 
     ClearPrint();
@@ -141,6 +263,7 @@ void BattleScene::bossUpdate() {
 
 void BattleScene::bossDraw() const {
     boss.rect.draw(Palette::Blueviolet);
+    RectF(boss.rect.pos + Vec2(boss.rect.w / 6.0, 0), boss.rect.size - Vec2(boss.rect.w / 3.0, 0)).draw(Palette::Yellow);
 }
 
 void BattleScene::playerInit() {
@@ -289,3 +412,4 @@ void BattleScene::shotUpdate() {
 void BattleScene::shotDraw() const {
     shotManager.draw();
 }
+

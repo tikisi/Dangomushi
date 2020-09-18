@@ -9,11 +9,13 @@ enum class State
 
     Game,
 
-	CharaSelect,
+    CharaSelect,
 
     BattleScene,
-    
+
     GameOver,
+
+    GameClear,
 };
 
 // ゲームデータ

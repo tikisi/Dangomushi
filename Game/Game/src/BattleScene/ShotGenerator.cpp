@@ -19,7 +19,7 @@ void RasenGenerator::update() {
 void SpiralGenerator::update() {
     if (counter++ % 15 == 0) {
         for (int i = 0; i < shotNum; i++) {
-            shotAddr->add(new SpiralShot(center, Math::TwoPi / double(shotNum) * i, 0, 0.5, 0.01, 15));
+            shotAddr->add(new SpiralShot(center, Math::TwoPi / double(shotNum) * i, 0, 0.5, 0.01, 5.0));
         }
     }
 }
