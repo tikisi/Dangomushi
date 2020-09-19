@@ -12,7 +12,6 @@ class BattleScene : public MyApp::Scene
 private:
     Stage stage[STAGE_NUM];
     Battle::Player player;
-    Boss boss;
     ShotManager shotManager;
 
     Texture dango1;
@@ -21,7 +20,8 @@ private:
     Texture dango4;
     Texture dango5;
     Texture dango;
-    
+
+    Boss boss;
     
 public:
     BattleScene(const InitData& init);
@@ -38,14 +38,20 @@ public:
     void playerUpdate();
     void playerDraw() const;
 
-    void bossInit();
-    void bossUpdate();
-    void bossDraw() const;
-
     void shotInit();
     void shotUpdate();
     void shotDraw() const;
 
+    void bossInit();
+    void bossUpdate();
+    void bossDraw() const;
+    void bossIntersects();
 
-    bool bossIntersects();
+    void bossDownStop();
+    void bossDownMove();
+    void bossDownToUp1();
+    void bossDownToUp2();
+    void bossUpStop();
+    void bossUptoDown1();
+    void bossUptoDown2();
 };

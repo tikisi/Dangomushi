@@ -448,9 +448,6 @@
     <ClInclude Include="src\BattleScene\ShotGenerator.hpp">
       <Filter>Header Files\BattleScene</Filter>
     </ClInclude>
-    <ClInclude Include="src\BattleScene\Bullet.hpp">
-      <Filter>Header Files\BattleScene</Filter>
-    </ClInclude>
     <ClInclude Include="src\Asset.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

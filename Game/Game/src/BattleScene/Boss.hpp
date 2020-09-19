@@ -16,9 +16,12 @@ struct Boss {
     RectF rect;
     double speedX;
     double accX;
+    bool onRight;
+    int HP;
 
     BossState state;
-    bool onRight;
+    BossState nState;
 
-    int HP;
+    Stopwatch stopWatch1;
+    Stopwatch stopWatch2;
 };
