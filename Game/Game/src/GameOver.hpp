@@ -1,12 +1,4 @@
-﻿//
-//  GameOver.hpp
-//  Game
-//
-//  Created by Ryoma Usui on 2020/08/23.
-//
-
-#ifndef GameOver_hpp
-#define GameOver_hpp
+﻿#pragma once
 
 #include <stdio.h>
 #include "Common.hpp"
@@ -28,6 +20,3 @@ public:
 
     void draw() const override;
 };
-
-
-#endif /* GameOver_hpp */

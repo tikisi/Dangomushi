@@ -1,12 +1,4 @@
-﻿//
-//  Item.hpp
-//  Game
-//
-//  Created by Ryoma Usui on 2020/08/02.
-//
-
-#ifndef Item_h
-#define Item_h
+﻿#pragma once
 
 struct Item {
     int type;       // アイテムの種類
@@ -19,6 +11,3 @@ struct Item {
     bool isThere; // アイテムの存在
 
 };
-
-
-#endif /* Item_h */
