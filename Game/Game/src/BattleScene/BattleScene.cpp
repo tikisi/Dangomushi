@@ -1,4 +1,4 @@
-﻿#include "BattleScene.hpp"
+#include "BattleScene.hpp"
 using namespace Battle;
 
 BattleScene::BattleScene(const InitData& init)
@@ -67,6 +67,7 @@ void BattleScene::stageUpdate() {
 }
 
 void BattleScene::stageDraw() const {
+    
     for (int i = 0; i < STAGE_NUM; i++) {
         stage[i].rect.draw(Palette::Brown);
     }
