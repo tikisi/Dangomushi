@@ -1,4 +1,4 @@
-# pragma once
+﻿# pragma once
 #include "Background.hpp"
 #include "Common.hpp"
 #include "Player.hpp"
@@ -42,6 +42,20 @@ private:
     Texture dango4;
     Texture dango5;
     Texture dango;
+    
+    // 敵
+    int texturetime = 0;
+    RectF enemyrect;
+    Texture crow1;
+    Texture crow2;
+    Texture crow;
+    Texture crowcharge1;
+    Texture crowcharge2;
+    Texture crowcharge;
+    Texture cubicRed;
+    Texture cubicBlue;
+    Texture cubic;
+    Texture cubiccharge;
 
     // 足場
     Foot foots[FT_NUM];
@@ -87,7 +101,7 @@ public:
     void itemDrawBefore() const;
     void itemDraw() const;
 
-    void enemyInit();
+    void enemyInit(bool type);
     void enemyUpdate();
     void enemyDraw() const;
 

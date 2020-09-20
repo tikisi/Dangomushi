@@ -13,8 +13,18 @@ Game::Game(const InitData& init) : font30(30), IScene(init) {
         tower[i] = Texture(U"tower" + Format(i + 1) + U".png");
     }
     
+    // 敵読み込み
+    crow1 = Texture(U"crow1.png");
+    crow2 = Texture(U"crow2.png");
+    crowcharge1 = Texture(U"crowcharge1.png");
+    crowcharge2 = Texture(U"crowcharge2.png");
+    
+    cubicRed = Texture(U"boxRed.png");
+    cubicBlue = Texture(U"boxBlue.png");
+    cubic = cubicBlue;
+    
     AudioAsset(U"Main_BGM").setLoop(true);
-    AudioAsset(U"Main_BGM").play();
+    //AudioAsset(U"Main_BGM").play();
     
     // プレイヤー初期化
     playerInit();
@@ -26,7 +36,7 @@ Game::Game(const InitData& init) : font30(30), IScene(init) {
     itemInit();
     
     // 敵の初期化
-    enemyInit();
+    enemyInit(0);
 }
 
 
@@ -55,17 +65,19 @@ void Game::draw() const {
 
 
 void Game::backUpdate() {
-    back.Pos1 = -player.posY/30 - 300;
-    back.alpha = 1.0 + player.posY/4000.0;
+    back.Pos1 = -player.posY/100 - 200;
+    back.alpha = 1.0 + player.posY/20000.0;
     if(back.alpha < -1){
         texture1 = earth;
         texture2 = white;
         back.alpha += 2;
+        back.Pos1 -= 400;
     }
     else if(back.alpha < 0){
         texture1 = sunset;
         texture2 = earth;
         back.alpha++;
+        back.Pos1 -= 200;
     }else{
         texture1 = ground;
         texture2 = sunset;
@@ -73,11 +85,12 @@ void Game::backUpdate() {
 }
 
 void Game::backDraw() const {
-    texture2.resized(3000).drawAt(400, 1400 + back.Pos1);
+    texture2.resized(1000, 1000).draw(-150, back.Pos1 - 200);
     //texture1.resized(800,1000).draw(0, back.Pos1,ColorF(1.0, Periodic::Sine0_1(2s)));
     //texture1.resized(800,1000).draw(0, back.Pos1, ColorF(1.0, back.alpha));
-    texture1.resized(3000).drawAt(400, back.Pos1, ColorF(1.0, back.alpha));
-    Print << back.alpha;
+    texture1.resized(1000, 1000).draw(-150, back.Pos1, ColorF(1.0, back.alpha));
+    Rect(700, 0, 100, 600).draw(ColorF(0,0,0,0.7));
+    Rect(705, 600 + 600.0/60000.0 * player.posY, 90, 5).draw(Palette::Red);
 }
 
 
@@ -144,20 +157,20 @@ void Game::playerUpdate() {
     
     // デバッグ用
     if (KeyUp.pressed()) {
-        player.speedY = 10;
+        player.speedY = 20;
     }
     
     // ジャンプ
     if (KeySpace.down()) {
         player.spinCount = 0;
         if (player.isGround) {
-            AudioAsset(U"spin").play();
+            //AudioAsset(U"spin").play();
             //static const Audio spin(U"example/kaiten.mp3");
             //spin.play();
             player.jump = 1;
             player.speedY += 5.0;
             player.updateWidth(30, TW_CENTER_X);
-            AudioAsset(U"kaiten").play();
+            //AudioAsset(U"kaiten").play();
         }
     }
     
@@ -194,7 +207,7 @@ void Game::playerUpdate() {
     // yの加速
     player.speedY -= player.accY;
     player.speedY *= 0.98;
-//    if(KeyDown.pressed())player.speedY = 0;
+    //    if(KeyDown.pressed())player.speedY = 0;
     player.posY -= player.speedY;
     
     // アニメーション
@@ -302,7 +315,7 @@ void Game::playerDraw() const {
     if (player.isRight) dango.mirrored().drawAt(player.drawPosX, player.drawPosY);
     else dango.drawAt(player.drawPosX, player.drawPosY);
     
-    Rect(730, 550 - player.HP, 40, player.HP).draw(Palette::Lightgreen);
+    //Rect(730, 550 - player.HP, 40, player.HP).draw(Palette::Lightgreen);
     
     // デバッグ用表示
     ClearPrint();
@@ -472,89 +485,121 @@ void Game::itemInit() {
 }
 
 void Game::itemUpdate() {
-//    // 回転
-//    for (int i = 0; i < FT_NUM; i++) {
-//        items[i].dir = rotate(items[i].dir);
-//        items[i].posX = calcPos(items[i].dir, FT_R);
-//        items[i].posY = foots[i].posY - 30;
-//        items[i].isFront = isFront(items[i].dir);
-//        items[i].drawPosY = items[i].posY + (player.drawPosY - player.posY);
-//        RectF itemRect(Arg::center(items[i].posX, items[i].drawPosY), 30, 30);
-//        RectF playerRect(player.drawPosX, player.drawPosY, player.width, player.height);
-//        if (playerRect.intersects(itemRect) && items[i].isThere) {
-//            items[i].isThere = 0;
-//            player.HP += 100;
-//        }
-//    }
+    //    // 回転
+    //    for (int i = 0; i < FT_NUM; i++) {
+    //        items[i].dir = rotate(items[i].dir);
+    //        items[i].posX = calcPos(items[i].dir, FT_R);
+    //        items[i].posY = foots[i].posY - 30;
+    //        items[i].isFront = isFront(items[i].dir);
+    //        items[i].drawPosY = items[i].posY + (player.drawPosY - player.posY);
+    //        RectF itemRect(Arg::center(items[i].posX, items[i].drawPosY), 30, 30);
+    //        RectF playerRect(player.drawPosX, player.drawPosY, player.width, player.height);
+    //        if (playerRect.intersects(itemRect) && items[i].isThere) {
+    //            items[i].isThere = 0;
+    //            player.HP += 100;
+    //        }
+    //    }
 }
 
 void Game::itemDrawBefore() const {
-//    for (int i = 0; i < FT_NUM; i++) {
-//        // 後ろのアイテム
-//        if (!items[i].isFront && items[i].isThere) {
-//            RectF(Arg::center(items[i].posX, items[i].drawPosY), 30, 30).draw(Palette::Aqua);
-//        }
-//    }
+    //    for (int i = 0; i < FT_NUM; i++) {
+    //        // 後ろのアイテム
+    //        if (!items[i].isFront && items[i].isThere) {
+    //            RectF(Arg::center(items[i].posX, items[i].drawPosY), 30, 30).draw(Palette::Aqua);
+    //        }
+    //    }
 }
 
 void Game::itemDraw() const {
-//    for (int i = 0; i < FT_NUM; i++) {
-//        // 前のアイテム
-//        if (items[i].isFront && items[i].isThere) {
-//            RectF(Arg::center(items[i].posX, items[i].drawPosY), 30, 30).draw(Palette::Aqua);
-//        }
-//    }
+    //    for (int i = 0; i < FT_NUM; i++) {
+    //        // 前のアイテム
+    //        if (items[i].isFront && items[i].isThere) {
+    //            RectF(Arg::center(items[i].posX, items[i].drawPosY), 30, 30).draw(Palette::Aqua);
+    //        }
+    //    }
 }
 
 
-void Game::enemyInit() {
+void Game::enemyInit(bool type) {
     enemy.isRight = RandomBool(0.5);
-    enemy.type = RandomBool(0.5);
+    enemy.type = type;
     enemy.posY = player.posY - 600;
     enemy.attack = -300;
     enemy.move = 0;
 }
 
 void Game::enemyUpdate() {
+    texturetime++;
+    if(texturetime>10000)texturetime -= 10000;
     // 再出現
     if (enemy.drawPosY > 900) {
-        enemyInit();
+        enemyInit(0);
     }
     
     
     if (enemy.attack < 0)enemy.attack++;
-    if (enemy.type == 2 && enemy.attack <= 0)enemy.move = -150 + sin(foots[1].time) * 200;
     
-    if (enemy.type == 2 && enemy.attack == 0 && player.isGround && player.speedX == 0)enemy.attack++;
+    enemy.move = sin(texturetime/10.0) * 10;
+    
     if (-5 < player.posY - enemy.posY && player.posY - enemy.posY < 5 && enemy.attack == 0 && player.isGround)enemy.attack++;
     if (enemy.posY > player.posY - 500 && enemy.attack <= 0) {
         enemy.posY += (player.posY - enemy.posY) / 50.0;
     }
     if (enemy.attack > 0)enemy.attack++;
     if (enemy.attack > 100)enemy.attack = 100;
-    enemy.drawPosY = enemy.posY - player.posY + player.drawPosY + enemy.move;
+    
+    enemy.drawPosY = enemy.posY - player.posY + player.drawPosY + enemy.move -30;
+    
+    if(texturetime % 50 < 25){
+        crow = crow1;
+        crowcharge = crowcharge1;
+    }else{
+        crow = crow2;
+        crowcharge = crowcharge2;
+    }
+    if(texturetime % 8 < 4) cubiccharge = cubicBlue;
+    else cubiccharge = cubicRed;
     
     
+    if (50 < enemy.attack && enemy.type == 1) {
+        enemyrect = RectF(600 - (enemy.attack - 50) * 14, enemy.drawPosY, 100, 60);
+    }else{
+        enemyrect = RectF(600, enemy.drawPosY, 100, 60);
+    }
+    
+    Rect playerrect(335,385,30,30);
+    
+    //カラスにあたると吹っ飛ぶ
+    if(enemyrect.intersects(playerrect)){
+        player.speedX = -0.1;
+        player.speedY = 2;
+    }
+    
+    //レーザーでゲームオーバー
+    Line lazer(0, enemy.drawPosY+30, 650, enemy.drawPosY + 30);
+    if (50 < enemy.attack && enemy.attack < 100 && lazer.intersects(playerrect) && enemy.type == 0)changeScene(State::GameOver);
 }
 
 void Game::enemyDraw() const {
-    if (enemy.attack < 0 || 50 < enemy.attack)RectF(700, enemy.drawPosY, 80, 50).drawFrame(10, HSV(120 * enemy.type, 1.0, 0.8)).draw(Palette::White);
-    else RectF(700, enemy.drawPosY, 80, 50).drawFrame(10, HSV(120 * enemy.type, 1.0, 0.8)).draw(Color(255, 255 - enemy.attack * 3, 255 - enemy.attack));
+    //    if (enemy.attack < 0 || 50 < enemy.attack)RectF(700, enemy.drawPosY, 80, 50).drawFrame(10, HSV(120 * enemy.type, 1.0, 0.8)).draw(Palette::White);
+    //    else RectF(700, enemy.drawPosY, 80, 50).drawFrame(10, HSV(120 * enemy.type, 1.0, 0.8)).draw(Color(255, 255 - enemy.attack * 3, 255 - enemy.attack));
+    
+    
+    
+    
     
     switch (enemy.type) {
         case 0:
-            if (0 < enemy.attack && enemy.attack <= 50)Line(0, enemy.drawPosY, 700, enemy.drawPosY).draw(LineStyle::RoundDot, 3, Palette::Purple);
-            if (50 < enemy.attack && enemy.attack < 100)Line(0, enemy.drawPosY, 700, enemy.drawPosY).draw(LineStyle::RoundCap, enemy.attack / 5.0, Palette::Red);
+            if (0 < enemy.attack && enemy.attack <= 50)Line(0, enemy.drawPosY+30, 650, enemy.drawPosY + 30).draw(LineStyle::RoundDot, 3, Palette::Purple);
+            if (50 < enemy.attack && enemy.attack < 100)Line(0, enemy.drawPosY+30, 650, enemy.drawPosY + 30).draw(LineStyle::RoundCap, enemy.attack / 5.0, Palette::Red);
+            
+            if (enemy.attack <= 0 || 50 < enemy.attack)enemyrect(cubic).draw();
+            else enemyrect(cubiccharge).draw();
             break;
         case 1:
-            if (50 < enemy.attack && enemy.attack < 100) {
-                Circle(700 - (enemy.attack - 50) * 14, enemy.drawPosY, 20).draw(Palette::Red);
-            }
+            if (enemy.attack <= 0)enemyrect(crow).draw();
+            else enemyrect(crowcharge).draw();
             break;
-        case 2:
-            if (0 < enemy.attack && enemy.attack <= 50) Line(700, enemy.drawPosY, player.drawPosX, player.drawPosY).draw(5, Palette::Purple);
-            if (50 < enemy.attack && enemy.attack < 100)RectF(0, enemy.drawPosY, 700, 10 + enemy.attack / 10).draw(Palette::Red);
-            
         default:
             break;
     }

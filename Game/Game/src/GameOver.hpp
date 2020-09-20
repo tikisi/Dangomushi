@@ -21,7 +21,7 @@ private:
 public:
 
     GameOver(const InitData& init) : backTexture(U"GameOverBack.png"), font50(50), IScene(init) {
-        AudioAsset(U"GameOver_BGM").play();
+        //AudioAsset(U"GameOver_BGM").play();
     }
 
     void update() override;

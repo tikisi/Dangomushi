@@ -103,7 +103,7 @@ void BattleScene::playerUpdate() {
         if (player.isGround) {
             player.jump = 1;
             player.speedY -= 8.0;
-            AudioAsset(U"kaiten").play();
+            //AudioAsset(U"kaiten").play();
         }
     }
     
