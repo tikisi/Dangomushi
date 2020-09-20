@@ -81,6 +81,8 @@ void BattleScene::bossInit() {
     boss.nState = boss.state;
     boss.HP = 5;
     boss.onRight = true;
+
+    boss.animCount = 0;
 }
 
 void BattleScene::bossUpdate() {
@@ -131,6 +133,10 @@ void BattleScene::bossUpdate() {
     // 状態のFinalize?
 
 
+    boss.animCount++;
+    if(boss.animCount == 100) {
+        boss.animCount = 0;
+    }
 #ifdef DEBUG
     ClearPrint();
     Print << U"onRight: " << boss.onRight;
@@ -141,8 +147,20 @@ void BattleScene::bossUpdate() {
 }
 
 void BattleScene::bossDraw() const {
-    boss.rect.draw(Palette::Blueviolet);
-    RectF(boss.rect.pos + Vec2(boss.rect.w / 6.0, 0), boss.rect.size - Vec2(boss.rect.w / 3.0, 0)).draw(Palette::Yellow);
+    // 停止中
+    if (boss.state < BossState::UptoDown1) {
+        boss.rect(TextureAsset(U"boss1")).draw();
+    }
+    // 移動中
+    else {
+        if(boss.onRight) {
+            boss.rect(TextureAsset(U"boss" + Format(boss.animCount / 10 + 1))).draw();
+        }else {
+            boss.rect(TextureAsset(U"boss" + Format(boss.animCount / 10 + 1)).mirrored()).draw();
+        }
+    }
+    /*boss.rect.draw(Palette::Blueviolet);
+    RectF(boss.rect.pos + Vec2(boss.rect.w / 6.0, 0), boss.rect.size - Vec2(boss.rect.w / 3.0, 0)).draw(Palette::Yellow);*/
 }
 
 void BattleScene::playerInit() {

@@ -2,6 +2,7 @@
 #include <Siv3D.hpp>
 
 void AssetRegister() {
+    // Player
     TextureAsset::Register(U"player11", U"player/dangomushi/s1dangomushi.png");
     TextureAsset::Register(U"player12", U"player/dangomushi/s2dangomushi.png");
     TextureAsset::Register(U"player13", U"player/dangomushi/j1dangomushi.png");
@@ -27,6 +28,11 @@ void AssetRegister() {
     TextureAsset::Register(U"player53", U"player/kurowassan/j1kurowassan.png");
     TextureAsset::Register(U"player54", U"player/kurowassan/j2kurowassan.png");
     TextureAsset::Register(U"player55", U"player/kurowassan/j3kurowassan.png");
+
+    // Boss
+    for(int i = 1; i <= 10; i++) {
+        TextureAsset::Register(U"boss" + Format(i), U"boss" + Format(i) + U".png");
+    }
 
     // Audio
     AudioAsset::Register(U"Title", U"Sounds/BGM/Title.ogg");
