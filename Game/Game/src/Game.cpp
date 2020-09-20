@@ -472,38 +472,38 @@ void Game::itemInit() {
 }
 
 void Game::itemUpdate() {
-//    // 回転
-//    for (int i = 0; i < FT_NUM; i++) {
-//        items[i].dir = rotate(items[i].dir);
-//        items[i].posX = calcPos(items[i].dir, FT_R);
-//        items[i].posY = foots[i].posY - 30;
-//        items[i].isFront = isFront(items[i].dir);
-//        items[i].drawPosY = items[i].posY + (player.drawPosY - player.posY);
-//        RectF itemRect(Arg::center(items[i].posX, items[i].drawPosY), 30, 30);
-//        RectF playerRect(player.drawPosX, player.drawPosY, player.width, player.height);
-//        if (playerRect.intersects(itemRect) && items[i].isThere) {
-//            items[i].isThere = 0;
-//            player.HP += 100;
-//        }
-//    }
+    // 回転
+    for (int i = 0; i < FT_NUM; i++) {
+        items[i].dir = rotate(items[i].dir);
+        items[i].posX = calcPos(items[i].dir, FT_R);
+        items[i].posY = foots[i].posY - 30;
+        items[i].isFront = isFront(items[i].dir);
+        items[i].drawPosY = items[i].posY + (player.drawPosY - player.posY);
+        RectF itemRect(Arg::center(items[i].posX, items[i].drawPosY), 30, 30);
+        RectF playerRect(player.drawPosX, player.drawPosY, player.width, player.height);
+        if (playerRect.intersects(itemRect) && items[i].isThere) {
+            items[i].isThere = 0;
+            player.HP += 100;
+        }
+    }
 }
 
 void Game::itemDrawBefore() const {
-//    for (int i = 0; i < FT_NUM; i++) {
-//        // 後ろのアイテム
-//        if (!items[i].isFront && items[i].isThere) {
-//            RectF(Arg::center(items[i].posX, items[i].drawPosY), 30, 30).draw(Palette::Aqua);
-//        }
-//    }
+    for (int i = 0; i < FT_NUM; i++) {
+        // 後ろのアイテム
+        if (!items[i].isFront && items[i].isThere) {
+            RectF(Arg::center(items[i].posX, items[i].drawPosY), 30, 30).draw(Palette::Aqua);
+        }
+    }
 }
 
 void Game::itemDraw() const {
-//    for (int i = 0; i < FT_NUM; i++) {
-//        // 前のアイテム
-//        if (items[i].isFront && items[i].isThere) {
-//            RectF(Arg::center(items[i].posX, items[i].drawPosY), 30, 30).draw(Palette::Aqua);
-//        }
-//    }
+    for (int i = 0; i < FT_NUM; i++) {
+        // 前のアイテム
+        if (items[i].isFront && items[i].isThere) {
+            RectF(Arg::center(items[i].posX, items[i].drawPosY), 30, 30).draw(Palette::Aqua);
+        }
+    }
 }
 
 

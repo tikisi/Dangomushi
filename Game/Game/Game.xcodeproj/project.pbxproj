@@ -55,7 +55,6 @@
 		23C1191C2512CFD5008F1D19 /* BattleScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BattleScene.hpp; sourceTree = "<group>"; };
 		23C1191E2512D30C008F1D19 /* Player.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Player.hpp; sourceTree = "<group>"; };
 		23C1191F2512DA89008F1D19 /* Stage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Stage.hpp; sourceTree = "<group>"; };
-		23C119202513408F008F1D19 /* Bullet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Bullet.hpp; sourceTree = "<group>"; };
 		23D18B6B24F2174C00606D8A /* GameOver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameOver.cpp; sourceTree = "<group>"; };
 		23D18B6C24F2174C00606D8A /* GameOver.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameOver.hpp; sourceTree = "<group>"; };
 		23D18B6E24F221F300606D8A /* Background.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Background.hpp; sourceTree = "<group>"; };
@@ -144,7 +143,6 @@
 			children = (
 				23C1191E2512D30C008F1D19 /* Player.hpp */,
 				23C1191B2512CFD5008F1D19 /* BattleScene.cpp */,
-				23C119202513408F008F1D19 /* Bullet.hpp */,
 				23C1191F2512DA89008F1D19 /* Stage.hpp */,
 				23C1191C2512CFD5008F1D19 /* BattleScene.hpp */,
 				23C119192512CFD5008F1D19 /* Boss.hpp */,
