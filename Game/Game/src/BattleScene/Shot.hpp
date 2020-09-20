@@ -36,7 +36,7 @@ public:
         circular.r += 0.5;
     }
     Circle getCircle() const override { return Circle(center + circular, r); }
-    bool isFinish() const override { return circular.r > 340; }
+    bool isFinish() const override { return circular.r > 380; }
 };
 
 

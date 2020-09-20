@@ -4,7 +4,6 @@
 #include "Boss.hpp"
 #include "Stage.hpp"
 #include "ShotManager.hpp"
-#include "Bullet.hpp"
 
 #define STAGE_NUM 4
 class BattleScene : public MyApp::Scene
