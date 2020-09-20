@@ -63,7 +63,9 @@ void Game::backDraw() const {
     texture2.resized(3000).drawAt(400, 1400 + back.Pos1);
     //texture1.resized(800,1000).draw(0, back.Pos1,ColorF(1.0, Periodic::Sine0_1(2s)));
     texture1.resized(800, 1000).draw(0, back.Pos1, ColorF(1.0, back.alpha));
+#ifdef DEBUG
     Print << back.alpha;
+#endif
 }
 
 
@@ -223,7 +225,9 @@ void Game::collisionY() {
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].withDraw < 30) {
             if (player.intersects(foots[i])) {
+#ifdef DEBUG
                 Print << U"collision";
+#endif
                 if (player.speedY < 0.0) {   // 上からぶつかったとき
 
                     player.posY = foots[i].posY - player.height / 2 - 0.00001;
@@ -290,6 +294,7 @@ void Game::playerDraw() const {
     Rect(730, 550 - player.HP, 40, player.HP).draw(Palette::Lightgreen);
 
     // デバッグ用表示
+#ifdef DEBUG
     ClearPrint();
     Print << U"player.posY" << player.posY;
     Print << U"Lowest:" << player.lowest;
@@ -300,7 +305,7 @@ void Game::playerDraw() const {
     Print << U"GROUND" << player.isGround;
     Print << back.alpha;
     Print << U"Lv: " << Lv;
-
+#endif
 }
 
 void Game::footInit() {

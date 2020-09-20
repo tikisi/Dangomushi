@@ -28,13 +28,12 @@ void Main()
     
     // シーンと遷移時の色を設定
     MyApp manager;
-    /*manager
+    manager
     .add<Title>(State::Title)
     .add<Game>(State::Game)
     .add<BattleScene>(State::BattleScene)
     .add<CharaSelect>(State::CharaSelect)
-    .add<GameOver>(State::GameOver);*/
-    manager.add<BattleScene>(State::BattleScene);
+    .add<GameOver>(State::GameOver);
 
     
     AssetRegister();

@@ -131,11 +131,13 @@ void BattleScene::bossUpdate() {
     // 状態のFinalize?
 
 
+#ifdef DEBUG
     ClearPrint();
     Print << U"onRight: " << boss.onRight;
     Print << U"BossState: " << int(boss.state);
     Print << U"StopWatch1: " << boss.stopWatch1.sF();
     Print << U"StopWatch2: " << boss.stopWatch2.sF();
+#endif
 }
 
 void BattleScene::bossDraw() const {
