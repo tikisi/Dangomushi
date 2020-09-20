@@ -12,7 +12,7 @@
 # include "Game.hpp"
 # include "GameOver.hpp"
 # include "CharaSelect.h"
-# include "Audio.hpp"
+# include "Asset.hpp"
 # include "BattleScene/BattleScene.hpp"
 
 void Main()
@@ -34,8 +34,9 @@ void Main()
     .add<BattleScene>(State::BattleScene)
     .add<CharaSelect>(State::CharaSelect)
     .add<GameOver>(State::GameOver);
+
     
-    AudioAssetRegister();
+    AssetRegister();
     
     while (System::Update())
     {

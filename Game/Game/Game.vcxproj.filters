@@ -392,6 +392,12 @@
     <ClCompile Include="src\BattleScene\BattleScene.cpp">
       <Filter>Header Files\BattleScene</Filter>
     </ClCompile>
+    <ClCompile Include="src\BattleScene\ShotManager.cpp">
+      <Filter>Header Files\BattleScene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BattleScene\ShotGenerator.cpp">
+      <Filter>Header Files\BattleScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.hpp">
@@ -418,9 +424,6 @@
     <ClInclude Include="src\Enemy.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Audio.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\GameOver.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -435,6 +438,18 @@
     </ClInclude>
     <ClInclude Include="src\BattleScene\Stage.hpp">
       <Filter>Header Files\BattleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BattleScene\Shot.hpp">
+      <Filter>Header Files\BattleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BattleScene\ShotManager.hpp">
+      <Filter>Header Files\BattleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\BattleScene\ShotGenerator.hpp">
+      <Filter>Header Files\BattleScene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Asset.hpp">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

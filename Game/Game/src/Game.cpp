@@ -7,34 +7,34 @@ Game::Game(const InitData& init) : font30(30), IScene(init) {
     sunset = Texture(U"pixelsunset.png");
     earth = Texture(U"earthh.png");
     white = Texture(U"pixelwhite.png");
-    
+
     // 塔読み込み
     for (int i = 0; i < TW_NUM; i++) {
         tower[i] = Texture(U"tower" + Format(i + 1) + U".png");
     }
-    
+
     // 敵読み込み
     crow1 = Texture(U"crow1.png");
     crow2 = Texture(U"crow2.png");
     crowcharge1 = Texture(U"crowcharge1.png");
     crowcharge2 = Texture(U"crowcharge2.png");
-    
+
     cubicRed = Texture(U"boxRed.png");
     cubicBlue = Texture(U"boxBlue.png");
     cubic = cubicBlue;
-    
+
     AudioAsset(U"Main_BGM").setLoop(true);
-    //AudioAsset(U"Main_BGM").play();
-    
+    AudioAsset(U"Main_BGM").play();
+
     // プレイヤー初期化
     playerInit();
-    
+
     // 足場の初期化
     footInit();
-    
+
     // アイテムの初期化
     itemInit();
-    
+
     // 敵の初期化
     enemyInit(0);
 }
@@ -65,20 +65,21 @@ void Game::draw() const {
 
 
 void Game::backUpdate() {
-    back.Pos1 = -player.posY/100 - 200;
-    back.alpha = 1.0 + player.posY/20000.0;
-    if(back.alpha < -1){
+    back.Pos1 = -player.posY / 100 - 200;
+    back.alpha = 1.0 + player.posY / 20000.0;
+    if (back.alpha < -1) {
         texture1 = earth;
         texture2 = white;
         back.alpha += 2;
         back.Pos1 -= 400;
     }
-    else if(back.alpha < 0){
+    else if (back.alpha < 0) {
         texture1 = sunset;
         texture2 = earth;
         back.alpha++;
         back.Pos1 -= 200;
-    }else{
+    }
+    else {
         texture1 = ground;
         texture2 = sunset;
     }
@@ -89,8 +90,11 @@ void Game::backDraw() const {
     //texture1.resized(800,1000).draw(0, back.Pos1,ColorF(1.0, Periodic::Sine0_1(2s)));
     //texture1.resized(800,1000).draw(0, back.Pos1, ColorF(1.0, back.alpha));
     texture1.resized(1000, 1000).draw(-150, back.Pos1, ColorF(1.0, back.alpha));
-    Rect(700, 0, 100, 600).draw(ColorF(0,0,0,0.7));
-    Rect(705, 600 + 600.0/60000.0 * player.posY, 90, 5).draw(Palette::Red);
+    Rect(700, 0, 100, 600).draw(ColorF(0, 0, 0, 0.7));
+    Rect(705, 600 + 600.0 / 60000.0 * player.posY, 90, 5).draw(Palette::Red);
+#ifdef DEBUG
+    Print << back.alpha;
+#endif
 }
 
 
@@ -99,7 +103,7 @@ void Game::towerUpdate() {
     // ずれを二段分以下に抑える
     towerPosY = int(player.posY) % 80;
     towerDir = rotate(towerDir);
-    
+
     // 描画する塔の種類を選択
     double a = towerDir;
     towerSelect = 0;
@@ -108,8 +112,8 @@ void Game::towerUpdate() {
         else towerSelect += 1;
         a -= Math::TwoPi / 72.0;
     }
-    
-    
+
+
     if (towerSelect == 0) {
         tower1 = tower[0]; tower2 = tower[3];
     }
@@ -128,7 +132,7 @@ void Game::towerUpdate() {
     else if (towerSelect == 5) {
         tower1 = tower[5]; tower2 = tower[2];
     }
-    
+
 }
 
 
@@ -142,7 +146,7 @@ void Game::towerDraw() const {
 
 void Game::playerInit() {
     loadPlayer(getData().SelectNum);
-    
+
     player.drawPosX = TW_CENTER_X;  // 塔の中心
     player.drawPosY = 400;
     player.posY = 0;
@@ -154,12 +158,12 @@ void Game::playerInit() {
 
 
 void Game::playerUpdate() {
-    
+
     // デバッグ用
     if (KeyUp.pressed()) {
         player.speedY = 20;
     }
-    
+
     // ジャンプ
     if (KeySpace.down()) {
         player.spinCount = 0;
@@ -173,7 +177,7 @@ void Game::playerUpdate() {
             //AudioAsset(U"kaiten").play();
         }
     }
-    
+
     if (!player.isGround && player.jump != 0) {
         if (player.jump++ > 8) {
             player.jump = 0;
@@ -184,20 +188,20 @@ void Game::playerUpdate() {
         else {
             player.jump = 0;
         }
-        
-        if(player.isGround)player.width = 50;
+
+        if (player.isGround)player.width = 50;
         else player.width = 30;
     }
-    
+
     // 左右の加速
     if (player.footType == Foot::Type::ice)player.accX = 0.0005;
     else player.accX = 0.001;
-    
+
     if (KeyRight.pressed()) {
         player.speedX += player.accX;
         player.isRight = true;
     }
-    
+
     if (KeyLeft.pressed()) {
         player.speedX -= player.accX;
         player.isRight = false;
@@ -209,7 +213,7 @@ void Game::playerUpdate() {
     player.speedY *= 0.98;
     //    if(KeyDown.pressed())player.speedY = 0;
     player.posY -= player.speedY;
-    
+
     // アニメーション
     if (player.isGround) {
         // プレイヤーの歩くアニメーション
@@ -221,7 +225,7 @@ void Game::playerUpdate() {
             else dango = dango2;
             b -= Math::TwoPi / 144.0;
         }
-        
+
         if (walkflag == player.damageFlag && player.footType == Foot::Type::spike) {
             player.HP -= 10;
             player.damageFlag = !player.damageFlag;
@@ -230,15 +234,14 @@ void Game::playerUpdate() {
     else {
         player.spinCount++;
         if (player.spinCount > 15)player.spinCount = 6;
-        
-        
+
         if (player.jump) dango = dango3;
         else if (player.spinCount <= 10)dango = dango4;
         else dango = dango5;
     }
-    
-    if(player.posY > player.lowest + 300) {
-        if(-player.posY > getData().highscore) getData().highscore = round(-player.posY);
+
+    if (player.posY > player.lowest + 300) {
+        if (-player.posY > getData().highscore) getData().highscore = round(-player.posY);
         getData().dataLv = Lv;
         AudioAsset(U"Main_BGM").stop();
         //changeScene(State::GameOver);
@@ -251,13 +254,15 @@ void Game::collisionY() {
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].withDraw < 30) {
             if (player.intersects(foots[i])) {
+#ifdef DEBUG
                 Print << U"collision";
+#endif
                 if (player.speedY < 0.0) {   // 上からぶつかったとき
-                    
+
                     player.posY = foots[i].posY - player.height / 2 - 0.00001;
                     player.isGround = true;     // 地面にいるフラグを立てる
                     player.speedY = 0.0;
-                    
+
                     // 刺にあたった瞬間のダメージ
                     if (player.footType == Foot::Type::norm && foots[i].type == Foot::Type::spike) {
                         player.HP -= 50;
@@ -279,7 +284,7 @@ void Game::collisionY() {
                 else {    //  下からぶつかったとき
                     player.posY = foots[i].posY + foots[i].height + (player.height / 2) + 0.00001;
                 }
-                
+
                 player.speedY = 0.0;
             }
             else player.isGround = false;
@@ -294,7 +299,7 @@ void Game::collisionX() {
         if (foots[i].withDraw < 30 && player.intersects(foots[i])) {
             double tmp = player.speedX; // 退避
             player.speedX *= -1.0 - 0.00001;
-            
+
             for (int j = 0; j < FT_NUM; j++) {
                 foots[j].dirR = rotate(foots[j].dirR);
                 foots[j].dirL = rotate(foots[j].dirL);
@@ -305,7 +310,7 @@ void Game::collisionX() {
                 foots[j].isFrontR = isFront(foots[j].dirR);
                 foots[j].isFrontL = isFront(foots[j].dirL);
             }
-            
+
             player.speedX = tmp * -0.5;
         }
     }
@@ -314,10 +319,10 @@ void Game::collisionX() {
 void Game::playerDraw() const {
     if (player.isRight) dango.mirrored().drawAt(player.drawPosX, player.drawPosY);
     else dango.drawAt(player.drawPosX, player.drawPosY);
-    
     //Rect(730, 550 - player.HP, 40, player.HP).draw(Palette::Lightgreen);
-    
+
     // デバッグ用表示
+#ifdef DEBUG
     ClearPrint();
     Print << U"player.posY" << player.posY;
     Print << U"Lowest:" << player.lowest;
@@ -328,7 +333,7 @@ void Game::playerDraw() const {
     Print << U"GROUND" << player.isGround;
     Print << back.alpha;
     Print << U"Lv: " << Lv;
-    
+#endif
 }
 
 void Game::footInit() {
@@ -336,7 +341,7 @@ void Game::footInit() {
     for (int i = 0; i < FT_TEX_NUM; i++) {
         footTextures[i] = Texture(Image(U"Tower" + Format(i + 1) + U".png").scale(FT_TEX_WIDTH, FT_TEX_HEIGHT));
     }
-    
+
     for (int i = 0; i < FT_NUM; i++) {
         foots[i].height = 40;
         foots[i].time = 0;
@@ -349,8 +354,8 @@ void Game::footInit() {
     // 足場の生成
     //Lv = getData().dataLv;
     Lv = 1;
-    player.lowest = (Lv - 1)*5000;
-    player.posY = (Lv - 1)*5000;
+    player.lowest = (Lv - 1) * 5000;
+    player.posY = (Lv - 1) * 5000;
     generateInit();
 }
 
@@ -359,7 +364,7 @@ void Game::footUpdate() {
     for (int i = 0; i < FT_NUM; i++) {
         foots[i].dirR = rotate(foots[i].dirR);
         foots[i].dirL = rotate(foots[i].dirL);
-        
+
         foots[i].posRootXL = calcPos(foots[i].dirL, FT_ROOT_R);
         foots[i].posRootXR = calcPos(foots[i].dirR, FT_ROOT_R);
         foots[i].posXL = calcPos(foots[i].dirL, FT_R - foots[i].withDraw);
@@ -369,36 +374,36 @@ void Game::footUpdate() {
         foots[i].drawPosY = foots[i].posY + (player.drawPosY - player.posY);
         foots[i].time += 0.02;
         if (foots[i].time > Math::TwoPi) foots[i].time -= Math::TwoPi;
-        
+
         if (foots[i].type == 1) foots[i].withDraw = cos(foots[i].time) * 50;
-        
+
         if (foots[i].type == 0 && foots[i].posY > player.posY + 10) foots[i].withDraw += 0.0;
-        
+
         if (foots[i].withDraw > FT_R - FT_ROOT_R + 5) foots[i].withDraw = FT_R - FT_ROOT_R + 5;
     }
-    
+
     switch (-(int)player.posY / 5000) {
-        case 0:
-            Lv = 1;
-            break;
-        case 1:
-            Lv = 2;
-            break;
-        case 2:
-            Lv = 3;
-            break;
-        case 3:
-            Lv = 4;
-            break;
-        case 4:
-            Lv = 5;
-            break;
-            
-        default:
-            break;
+    case 0:
+        Lv = 1;
+        break;
+    case 1:
+        Lv = 2;
+        break;
+    case 2:
+        Lv = 3;
+        break;
+    case 3:
+        Lv = 4;
+        break;
+    case 4:
+        Lv = 5;
+        break;
+
+    default:
+        break;
     }
-    
-    
+
+
     // 再出現
     generate();
 }
@@ -417,27 +422,27 @@ void Game::footDrawBefore() const {
 
 void Game::footDraw() const {
     for (int i = 0; i < FT_NUM; i++) {
-        
+
         Color footcolor;
-        
+
         switch (foots[i].type) {
-            case Foot::norm:
-                footcolor = Color(10, 50 + foots[i].withDraw * 1.5, 50 + foots[i].withDraw * 1.5);
-                break;
-            case Foot::pull:
-                footcolor = Color(170, 100 + foots[i].withDraw * 1.5, 100 + foots[i].withDraw * 1.5);
-                break;
-            case Foot::spike:
-                footcolor = Color(0, 100 + foots[i].withDraw * 1.5, 100 + foots[i].withDraw * 1.5);
-                break;
-            case Foot::ice:
-                footcolor = Color(140, 210, 255);
-                break;
-            case Foot::bounce:
-                footcolor = Color(60, 60, 60);
-                break;
+        case Foot::norm:
+            footcolor = Color(10, 50 + foots[i].withDraw * 1.5, 50 + foots[i].withDraw * 1.5);
+            break;
+        case Foot::pull:
+            footcolor = Color(170, 100 + foots[i].withDraw * 1.5, 100 + foots[i].withDraw * 1.5);
+            break;
+        case Foot::spike:
+            footcolor = Color(0, 100 + foots[i].withDraw * 1.5, 100 + foots[i].withDraw * 1.5);
+            break;
+        case Foot::ice:
+            footcolor = Color(140, 210, 255);
+            break;
+        case Foot::bounce:
+            footcolor = Color(60, 60, 60);
+            break;
         }
-        
+
         // 左右の壁の描画
         if (foots[i].isFrontL && foots[i].dirL < Math::HalfPi * 3) {
             drawBox(foots[i].posRootXL, foots[i].drawPosY, foots[i].posXL, foots[i].height).draw(footcolor).drawFrame(5, 0, Palette::Black);
@@ -445,9 +450,9 @@ void Game::footDraw() const {
         if (foots[i].isFrontR && foots[i].dirR > Math::HalfPi * 3) {
             drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, foots[i].height).draw(footcolor).drawFrame(5, 0, Palette::Black);
         }
-        
-        
-        
+
+
+
         // 足場のまるい壁
         if (foots[i].isFrontL && foots[i].isFrontR) {
             drawBox(foots[i].posXR, foots[i].drawPosY, foots[i].posXL, foots[i].height).draw(footcolor).drawFrame(5, 0, Palette::Green);
@@ -469,16 +474,16 @@ void Game::itemInit() {
     // アイテム初期化
     for (int i = 0; i < FT_NUM; i++) {
         items[i].type = RandomBool(0.2);
-        
+
         if (foots[i].dirR < foots[i].dirL) {
             items[i].dir = Random(foots[i].dirR, foots[i].dirL);
         }
         else {
             items[i].dir = Random(foots[i].dirR, foots[i].dirL + Math::TwoPi);
-            
+
             if (items[i].dir > Math::TwoPi) items[i].dir -= Math::TwoPi;
         }
-        
+
         items[i].posY = foots[i].posY - 30;
         items[i].isThere = RandomBool(0.2);
     }
@@ -530,78 +535,80 @@ void Game::enemyInit(bool type) {
 
 void Game::enemyUpdate() {
     texturetime++;
-    if(texturetime>10000)texturetime -= 10000;
+    if (texturetime > 10000)texturetime -= 10000;
     // 再出現
     if (enemy.drawPosY > 900) {
         enemyInit(0);
     }
-    
-    
+
+
     if (enemy.attack < 0)enemy.attack++;
-    
-    enemy.move = sin(texturetime/10.0) * 10;
-    
+
+    enemy.move = sin(texturetime / 10.0) * 10;
+
     if (-5 < player.posY - enemy.posY && player.posY - enemy.posY < 5 && enemy.attack == 0 && player.isGround)enemy.attack++;
     if (enemy.posY > player.posY - 500 && enemy.attack <= 0) {
         enemy.posY += (player.posY - enemy.posY) / 50.0;
     }
     if (enemy.attack > 0)enemy.attack++;
     if (enemy.attack > 100)enemy.attack = 100;
-    
-    enemy.drawPosY = enemy.posY - player.posY + player.drawPosY + enemy.move -30;
-    
-    if(texturetime % 50 < 25){
+
+    enemy.drawPosY = enemy.posY - player.posY + player.drawPosY + enemy.move - 30;
+
+    if (texturetime % 50 < 25) {
         crow = crow1;
         crowcharge = crowcharge1;
-    }else{
+    }
+    else {
         crow = crow2;
         crowcharge = crowcharge2;
     }
-    if(texturetime % 8 < 4) cubiccharge = cubicBlue;
+    if (texturetime % 8 < 4) cubiccharge = cubicBlue;
     else cubiccharge = cubicRed;
-    
-    
+
+
     if (50 < enemy.attack && enemy.type == 1) {
         enemyrect = RectF(600 - (enemy.attack - 50) * 14, enemy.drawPosY, 100, 60);
-    }else{
+    }
+    else {
         enemyrect = RectF(600, enemy.drawPosY, 100, 60);
     }
-    
-    Rect playerrect(335,385,30,30);
-    
+
+    Rect playerrect(335, 385, 30, 30);
+
     //カラスにあたると吹っ飛ぶ
-    if(enemyrect.intersects(playerrect)){
+    if (enemyrect.intersects(playerrect)) {
         player.speedX = -0.1;
         player.speedY = 2;
     }
-    
+
     //レーザーでゲームオーバー
-    Line lazer(0, enemy.drawPosY+30, 650, enemy.drawPosY + 30);
+    Line lazer(0, enemy.drawPosY + 30, 650, enemy.drawPosY + 30);
     if (50 < enemy.attack && enemy.attack < 100 && lazer.intersects(playerrect) && enemy.type == 0)changeScene(State::GameOver);
 }
 
 void Game::enemyDraw() const {
     //    if (enemy.attack < 0 || 50 < enemy.attack)RectF(700, enemy.drawPosY, 80, 50).drawFrame(10, HSV(120 * enemy.type, 1.0, 0.8)).draw(Palette::White);
     //    else RectF(700, enemy.drawPosY, 80, 50).drawFrame(10, HSV(120 * enemy.type, 1.0, 0.8)).draw(Color(255, 255 - enemy.attack * 3, 255 - enemy.attack));
-    
-    
-    
-    
-    
+
+
+
+
+
     switch (enemy.type) {
-        case 0:
-            if (0 < enemy.attack && enemy.attack <= 50)Line(0, enemy.drawPosY+30, 650, enemy.drawPosY + 30).draw(LineStyle::RoundDot, 3, Palette::Purple);
-            if (50 < enemy.attack && enemy.attack < 100)Line(0, enemy.drawPosY+30, 650, enemy.drawPosY + 30).draw(LineStyle::RoundCap, enemy.attack / 5.0, Palette::Red);
-            
-            if (enemy.attack <= 0 || 50 < enemy.attack)enemyrect(cubic).draw();
-            else enemyrect(cubiccharge).draw();
-            break;
-        case 1:
-            if (enemy.attack <= 0)enemyrect(crow).draw();
-            else enemyrect(crowcharge).draw();
-            break;
-        default:
-            break;
+    case 0:
+        if (0 < enemy.attack && enemy.attack <= 50)Line(0, enemy.drawPosY + 30, 650, enemy.drawPosY + 30).draw(LineStyle::RoundDot, 3, Palette::Purple);
+        if (50 < enemy.attack && enemy.attack < 100)Line(0, enemy.drawPosY + 30, 650, enemy.drawPosY + 30).draw(LineStyle::RoundCap, enemy.attack / 5.0, Palette::Red);
+
+        if (enemy.attack <= 0 || 50 < enemy.attack)enemyrect(cubic).draw();
+        else enemyrect(cubiccharge).draw();
+        break;
+    case 1:
+        if (enemy.attack <= 0)enemyrect(crow).draw();
+        else enemyrect(crowcharge).draw();
+        break;
+    default:
+        break;
     }
 }
 
@@ -610,7 +617,7 @@ double Game::rotate(double arg) {
     arg -= player.speedX;
     if (arg < 0) arg += Math::TwoPi;
     if (arg > Math::TwoPi) arg -= Math::TwoPi;
-    
+
     return arg;
 }
 
@@ -624,43 +631,9 @@ bool Game::isFront(double arg) {
 }
 
 void Game::loadPlayer(int selectNum) {
-    const static String path = U"player/"; // ディレクトリのパス
-    
-    switch (selectNum) {
-        case 1:
-            dango1 = Texture(path + U"dangomushi/s1dangomushi.png");
-            dango2 = Texture(path + U"dangomushi/s2dangomushi.png");
-            dango3 = Texture(path + U"dangomushi/j1dangomushi.png");
-            dango4 = Texture(path + U"dangomushi/j2dangomushi.png");
-            dango5 = Texture(path + U"dangomushi/j3dangomushi.png");
-            break;
-        case 2:
-            dango1 = Texture(path + U"ebi/s1ebi.png");
-            dango2 = Texture(path + U"ebi/s2ebi.png");
-            dango3 = Texture(path + U"ebi/j1ebi.png");
-            dango4 = Texture(path + U"ebi/j2ebi.png");
-            dango5 = Texture(path + U"ebi/j3ebi.png");
-            break;
-        case 3:
-            dango1 = Texture(path + U"yadokari/s1yadokari.png");
-            dango2 = Texture(path + U"yadokari/s2yadokari.png");
-            dango3 = Texture(path + U"yadokari/j1yadokari.png");
-            dango4 = Texture(path + U"yadokari/j2yadokari.png");
-            dango5 = Texture(path + U"yadokari/j3yadokari.png");
-            break;
-        case 4:
-            dango1 = Texture(path + U"gdangomushi/s1gdangomushi.png");
-            dango2 = Texture(path + U"gdangomushi/s2gdangomushi.png");
-            dango3 = Texture(path + U"gdangomushi/j1gdangomushi.png");
-            dango4 = Texture(path + U"gdangomushi/j2gdangomushi.png");
-            dango5 = Texture(path + U"gdangomushi/j3gdangomushi.png");
-            break;
-        case 5:
-            dango1 = Texture(path + U"kurowassan/s1kurowassan.png");
-            dango2 = Texture(path + U"kurowassan/s2kurowassan.png");
-            dango3 = Texture(path + U"kurowassan/j1kurowassan.png");
-            dango4 = Texture(path + U"kurowassan/j2kurowassan.png");
-            dango5 = Texture(path + U"kurowassan/j3kurowassan.png");
-            break;
-    }
+    dango1 = TextureAsset(U"player" + Format(selectNum) + Format(1));
+    dango2 = TextureAsset(U"player" + Format(selectNum) + Format(2));
+    dango3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
+    dango4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
+    dango5 = TextureAsset(U"player" + Format(selectNum) + Format(5));
 }

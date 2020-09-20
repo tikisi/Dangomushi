@@ -1,12 +1,4 @@
-﻿//
-//  Enemy.hpp
-//  Game
-//
-//  Created by Ryoma Usui on 2020/08/09.
-//
-
-#ifndef Enemy_h
-#define Enemy_h
+﻿#pragma once
 
 struct Enemy {
     int type;       // 敵の種類
@@ -18,5 +10,3 @@ struct Enemy {
     int aimX;
     int aimY;
 };
-
-#endif /* Enemy_h */

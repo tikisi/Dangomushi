@@ -1,16 +1,27 @@
 ﻿#pragma once
+#include <Siv3D.hpp>
+
+enum class BossState {
+    DownStop,       // 停止中
+    DownMove,       // 移動中
+    DownToUp1,      // 攻撃された後画面外へ
+    DownToUp2,      // 攻撃された後画面内へ
+    UpStop,         // 上で停止中 
+    UptoDown1,      // 画面外へ
+    UptoDown2,      // 画面内へ
+};
+
 
 struct Boss {
-    int width = 50;     // 横幅
-    int height = 30;    // 縦幅
-    double speedX = 0.0;   // 横移動の速度
-    double accX = 0.001;    // 横移動の加速度
-
-    double PosX;    // 画面上での描画座標X
-
-
-    bool onGround;     // 地面にいるかどうかのフラグ
-    bool isRight;     // どっちに向いているのか（右なら1、左なら０）
+    RectF rect;
+    double speedX;
+    double accX;
+    bool onRight;
     int HP;
-    bool damageFlag;
+
+    BossState state;
+    BossState nState;
+
+    Stopwatch stopWatch1;
+    Stopwatch stopWatch2;
 };
