@@ -43,6 +43,7 @@ void Game::generateInit() {
 
 void Game::generateLv1Init() {
     //foots[0].dirR = Random<double>(Math::Pi, 10 * Math::QuarterPi);
+    
     foots[0].type = Foot::Type::norm;
     foots[0].height = 30;
     foots[0].dirR = -Math::HalfPi - 0.2;
@@ -67,6 +68,9 @@ void Game::generateLv1Init() {
 
 void Game::generateLv1() {
     for (int i = 0; i < FT_NUM; i++) {
+        if(KeyN.down())enemyInit(0);
+        if(KeyM.down())enemyInit(1);
+        
         if (foots[i].drawPosY > 1000) {
             if (RandomBool()) {
                 foots[i].dirR = foots[i != 0 ? i - 1 : FT_NUM - 1].dirL + Math::Pi / 5 + Random<double>(Math::Pi / 7);
