@@ -6,7 +6,7 @@ public:
     virtual void update() = 0;
     virtual Circle getCircle() const = 0;
     virtual bool isFinish() const = 0;
-    virtual ~Shot(){};
+    virtual ~Shot() {};
 };
 
 class RadialShot : public Shot {
@@ -17,7 +17,7 @@ public:
     RadialShot(const Vec2& start, const Vec2& speed) : pos(start), speed(speed) {}
 
     void update() override { pos += speed; }
-    Circle getCircle() const override {return Circle(pos, r);} 
+    Circle getCircle() const override { return Circle(pos, r); }
     bool isFinish() const override { return !(getCircle().intersects(Scene::Rect())); }
 };
 
@@ -62,4 +62,23 @@ public:
 
     Circle getCircle() const override { return Circle(center + Circular(dist, angle), r); }
     bool isFinish() const override { return dist > 800; }
+};
+
+class ShieldShot : public Shot {
+private:
+    Vec2 center;
+    Circular circular;
+    Stopwatch stopwatch;
+
+    static inline constexpr double omega = 0.03;
+
+public:
+    ShieldShot(Vec2& center, const double r, const double theta)
+        : center(center), circular(Circular(r, theta)) {
+        stopwatch.start();    
+    }
+
+    void update() override { circular.theta -= omega; }
+    bool isFinish() const override { return stopwatch.sF() > 4.0; }
+    Circle getCircle() const override { return Circle(center + circular, 5.0); }
 };

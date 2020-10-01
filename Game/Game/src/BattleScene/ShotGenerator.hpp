@@ -55,3 +55,17 @@ public:
     void update() override;
     bool isFinish() const override;
 };
+
+class ShieldGenerator : public ShotGenerator {
+private:
+    Vec2 center;
+    uint32 r;
+    uint32 shotNum;
+
+public:
+    ShieldGenerator(ShotAddr* shotAddr, const Vec2& center, uint32 r, uint32 shotNum) 
+        : ShotGenerator(shotAddr), center(center), r(r), shotNum(shotNum) {}
+
+    void update() override;
+    bool isFinish() const override {return true;}
+};

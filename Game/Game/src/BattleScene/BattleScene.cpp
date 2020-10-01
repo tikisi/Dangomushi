@@ -83,6 +83,7 @@ void BattleScene::bossInit() {
     boss.isLeft = true;
 
     boss.animCount = 0;
+    boss.counter = 0;
 }
 
 void BattleScene::bossUpdate() {
@@ -90,6 +91,7 @@ void BattleScene::bossUpdate() {
     if (boss.state != boss.nState) {
         boss.stopWatch1.restart();
         boss.stopWatch2.restart();
+        boss.counter = 0;
         boss.state = boss.nState;
     }
 
@@ -135,6 +137,7 @@ void BattleScene::bossUpdate() {
     if (++boss.animCount == 100) {
         boss.animCount = 0;
     }
+    boss.counter++;
 
 #ifdef DEBUG
     ClearPrint();
@@ -293,7 +296,7 @@ void BattleScene::shotUpdate() {
         Array<Shot*>& shots = shotManager.getShots();
         for (auto it = shots.begin(); it != shots.end(); it++) {
             if ((*it)->getCircle().intersects(player.rect)) {
-                // if (--player.HP == 0) changeScene(State::GameOver);
+                if (--player.HP == 0) changeScene(State::GameOver);
                 player.protectedCounter = 1;
                 delete* it;
                 shots.erase(it);
@@ -339,6 +342,11 @@ void BattleScene::bossDownStop() {
         //shotManager.genRasen(boss.rect.pos + boss.rect.size / 2);
         shotManager.genRadial(boss.rect.pos + boss.rect.size / 2);
         boss.stopWatch2.restart();
+    }
+
+    // シールド生成
+    if (boss.counter == 0) {
+        shotManager.getShield(boss.rect.pos + boss.rect.size / 2, 150, 3);
     }
 
     // Moveへ

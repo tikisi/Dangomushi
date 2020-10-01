@@ -22,4 +22,5 @@ public:
     void genRadial(const Vec2& center);
     void genRasen(const Vec2& center);
     void genSpiral(const Vec2& center, uint32 shotNum, uint32 layerNum);
+    void getShield(const Vec2& center, uint32 r, uint32 shotNum);
 };

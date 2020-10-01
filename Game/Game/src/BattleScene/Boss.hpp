@@ -26,7 +26,8 @@ struct Boss {
     BossState state;
     BossState nState;
 
-    int animCount;
+    uint32 animCount;   // アニメーションのカウンター
+    uint32 counter;     // その状態になってからの経過時間
     Stopwatch stopWatch1;
     Stopwatch stopWatch2;
 };

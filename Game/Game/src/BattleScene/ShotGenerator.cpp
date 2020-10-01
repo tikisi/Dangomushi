@@ -1,9 +1,9 @@
 ﻿#include "ShotGenerator.hpp"
 
 void RadialGenerator::update() {
-    if(counter++ % 15 == 0) {
-        for(int i = 0; i < 8; i++) {
-            shotAddr -> add(new RadialShot(center, Circular(2.0, randomOffset + Math::QuarterPi * i)));
+    if (counter++ % 15 == 0) {
+        for (int i = 0; i < 8; i++) {
+            shotAddr->add(new RadialShot(center, Circular(2.0, randomOffset + Math::QuarterPi * i)));
         }
     }
 }
@@ -26,4 +26,11 @@ void SpiralGenerator::update() {
 
 bool SpiralGenerator::isFinish() const {
     return  counter > 15 * (layerNum - 1) ? true : false;
+}
+
+void ShieldGenerator::update() {
+    double delta = Math::TwoPi / shotNum;
+    for (uint32 i = 0; i < shotNum; i++) {
+        shotAddr->add(new ShieldShot(center, r, delta * i));
+    }
 }
