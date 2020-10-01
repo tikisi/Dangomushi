@@ -9,7 +9,7 @@ public:
     virtual void update() = 0;
     virtual bool isFinish() const = 0;
     ShotGenerator(ShotAddr* shotAddr) : shotAddr(shotAddr) {}
-    virtual ~ShotGenerator() {};
+    virtual ~ShotGenerator() = default;
 };
 
 class RadialGenerator : public ShotGenerator {

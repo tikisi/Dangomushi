@@ -13,6 +13,10 @@ class ShotManager : public  ShotAddr {
 public:
     Array<Shot*> shots;
     Array<ShotGenerator*> shotGenerators;
+    
+    ShotManager() = default;
+    ~ShotManager();
+
     void add(Shot* s) { shots.push_back(s); }
 
     void update();

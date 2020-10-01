@@ -38,3 +38,9 @@ void ShotManager::draw() const {
         i->getCircle().draw(Palette::Red);
     }
 }
+
+ShotManager::~ShotManager() {
+    // ポインタの削除
+    for(auto it = shots.begin(); it != shots.end();) {it = shots.erase(it);}    
+    for(auto it = shotGenerators.begin(); it != shotGenerators.end();) {it = shotGenerators.erase(it);}
+}
