@@ -6,6 +6,7 @@ public:
     virtual void update() = 0;
     virtual Circle getCircle() const = 0;
     virtual bool isFinish() const = 0;
+    virtual ~Shot(){};
 };
 
 class RadialShot : public Shot {
@@ -29,7 +30,7 @@ private:
     static inline constexpr double r = 5.0;
 
 public:
-    RasenShot(Vec2 center, double theta, double r) : center(center), circular(r, theta) {};
+    RasenShot(Vec2 center, double theta, double _r) : center(center), circular(_r, theta) {};
 
     void update() override {
         circular.theta -= omega;
