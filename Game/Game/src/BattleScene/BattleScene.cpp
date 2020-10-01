@@ -80,7 +80,7 @@ void BattleScene::bossInit() {
     boss.state = BossState::DownStop;
     boss.nState = boss.state;
     boss.HP = 5;
-    boss.onRight = true;
+    boss.isLeft = true;
 
     boss.animCount = 0;
 }
@@ -132,14 +132,13 @@ void BattleScene::bossUpdate() {
 
     // 状態のFinalize?
 
-
-    boss.animCount++;
-    if(boss.animCount == 100) {
+    if (++boss.animCount == 100) {
         boss.animCount = 0;
     }
+
 #ifdef DEBUG
     ClearPrint();
-    Print << U"onRight: " << boss.onRight;
+    Print << U"onRight: " << boss.isLeft;
     Print << U"BossState: " << int(boss.state);
     Print << U"StopWatch1: " << boss.stopWatch1.sF();
     Print << U"StopWatch2: " << boss.stopWatch2.sF();
@@ -147,20 +146,23 @@ void BattleScene::bossUpdate() {
 }
 
 void BattleScene::bossDraw() const {
-    // 停止中
-    if (boss.state < BossState::UptoDown1) {
-        boss.rect(TextureAsset(U"boss1")).draw();
-    }
-    // 移動中
-    else {
-        if(boss.onRight) {
-            boss.rect(TextureAsset(U"boss" + Format(boss.animCount / 10 + 1))).draw();
-        }else {
-            boss.rect(TextureAsset(U"boss" + Format(boss.animCount / 10 + 1)).mirrored()).draw();
-        }
-    }
+    // 停止中、移動中
+    TextureRegion tex = (boss.state == BossState::DownStop || boss.state == BossState::UpStop) ?
+        TextureAsset(U"boss1") :
+        TextureAsset(U"boss" + Format(boss.animCount / 10 + 1));
+
+    // 右を向いているとき 
+    if (!boss.isLeft) tex = tex.mirrored();
+
+    // 上にいるとき
+    if (boss.state >= BossState::DownToUp2) tex = tex.flipped();
+
+    // 描画
+    boss.rect(tex).draw();
+
+    // 当たり判定ボックスの描画
     /*boss.rect.draw(Palette::Blueviolet);
-    RectF(boss.rect.pos + Vec2(boss.rect.w / 6.0, 0), boss.rect.size - Vec2(boss.rect.w / 3.0, 0)).draw(Palette::Yellow);*/
+    RectF(boss.rect.pos + Vec2(boss.rect.w / 6.0, 0), boss.rect.size - Vec2(boss.rect.w / 3.0, 0)).draw(Palette::Yellow); */
 }
 
 void BattleScene::playerInit() {
@@ -211,7 +213,6 @@ void BattleScene::playerUpdate() {
         else {
             player.jump = 0;
         }
-
     }
 
     // 座標の更新
@@ -333,7 +334,7 @@ void BattleScene::bossIntersects() {
 
 void BattleScene::bossDownStop() {
     // 弾を発射
-    if (boss.stopWatch2.sF() >= 8.0) {
+    if (boss.stopWatch2.sF() >= 5.0) {
         //shotManager.genSpiral(boss.rect.pos + boss.rect.size / 2, 5, 4);
         //shotManager.genRasen(boss.rect.pos + boss.rect.size / 2);
         shotManager.genRadial(boss.rect.pos + boss.rect.size / 2);
@@ -341,16 +342,15 @@ void BattleScene::bossDownStop() {
     }
 
     // Moveへ
-    if (boss.stopWatch1.sF() >= 24.0) {
-        boss.speedX = 0;
+    if (boss.stopWatch1.sF() >= 19.0) {
         boss.nState = BossState::DownMove;
+        boss.isLeft = boss.isLeft;
     }
 }
 
 void BattleScene::bossDownMove() {
     if (boss.stopWatch1.sF() <= 2.0) {
-        if (boss.onRight) boss.speedX -= boss.accX;
-        else boss.speedX += boss.accX;
+        boss.speedX += (boss.isLeft) ? -boss.accX : boss.accX;
     }
 
     boss.speedX *= 0.9;
@@ -359,44 +359,42 @@ void BattleScene::bossDownMove() {
     // Stopへ
     if (boss.rect.x < 0) {
         boss.rect.x = 0;
-        boss.onRight = false;
+        boss.isLeft = false;
         boss.nState = BossState::DownStop;
     }
     if (boss.rect.x > Scene::Width() - boss.rect.w) {
         boss.rect.x = Scene::Width() - boss.rect.w;
-        boss.onRight = true;
+        boss.isLeft = true;
         boss.nState = BossState::DownStop;
     }
 }
 
 void BattleScene::bossDownToUp1() {
-    if (boss.onRight) boss.speedX -= boss.accX * 2.0;
-    else boss.speedX += boss.accX * 2.0;
+    boss.speedX += (boss.isLeft) ? -boss.accX * 2.0 : boss.accX * 2.0;
 
     boss.speedX *= 0.9;
     boss.rect.x += boss.speedX;
 
     if (boss.rect.x + boss.rect.w < 0) {
-        boss.onRight = false;
+        boss.isLeft = false;
         boss.rect.pos = Vec2(-boss.rect.w, 0);
         boss.nState = BossState::DownToUp2;
     }
     else if (boss.rect.x > Scene::Width()) {
-        boss.onRight = true;
+        boss.isLeft = true;
         boss.rect.pos = Vec2(Scene::Width(), 0);
         boss.nState = BossState::DownToUp2;
     }
 }
 
 void BattleScene::bossDownToUp2() {
-    if (boss.onRight == true) boss.speedX -= boss.accX;
-    else boss.speedX += boss.accX;
+    boss.speedX += (boss.isLeft) ? -boss.accX : boss.accX;
 
     boss.speedX *= 0.9;
     boss.rect.x += boss.speedX;
 
     // 移動が完了
-    if (boss.onRight) {
+    if (boss.isLeft) {
         if (boss.rect.x < Scene::Center().x - (boss.rect.w / 2.0)) {
             boss.rect.x = Scene::Center().x - (boss.rect.w / 2.0);
             boss.nState = BossState::UpStop;
@@ -418,13 +416,13 @@ void BattleScene::bossUpStop() {
     }
 
     if (boss.stopWatch1.sF() >= 18.0) {
-        boss.onRight = RandomBool();
+        boss.isLeft = RandomBool();
         boss.nState = BossState::UptoDown1;
     }
 }
 
 void BattleScene::bossUptoDown1() {
-    boss.speedX += boss.onRight ? boss.accX : -boss.accX;
+    boss.speedX += boss.isLeft ? -boss.accX : boss.accX;
 
     boss.speedX *= 0.9;
     boss.rect.x += boss.speedX;
@@ -433,16 +431,17 @@ void BattleScene::bossUptoDown1() {
     if (boss.rect.x + boss.rect.w < 0 || boss.rect.x > Scene::Width()) {
         boss.rect.y = Scene::Height() - 125;
         boss.nState = BossState::UptoDown2;
+        boss.isLeft = !boss.isLeft;
     }
 }
 
 void BattleScene::bossUptoDown2() {
-    boss.speedX += boss.onRight ? -boss.accX : boss.accX;
+    boss.speedX += boss.isLeft ? -boss.accX : boss.accX;
 
     boss.speedX *= 0.9;
     boss.rect.x += boss.speedX;
 
-    if (boss.onRight) {
+    if (boss.isLeft) {
         if (boss.rect.x < Scene::Width() - boss.rect.w) {
             boss.rect.x = Scene::Width() - boss.rect.w;
             boss.nState = BossState::DownStop;
