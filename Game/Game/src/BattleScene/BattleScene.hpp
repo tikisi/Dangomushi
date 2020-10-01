@@ -5,7 +5,7 @@
 #include "Stage.hpp"
 #include "ShotManager.hpp"
 
-#define STAGE_NUM 4
+#define STAGE_NUM 3
 class BattleScene : public MyApp::Scene
 {
 private:

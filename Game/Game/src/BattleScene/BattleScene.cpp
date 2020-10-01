@@ -36,25 +36,25 @@ void BattleScene::stageInit() {
     stage[0].r = 0;
     stage[1].rect.w = 100;
     stage[1].rect.h = 50;
-    stage[1].rect.x = 100;
+    stage[1].rect.x = 180;
     stage[1].centerY = 300;
     stage[1].arg = 0;
     stage[1].accArg = 0.01;
-    stage[1].r = 200;
-    stage[2].rect.w = 100;
+    stage[1].r = 160;
+    /*stage[2].rect.w = 100;
     stage[2].rect.h = 50;
     stage[2].rect.x = 300;
     stage[2].centerY = 300;
     stage[2].arg = 0;
     stage[2].accArg = 0.015;
-    stage[2].r = 200;
-    stage[3].rect.w = 100;
-    stage[3].rect.h = 50;
-    stage[3].rect.x = 500;
-    stage[3].centerY = 300;
-    stage[3].arg = 0;
-    stage[3].accArg = 0.005;
-    stage[3].r = 200;
+    stage[2].r = 200;*/
+    stage[2].rect.w = 100;
+    stage[2].rect.h = 50;
+    stage[2].rect.x = Scene::Width() - 180 - stage[2].rect.w;
+    stage[2].centerY = 300;
+    stage[2].arg = 0;
+    stage[2].accArg = 0.005;
+    stage[2].r = 160;
 }
 
 void BattleScene::stageUpdate() {
@@ -81,9 +81,11 @@ void BattleScene::bossInit() {
     boss.nState = boss.state;
     boss.HP = 5;
     boss.isLeft = true;
-
+    
     boss.animCount = 0;
     boss.counter = 0;
+    boss.stopWatch1.start();
+    boss.stopWatch2.start();
 }
 
 void BattleScene::bossUpdate() {
