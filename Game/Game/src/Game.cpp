@@ -41,6 +41,10 @@ Game::Game(const InitData& init) : font30(30), IScene(init) {
 
 
 void Game::update() {
+#ifdef DEBUG
+    ClearPrint();
+#endif
+
     playerUpdate();
     collisionY();
     towerUpdate();
@@ -323,7 +327,6 @@ void Game::playerDraw() const {
 
     // デバッグ用表示
 #ifdef DEBUG
-    ClearPrint();
     Print << U"player.posY" << player.posY;
     Print << U"Lowest:" << player.lowest;
     Print << foots[1].time;
@@ -337,23 +340,16 @@ void Game::playerDraw() const {
 }
 
 void Game::footInit() {
-    // 足場初期化
+    // 画像読み込み
     for (int i = 0; i < FT_TEX_NUM; i++) {
         footTextures[i] = Texture(Image(U"Tower" + Format(i + 1) + U".png").scale(FT_TEX_WIDTH, FT_TEX_HEIGHT));
     }
 
-    for (int i = 0; i < FT_NUM; i++) {
-        foots[i].height = 40;
-        foots[i].time = 0;
-        //foots[i].type = (Foot::Type)Random<int>(4);
-        foots[i].type = (Foot::Type)0;
-        foots[i].dirR = 0.0;
-        foots[i].dirL = 0.0;
-        foots[i].withDraw = 0.0;
-    }
-    // 足場の生成
+    // 足場の初期化
     //Lv = getData().dataLv;
-    Lv = 1;
+    Lv = 4;
+    nLv = Lv;
+
     player.lowest = (Lv - 1) * 5000;
     player.posY = (Lv - 1) * 5000;
     generateInit();
@@ -384,19 +380,19 @@ void Game::footUpdate() {
 
     switch (-(int)player.posY / 5000) {
     case 0:
-        Lv = 1;
+        nLv = 1;
         break;
     case 1:
-        Lv = 2;
+        nLv = 2;
         break;
     case 2:
-        Lv = 3;
+        nLv = 3;
         break;
     case 3:
-        Lv = 4;
+        nLv = 4;
         break;
     case 4:
-        Lv = 5;
+        nLv = 5;
         break;
 
     default:

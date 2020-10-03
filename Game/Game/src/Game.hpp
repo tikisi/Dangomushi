@@ -60,7 +60,9 @@ private:
     // 足場
     Foot foots[FT_NUM];
     Texture footTextures[FT_TEX_NUM];
+    double footWidth; // 足場の横幅
     int Lv;
+    int nLv;    // 次ループでのレベル
 
 
     // アイテム
