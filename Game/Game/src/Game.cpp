@@ -347,7 +347,7 @@ void Game::footInit() {
 
     // 足場の初期化
     //Lv = getData().dataLv;
-    Lv = 4;
+    Lv = 5;
     nLv = Lv;
 
     player.lowest = (Lv - 1) * 5000;
