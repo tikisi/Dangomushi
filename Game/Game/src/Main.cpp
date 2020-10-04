@@ -25,6 +25,8 @@ void Main()
     // 画面サイズを変更
     Window::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
     Scene::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    // フレームレートを60に固定
+    Graphics::SetTargetFrameRateHz(60);
     
     // シーンと遷移時の色を設定
     MyApp manager;
