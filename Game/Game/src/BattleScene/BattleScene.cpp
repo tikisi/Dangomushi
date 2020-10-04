@@ -1,4 +1,4 @@
-#include "BattleScene.hpp"
+﻿#include "BattleScene.hpp"
 using namespace Battle;
 
 BattleScene::BattleScene(const InitData& init)
@@ -67,8 +67,9 @@ void BattleScene::stageUpdate() {
 }
 
 void BattleScene::stageDraw() const {
-    
+    background.drawAt(400,300);
     for (int i = 0; i < STAGE_NUM; i++) {
+        Rect(stage[i].rect.x + 3, stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h / 2.0 - stage[i].rect.h, stage[i].rect.w - 6 , stage[i].rect.h).draw(Palette::Black) ;
         stage[i].rect.draw(Palette::Brown);
     }
 }
@@ -135,7 +136,7 @@ void BattleScene::bossUpdate() {
 
 
     boss.animCount++;
-    if(boss.animCount == 100) {
+    if(boss.animCount == 9) {
         boss.animCount = 0;
     }
 #ifdef DEBUG
@@ -144,20 +145,31 @@ void BattleScene::bossUpdate() {
     Print << U"BossState: " << int(boss.state);
     Print << U"StopWatch1: " << boss.stopWatch1.sF();
     Print << U"StopWatch2: " << boss.stopWatch2.sF();
+    Print << U"playertouch: " << player.touch;
 #endif
 }
 
 void BattleScene::bossDraw() const {
     // 停止中
-    if (boss.state < BossState::UptoDown1) {
+    if (boss.state == BossState::UpStop) {
+        boss.rect(TextureAsset(U"boss1").flipped()).draw();
+    }else if(boss.state == BossState::DownStop){
         boss.rect(TextureAsset(U"boss1")).draw();
     }
     // 移動中
     else {
-        if(boss.onRight) {
-            boss.rect(TextureAsset(U"boss" + Format(boss.animCount / 10 + 1))).draw();
-        }else {
-            boss.rect(TextureAsset(U"boss" + Format(boss.animCount / 10 + 1)).mirrored()).draw();
+        if(boss.state == BossState::UpStop || boss.state == BossState::UptoDown1 || boss.state == BossState::DownToUp2){
+            if(boss.onRight) {
+                boss.rect(TextureAsset(U"boss" + Format(boss.animCount + 1)).flipped()).draw();
+            }else {
+                boss.rect(TextureAsset(U"boss" + Format(boss.animCount + 1)).flipped().mirrored()).draw();
+            }
+        }else{
+            if(boss.onRight) {
+                boss.rect(TextureAsset(U"boss" + Format(boss.animCount + 1))).draw();
+            }else {
+                boss.rect(TextureAsset(U"boss" + Format(boss.animCount + 1)).mirrored()).draw();
+            }
         }
     }
     /*boss.rect.draw(Palette::Blueviolet);
@@ -167,7 +179,7 @@ void BattleScene::bossDraw() const {
 void BattleScene::playerInit() {
     player = Player();
     player.rect.x = 100;
-    player.rect.y = 520;
+    player.rect.y = 500;
     player.rect.w = 30;
     player.rect.h = 30;
 
@@ -175,6 +187,8 @@ void BattleScene::playerInit() {
     player.accX = 0.5;    // 横移動の加速度
     player.speedY = 0.0;      // 縦移動の速度
     player.accY = 0.4;    // 加速度Y
+    
+    player.touch = 1;
 
     player.HP = 5;
     player.protectedCounter = 0;
@@ -186,6 +200,7 @@ void BattleScene::playerInit() {
     dango3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
     dango4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
     dango5 = TextureAsset(U"player" + Format(selectNum) + Format(5));
+    background = Texture(U"pixelwhite.png");
 
     TextureAsset::Register(U"heart", U"pixelheart.png");
 }
@@ -226,10 +241,14 @@ void BattleScene::playerUpdate() {
 
     // ブロックとの当たり判定
     player.isGround = false;
+    player.touch = 0;
     for (int i = 0; i < STAGE_NUM; i++) {
+        if(player.rect.intersects(Rect(stage[i].rect.x + 3, stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h / 2.0 - stage[i].rect.h, stage[i].rect.w - 6 , stage[i].rect.h)) /* && !(player.rect.intersects(stage[i].rect))*/)player.touch = 1;
+        
+        stage[i].rect.y = stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h / 2.0;
 
-        if (player.rect.intersects(stage[i].rect) && player.speedY > 0 && stage[i].rect.y - 0.1 < player.rect.y + player.rect.h) {
-            player.rect.y = stage[i].rect.y - player.rect.h + 0.1;
+        if (player.rect.intersects(stage[i].rect) /* && player.speedY > 0 */&& stage[i].rect.y - 0.1 < player.rect.y + player.rect.h && player.touch) {
+            player.rect.y = stage[i].rect.y - player.rect.h - 0.1;
             player.isGround = 1;
             if (cos(stage[i].arg) > 0) player.speedY = stage[i].r * cos(stage[i].arg) * stage[i].accArg;
             else player.speedY = 0;
@@ -322,6 +341,8 @@ void BattleScene::bossIntersects() {
             boss.rect.size - Vec2(boss.rect.w / 3.0, 0)))) {
             boss.nState = BossState::DownToUp1;
             if (--boss.HP == 0) changeScene(State::GameClear);
+            player.speedY *= -1;
+            player.speedX *= -1;
         }
         // ぶつかったとき
         else {

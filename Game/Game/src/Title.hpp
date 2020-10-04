@@ -15,7 +15,7 @@ public:
 		ClearPrint();
         getData().dataLv = 1;
 		AudioAsset(U"Title").setLoop(true);
-		AudioAsset(U"Title").play();
+		//AudioAsset(U"Title").play();
 	}
 
     void update() override;

@@ -52,22 +52,20 @@
 		23900DC124D3C5EB0026C163 /* Foot.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Foot.hpp; sourceTree = "<group>"; };
 		23900DC224D3C5F40026C163 /* Player.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Player.hpp; sourceTree = "<group>"; };
 		23900DCB24D6A3FA0026C163 /* Item.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Item.hpp; sourceTree = "<group>"; };
-		23A5B5C42517C4ED009D0629 /* ShotManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShotManager.hpp; path = BattleScene/ShotManager.hpp; sourceTree = "<group>"; };
-		23A5B5C52517C4ED009D0629 /* ShotGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShotGenerator.cpp; path = BattleScene/ShotGenerator.cpp; sourceTree = "<group>"; };
-		23A5B5C62517C4ED009D0629 /* ShotGenerator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ShotGenerator.hpp; path = BattleScene/ShotGenerator.hpp; sourceTree = "<group>"; };
-		23A5B5C72517C4ED009D0629 /* Shot.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Shot.hpp; path = BattleScene/Shot.hpp; sourceTree = "<group>"; };
-		23A5B5C82517C4EE009D0629 /* ShotManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ShotManager.cpp; path = BattleScene/ShotManager.cpp; sourceTree = "<group>"; };
+		23A5B5C42517C4ED009D0629 /* ShotManager.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ShotManager.hpp; sourceTree = "<group>"; };
+		23A5B5C52517C4ED009D0629 /* ShotGenerator.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShotGenerator.cpp; sourceTree = "<group>"; };
+		23A5B5C62517C4ED009D0629 /* ShotGenerator.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ShotGenerator.hpp; sourceTree = "<group>"; };
+		23A5B5C72517C4ED009D0629 /* Shot.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Shot.hpp; sourceTree = "<group>"; };
+		23A5B5C82517C4EE009D0629 /* ShotManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShotManager.cpp; sourceTree = "<group>"; };
 		23A5B5CB2517C524009D0629 /* Asset.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Asset.hpp; sourceTree = "<group>"; };
 		23C119192512CFD5008F1D19 /* Boss.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Boss.hpp; sourceTree = "<group>"; };
 		23C1191B2512CFD5008F1D19 /* BattleScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BattleScene.cpp; sourceTree = "<group>"; };
 		23C1191C2512CFD5008F1D19 /* BattleScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = BattleScene.hpp; sourceTree = "<group>"; };
 		23C1191E2512D30C008F1D19 /* Player.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Player.hpp; sourceTree = "<group>"; };
 		23C1191F2512DA89008F1D19 /* Stage.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Stage.hpp; sourceTree = "<group>"; };
-		23C119202513408F008F1D19 /* Bullet.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Bullet.hpp; sourceTree = "<group>"; };
 		23D18B6B24F2174C00606D8A /* GameOver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameOver.cpp; sourceTree = "<group>"; };
 		23D18B6C24F2174C00606D8A /* GameOver.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameOver.hpp; sourceTree = "<group>"; };
 		23D18B6E24F221F300606D8A /* Background.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Background.hpp; sourceTree = "<group>"; };
-		23D18B6F24F23BA700606D8A /* Audio.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Audio.hpp; sourceTree = "<group>"; };
 		23D18B7024F23BB500606D8A /* CharaSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharaSelect.h; sourceTree = "<group>"; };
 		2C1778841CE0A9EA00BB8AD0 /* Game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Game.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C1778921CE0A9EA00BB8AD0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -150,9 +148,13 @@
 		23C119162512CAFF008F1D19 /* BattleScene */ = {
 			isa = PBXGroup;
 			children = (
+				23A5B5C72517C4ED009D0629 /* Shot.hpp */,
+				23A5B5C52517C4ED009D0629 /* ShotGenerator.cpp */,
+				23A5B5C62517C4ED009D0629 /* ShotGenerator.hpp */,
+				23A5B5C82517C4EE009D0629 /* ShotManager.cpp */,
+				23A5B5C42517C4ED009D0629 /* ShotManager.hpp */,
 				23C1191E2512D30C008F1D19 /* Player.hpp */,
 				23C1191B2512CFD5008F1D19 /* BattleScene.cpp */,
-				23C119202513408F008F1D19 /* Bullet.hpp */,
 				23C1191F2512DA89008F1D19 /* Stage.hpp */,
 				23C1191C2512CFD5008F1D19 /* BattleScene.hpp */,
 				23C119192512CFD5008F1D19 /* Boss.hpp */,
@@ -184,14 +186,8 @@
 			isa = PBXGroup;
 			children = (
 				23A5B5CB2517C524009D0629 /* Asset.hpp */,
-				23A5B5C72517C4ED009D0629 /* Shot.hpp */,
-				23A5B5C52517C4ED009D0629 /* ShotGenerator.cpp */,
-				23A5B5C62517C4ED009D0629 /* ShotGenerator.hpp */,
-				23A5B5C82517C4EE009D0629 /* ShotManager.cpp */,
-				23A5B5C42517C4ED009D0629 /* ShotManager.hpp */,
 				23C119162512CAFF008F1D19 /* BattleScene */,
 				23D18B7024F23BB500606D8A /* CharaSelect.h */,
-				23D18B6F24F23BA700606D8A /* Audio.hpp */,
 				2358A9A324E1729600F246E9 /* GenerateFoot.cpp */,
 				23900DC224D3C5F40026C163 /* Player.hpp */,
 				23900DC124D3C5EB0026C163 /* Foot.hpp */,
