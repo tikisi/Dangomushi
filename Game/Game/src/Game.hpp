@@ -62,7 +62,6 @@ private:
     Texture footTextures[FT_TEX_NUM];
     double footWidth; // 足場の横幅
     int Lv;
-    int nLv;    // 次ループでのレベル
 
 
     // アイテム
@@ -117,16 +116,17 @@ public:
     }
 
     // 足場の生成アルゴリズム
-    void generate();            // 足場の生成アルゴリズムを選択
-    void generateInit();        // 足場の初期生成アルゴリズムを選択
+    void generateInit(const int Lv);        // 一番最初の生成時アルゴリズムを選択
+    void switchGenerateFoot(const int Lv);            // 足場の生成アルゴリズムを選択
     void generateLv1Init();
-    void generateLv1();
-    void generateLv2Init();
-    void generateLv2();
+    int generateLv1();        // 追加した足場を返す(ない場合はnullptr)
+    void  generateLv2Init();
+    int generateLv2();
     void generateLv3Init();
-    void generateLv3();
+    int generateLv3();
     void generateLv4Init();
-    void generateLv4();
+    int generateLv4();
     void generateLv5Init();
-    void generateLv5();
+    int generateLv5();
+    std::function<int (void)> generateFoot;
 };
