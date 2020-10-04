@@ -119,7 +119,7 @@ public:
     void generateInit(const int Lv);        // 一番最初の生成時アルゴリズムを選択
     void switchGenerateFoot(const int Lv);            // 足場の生成アルゴリズムを選択
     void generateLv1Init();
-    int generateLv1();        // 追加した足場を返す(ない場合はnullptr)
+    int generateLv1();        // 追加した足場を返す(ない場合は-1)
     void  generateLv2Init();
     int generateLv2();
     void generateLv3Init();
