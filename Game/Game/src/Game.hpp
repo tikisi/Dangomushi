@@ -73,7 +73,8 @@ public:
     Game(const InitData& init);
     ~Game() {
         // ハイスコア更新
-        getData().highscore = std::max(getData().highscore, (uint32)(-player.posY));
+        getData().highscore = 
+            std::max(getData().highscore, (uint32)(player.posY < 0 ? -player.posY : 0));
         getData().dataLv = Lv;
         // セーブ
         WriteSaveData(getData());
