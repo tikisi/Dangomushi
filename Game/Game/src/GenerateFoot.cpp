@@ -146,8 +146,15 @@ void Game::generateLv3Init() {
     foots[0].dirL = 4.98;
     foots[0].dirR = 4.53;
     foots[0].posY = player.posY + 10;
+    foots[0].type = Foot::Type::ice;
     foots[0].height = 30;
+    foots[0].time = 0.0;
+    foots[0].withDraw = 0.0;
+
     for (int i = 1; i < FT_NUM; i++) {
+        foots[i].type = Foot::Type::ice;
+        foots[i].height = 30;
+
         if (RandomBool()) {
             foots[i].dirR = foots[i - 1].dirL + Math::Pi / 6 + Random<double>(Math::Pi / 3);
             foots[i].dirL = foots[i].dirR + 1.2;
@@ -157,12 +164,17 @@ void Game::generateLv3Init() {
             foots[i].dirR = foots[i].dirL - 1.2;
         }
         foots[i].posY = foots[i - 1].posY - (3 * foots[i].height + Random<double>(20));
+
+        foots[i].time = 0.0;
+        foots[i].withDraw = 0.0;
     }
 }
 
 int Game::generateLv3() {
     for (int i = 0; i < FT_NUM; i++) {
         foots[i].type = Foot::Type::ice;
+        foots[i].height = 30;
+
         if (foots[i].drawPosY > 1000) {
             if (RandomBool()) {
                 foots[i].dirR = foots[i != 0 ? i - 1 : FT_NUM - 1].dirL + Math::Pi / 6 + Random<double>(Math::Pi / 3);
@@ -175,6 +187,8 @@ int Game::generateLv3() {
             foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - (3 * foots[i].height + Random<double>(20));
             foots[0].height = 30;
 
+            foots[i].time = 0.0;
+            foots[i].withDraw = 0.0;
             return i;
         }
     }

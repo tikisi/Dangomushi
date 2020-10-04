@@ -350,6 +350,7 @@ void Game::footInit() {
 
     player.lowest = (Lv - 1) * 10000;
     player.posY = (Lv - 1) * 10000;
+    footWidth = 7.0;
     generateInit(Lv);
 }
 
