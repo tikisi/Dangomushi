@@ -39,8 +39,12 @@ void ShotManager::draw() const {
     }
 }
 
+void ShotManager::deleteAll() {
+    for (auto it = shots.begin(); it != shots.end();) { it = shots.erase(it); }
+    for (auto it = shotGenerators.begin(); it != shotGenerators.end();) { it = shotGenerators.erase(it); }
+}
+
 ShotManager::~ShotManager() {
     // ポインタの削除
-    for(auto it = shots.begin(); it != shots.end();) {it = shots.erase(it);}    
-    for(auto it = shotGenerators.begin(); it != shotGenerators.end();) {it = shotGenerators.erase(it);}
+    this->deleteAll();
 }

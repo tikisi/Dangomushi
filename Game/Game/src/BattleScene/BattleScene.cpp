@@ -325,17 +325,17 @@ void BattleScene::shotDraw() const {
 }
 
 
-
 void BattleScene::bossIntersects() {
     // プレイヤーとの当たり判定
     if (player.protectedCounter == 0 && player.rect.intersects(boss.rect)) {
         // 踏めたとき
         if (player.rect.intersects(RectF(boss.rect.pos + Vec2(boss.rect.w / 6.0, 0),
             boss.rect.size - Vec2(boss.rect.w / 3.0, 0)))) {
-            boss.nState = BossState::DownToUp1;
-            if (--boss.HP == 0) changeScene(State::GameClear);
             player.speedY *= -1;
             player.speedX *= -1;
+            shotManager.deleteAll();
+            boss.nState = BossState::DownToUp1;
+            if (--boss.HP == 0) changeScene(State::GameClear);
         }
         // ぶつかったとき
         else {
