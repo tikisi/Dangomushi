@@ -41,13 +41,6 @@ void BattleScene::stageInit() {
     stage[1].arg = 0;
     stage[1].accArg = 0.01;
     stage[1].r = 160;
-    /*stage[2].rect.w = 100;
-    stage[2].rect.h = 50;
-    stage[2].rect.x = 300;
-    stage[2].centerY = 300;
-    stage[2].arg = 0;
-    stage[2].accArg = 0.015;
-    stage[2].r = 200;*/
     stage[2].rect.w = 100;
     stage[2].rect.h = 50;
     stage[2].rect.x = Scene::Width() - 180 - stage[2].rect.w;
@@ -67,9 +60,9 @@ void BattleScene::stageUpdate() {
 }
 
 void BattleScene::stageDraw() const {
-    background.drawAt(400,300);
+    background.drawAt(400, 300);
     for (int i = 0; i < STAGE_NUM; i++) {
-        Rect(stage[i].rect.x + 3, stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h / 2.0 - stage[i].rect.h, stage[i].rect.w - 6 , stage[i].rect.h).draw(Palette::Black) ;
+        Rect(stage[i].rect.x + 3, stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h / 2.0 - stage[i].rect.h, stage[i].rect.w - 6, stage[i].rect.h).draw(Palette::Black);
         stage[i].rect.draw(Palette::Brown);
     }
 }
@@ -83,7 +76,7 @@ void BattleScene::bossInit() {
     boss.nState = boss.state;
     boss.HP = 5;
     boss.isLeft = true;
-    
+
     boss.animCount = 0;
     boss.counter = 0;
     boss.stopWatch1.start();
@@ -184,7 +177,7 @@ void BattleScene::playerInit() {
     player.accX = 0.5;    // 横移動の加速度
     player.speedY = 0.0;      // 縦移動の速度
     player.accY = 0.4;    // 加速度Y
-    
+
     player.touch = 1;
 
     player.HP = 5;
@@ -239,11 +232,11 @@ void BattleScene::playerUpdate() {
     player.isGround = false;
     player.touch = 0;
     for (int i = 0; i < STAGE_NUM; i++) {
-        if(player.rect.intersects(Rect(stage[i].rect.x + 3, stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h / 2.0 - stage[i].rect.h, stage[i].rect.w - 6 , stage[i].rect.h)) /* && !(player.rect.intersects(stage[i].rect))*/)player.touch = 1;
-        
+        if (player.rect.intersects(Rect(stage[i].rect.x + 3, stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h / 2.0 - stage[i].rect.h, stage[i].rect.w - 6, stage[i].rect.h)) /* && !(player.rect.intersects(stage[i].rect))*/)player.touch = 1;
+
         stage[i].rect.y = stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h / 2.0;
 
-        if (player.rect.intersects(stage[i].rect) /* && player.speedY > 0 */&& stage[i].rect.y - 0.1 < player.rect.y + player.rect.h && player.touch) {
+        if (player.rect.intersects(stage[i].rect) /* && player.speedY > 0 */ && stage[i].rect.y - 0.1 < player.rect.y + player.rect.h && player.touch) {
             player.rect.y = stage[i].rect.y - player.rect.h - 0.1;
             player.isGround = 1;
             if (cos(stage[i].arg) > 0) player.speedY = stage[i].r * cos(stage[i].arg) * stage[i].accArg;
@@ -285,7 +278,9 @@ void BattleScene::playerUpdate() {
 void BattleScene::playerDraw() const {
     // 無敵状態の時は点滅する
     if (player.protectedCounter == 0 || Periodic::Square0_1(0.5s)) {
+#ifdef DEBUG
         player.rect.draw(Palette::Gray);
+#endif
         if (player.isRight) dango.mirrored().drawAt(player.rect.pos + player.rect.size / 2.0);
         else dango.drawAt(player.rect.pos + player.rect.size / 2.0);
     }
