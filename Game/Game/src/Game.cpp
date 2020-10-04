@@ -91,11 +91,17 @@ void Game::backUpdate() {
 
 void Game::backDraw() const {
     texture2.resized(1000, 1000).draw(-150, back.Pos1 - 200);
-    //texture1.resized(800,1000).draw(0, back.Pos1,ColorF(1.0, Periodic::Sine0_1(2s)));
-    //texture1.resized(800,1000).draw(0, back.Pos1, ColorF(1.0, back.alpha));
     texture1.resized(1000, 1000).draw(-150, back.Pos1, ColorF(1.0, back.alpha));
+
+    // 到達バー背景
     Rect(700, 0, 100, 600).draw(ColorF(0, 0, 0, 0.7));
+    // 到達バーの区切り表示
+    for(int i = 1; i <= 5; i++) {
+        Rect(700, 600 - i * 100, 100, 5).draw(Palette::Green); 
+    }
+    // 到達バー
     Rect(705, 600 + 600.0 / 60000.0 * player.posY, 90, 5).draw(Palette::Red);
+
 #ifdef DEBUG
     Print << back.alpha;
 #endif
