@@ -8,6 +8,7 @@ namespace Battle {
         double accX;    // 横移動の加速度
         double speedY;      // 縦移動の速度
         double accY;    // 加速度Y
+        bool touch;  // 当たり判定用
 
         bool isGround;     // 地面にいるかどうかのフラグ
         int jump = 0;

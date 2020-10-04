@@ -19,6 +19,7 @@ private:
     Texture dango4;
     Texture dango5;
     Texture dango;
+    Texture background;
 
     Boss boss;
     

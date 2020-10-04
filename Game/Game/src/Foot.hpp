@@ -1,5 +1,5 @@
 ﻿#pragma once
-#define FT_NUM 40       // 足場の配列サイズ
+#define FT_NUM 25       // 足場の配列サイズ
 #define FT_TEX_NUM 6    // 足場の画像数
 #define FT_TEX_HEIGHT 50 // 足場の画像サイズY
 #define FT_TEX_WIDTH 600    // 足場の画像サイズX
