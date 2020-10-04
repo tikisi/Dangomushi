@@ -185,7 +185,7 @@ void BattleScene::playerInit() {
     player.speedY = 0.0;      // 縦移動の速度
     player.accY = 0.4;    // 加速度Y
     
-    player.touch = 1;
+    player.touch = 0;
 
     player.HP = 5;
     player.protectedCounter = 0;
@@ -237,9 +237,7 @@ void BattleScene::playerUpdate() {
 
     // ブロックとの当たり判定
     player.isGround = false;
-    player.touch = 0;
     for (int i = 0; i < STAGE_NUM; i++) {
-        if(player.rect.intersects(Rect(stage[i].rect.x + 3, stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h / 2.0 - stage[i].rect.h, stage[i].rect.w - 6 , stage[i].rect.h)) /* && !(player.rect.intersects(stage[i].rect))*/)player.touch = 1;
         
         stage[i].rect.y = stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h / 2.0;
 
@@ -249,6 +247,11 @@ void BattleScene::playerUpdate() {
             if (cos(stage[i].arg) > 0) player.speedY = stage[i].r * cos(stage[i].arg) * stage[i].accArg;
             else player.speedY = 0;
         }
+    }
+    
+    player.touch=0;
+    for (int i = 0; i < STAGE_NUM; i++){
+        if(player.rect.intersects(Rect(stage[i].rect.x + 3, stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h / 2.0 - stage[i].rect.h, stage[i].rect.w - 6 , stage[i].rect.h)) && !(player.rect.intersects(stage[i].rect)))player.touch = 1;
     }
 
     // 無敵状態の更新

@@ -79,6 +79,10 @@ void Game::generateLv1Init() {
 
 // ビームが出るのは途中からにしたい
 void Game::generateLv1() {
+    
+    if(KeyZ.down()) enemyOn(0, 100);
+    if(KeyX.down()) enemyOff();
+    
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].drawPosY > 1000) {
             // 足場の幅更新        

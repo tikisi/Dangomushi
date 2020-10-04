@@ -45,6 +45,7 @@ private:
     
     // 敵
     int texturetime = 0;
+    Stopwatch nextEnemy;
     RectF enemyrect;
     Texture crow1;
     Texture crow2;
@@ -75,6 +76,9 @@ public:
     ~Game() {
         ClearPrint();
     }
+    
+    // 敵の動き
+    bool enemyWait = 0;
 
     void update() override;
 
@@ -106,6 +110,12 @@ public:
     void enemyInit(bool type);
     void enemyUpdate();
     void enemyDraw() const;
+    
+    void enemyOn(bool type, int period);
+    void enemyOff();
+    int enemyPeriod;
+    int enemyTime = 0;
+
 
     // キー入力による角度の回転
     double rotate(double arg);

@@ -1,7 +1,7 @@
 ﻿# include "Game.hpp"
 
 
-Game::Game(const InitData& init) : font30(30), IScene(init) {
+Game::Game(const InitData& init) : font30(30), nextEnemy(false), IScene(init) {
     // 背景読み込み
     ground = Texture(U"ground.png");
     sunset = Texture(U"pixelsunset.png");
@@ -249,8 +249,8 @@ void Game::playerUpdate() {
         //getData().dataLv = Lv;
         getData().dataLv = -(int)player.posY / 5000 + 1;
         AudioAsset(U"Main_BGM").stop();
-        changeScene(State::GameOver);
-        //changeScene(State::BattleScene);
+        //changeScene(State::GameOver);
+        changeScene(State::BattleScene);
     }
 }
 
@@ -555,9 +555,14 @@ void Game::enemyUpdate() {
     texturetime++;
     if (texturetime > 10000)texturetime -= 10000;
     // 再出現
-    //    if (enemy.drawPosY > 900) {
-    //        enemyInit(0);
-    //    }
+    if (enemy.drawPosY > 900 && !enemyWait) {
+        enemyTime++;
+    }
+    
+    if(enemyPeriod < enemyTime) {
+        enemyInit(enemy.type);
+        enemyTime = 0;
+    }
     
     
     if (enemy.attack < 0)enemy.attack++;
@@ -565,7 +570,7 @@ void Game::enemyUpdate() {
     enemy.move = sin(texturetime / 10.0) * 10;
     
     if (-5 < player.posY - enemy.posY && player.posY - enemy.posY < 5 && enemy.attack == 0 && player.isGround)enemy.attack++;
-    if (enemy.posY > player.posY - 500 && enemy.attack <= 0) {
+    if (enemy.posY > player.posY - 500 && enemy.attack <= 0 && !enemyWait) {
         enemy.posY += (player.posY - enemy.posY) / 50.0;
     }
     if (enemy.attack > 0)enemy.attack++;
@@ -612,8 +617,6 @@ void Game::enemyDraw() const {
     
     
     
-    
-    
     switch (enemy.type) {
         case 0:
             if (0 < enemy.attack && enemy.attack <= 50)Line(0, enemy.drawPosY + 30, 650, enemy.drawPosY + 30).draw(LineStyle::RoundDot, 3, Palette::Purple);
@@ -629,6 +632,16 @@ void Game::enemyDraw() const {
         default:
             break;
     }
+}
+
+void Game::enemyOff(){
+    enemyWait = 1;
+}
+
+void Game::enemyOn(bool type, int period){
+    enemyWait = 0;
+    enemyPeriod = period;
+    enemy.type = type;
 }
 
 
