@@ -3,7 +3,8 @@
 void RadialGenerator::update() {
     if (counter++ % 15 == 0) {
         for (int i = 0; i < 8; i++) {
-            shotAddr->add(new RadialShot(center, Circular(2.0, randomOffset + Math::QuarterPi * i)));
+            shotAddr->add(new RadialShot(center, Circular(2.0, randomOffset + Math::QuarterPi * i),
+                accAbs * Vec2(cos(Math::QuarterPi * i), sin(Math::QuarterPi * i))));
         }
     }
 }

@@ -351,7 +351,7 @@ void BattleScene::bossDownStop() {
     if (boss.stopWatch2.sF() >= 5.0) {
         //shotManager.genSpiral(boss.rect.pos + boss.rect.size / 2, 5, 4);
         //shotManager.genRasen(boss.rect.pos + boss.rect.size / 2);
-        shotManager.genRadial(boss.rect.pos + boss.rect.size / 2);
+        shotManager.genRadial(boss.rect.pos + boss.rect.size / 2, 0.3);
         boss.stopWatch2.restart();
     }
 

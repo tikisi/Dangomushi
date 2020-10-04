@@ -16,10 +16,12 @@ class RadialGenerator : public ShotGenerator {
 private:
     Vec2 center;
     uint32 counter;
+    double accAbs;  // 加速度の絶対値
     double randomOffset;
     
 public:
-    RadialGenerator(ShotAddr * shotAddr, const Vec2& center) : ShotGenerator(shotAddr), center(center), counter(0) {
+    RadialGenerator(ShotAddr * shotAddr, const Vec2& center, double accAbs) :
+        ShotGenerator(shotAddr), center(center), counter(0), accAbs(accAbs) {
         randomOffset = Random<double>(Math::QuarterPi);
     }
     virtual ~RadialGenerator() {}

@@ -1,7 +1,7 @@
 ﻿#include "ShotManager.hpp"
 #include "ShotGenerator.hpp"
 
-void ShotManager::genRadial(const Vec2& center) { shotGenerators.push_back(new RadialGenerator(this, center)); }
+void ShotManager::genRadial(const Vec2& center, const double accAbs) { shotGenerators.push_back(new RadialGenerator(this, center, accAbs)); }
 void ShotManager::genRasen(const Vec2& center) { shotGenerators.push_back(new RasenGenerator(this, center)); }
 void ShotManager::genSpiral(const Vec2& center, uint32 shotNum, uint32 layerNum) { shotGenerators.push_back(new SpiralGenerator(this, center, shotNum, layerNum)); }
 void ShotManager::getShield(const Vec2& center, uint32 r, uint32 shotNum) { shotGenerators.push_back(new ShieldGenerator(this, center, r, shotNum)); }

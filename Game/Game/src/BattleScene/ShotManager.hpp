@@ -26,7 +26,7 @@ public:
     // すべてのShotとGeneratorを削除
     void deleteAll();
 
-    void genRadial(const Vec2& center);
+    void genRadial(const Vec2& center, const double accAbs = 0.0);
     void genRasen(const Vec2& center);
     void genSpiral(const Vec2& center, uint32 shotNum, uint32 layerNum);
     void getShield(const Vec2& center, uint32 r, uint32 shotNum);

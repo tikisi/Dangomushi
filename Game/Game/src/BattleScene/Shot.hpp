@@ -13,10 +13,15 @@ class RadialShot : public Shot {
 public:
     Vec2 pos;
     Vec2 speed;
+    Vec2 acc;
     static inline constexpr double r = 5.0;
-    RadialShot(const Vec2& start, const Vec2& speed) : pos(start), speed(speed) {}
+    RadialShot(const Vec2& start, const Vec2& speed, const Vec2& acc) : 
+        pos(start), speed(speed) ,acc(acc) {}
 
-    void update() override { pos += speed; }
+    void update() override { 
+        speed += acc;
+        pos += speed; 
+    }
     Circle getCircle() const override { return Circle(pos, r); }
     bool isFinish() const override { return !(getCircle().intersects(Scene::Rect())); }
 };
