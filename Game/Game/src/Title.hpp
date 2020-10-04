@@ -12,10 +12,13 @@ public:
 
 	Title(const InitData& init) : backTexture(U"Title.png") ,font50(50), IScene(init) {
 		Scene::SetBackground(Palette::Black);
-		ClearPrint();
-        getData().dataLv = 1;
+		LoadSaveData(getData());
 		AudioAsset(U"Title").setLoop(true);
-		//AudioAsset(U"Title").play();
+		AudioAsset(U"Title").play();
+	}
+	~Title() {
+		AudioAsset(U"Title").stop();
+		ClearPrint();
 	}
 
     void update() override;

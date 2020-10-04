@@ -72,13 +72,20 @@ public:
 
     Game(const InitData& init);
     ~Game() {
+        // ハイスコア更新
+        getData().highscore = std::max(getData().highscore, (uint32)round(-player.posY));
+        getData().dataLv = Lv;
+        // セーブ
+        WriteSaveData(getData());
+
+        AudioAsset(U"Main_BGM").stop();
         ClearPrint();
     }
 
     void update() override;
 
     void draw() const override;
-    
+
     void backUpdate();
     void backDraw() const;
     

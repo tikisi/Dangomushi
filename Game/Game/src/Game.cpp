@@ -244,11 +244,8 @@ void Game::playerUpdate() {
         else dango = dango5;
     }
 
+    // 落ちたとき
     if (player.posY > player.lowest + 300) {
-        if (-player.posY > getData().highscore) getData().highscore = round(-player.posY);
-        //getData().dataLv = Lv;
-        getData().dataLv = -(int)player.posY / 5000 + 1;
-        AudioAsset(U"Main_BGM").stop();
         changeScene(State::GameOver);
         //changeScene(State::BattleScene);
     }
@@ -349,8 +346,7 @@ void Game::footInit() {
     }
 
     // 足場の初期化
-    //Lv = getData().dataLv;
-    Lv = 1;
+    Lv = getData().dataLv;
 
     player.lowest = (Lv - 1) * 10000;
     player.posY = (Lv - 1) * 10000;
@@ -591,17 +587,16 @@ void Game::enemyUpdate() {
 
     //レーザーでゲームオーバー
     Line lazer(0, enemy.drawPosY + 30, 650, enemy.drawPosY + 30);
-    if (50 < enemy.attack && enemy.attack < 100 && lazer.intersects(playerrect) && enemy.type == 0)changeScene(State::GameOver);
-    getData().dataLv = -(int)player.posY / 5000 + 1;
+    if (50 < enemy.attack && enemy.attack < 100 && 
+        lazer.intersects(playerrect) && 
+        enemy.type == 0) {
+        changeScene(State::GameOver);
+    }
 }
 
 void Game::enemyDraw() const {
     //    if (enemy.attack < 0 || 50 < enemy.attack)RectF(700, enemy.drawPosY, 80, 50).drawFrame(10, HSV(120 * enemy.type, 1.0, 0.8)).draw(Palette::White);
     //    else RectF(700, enemy.drawPosY, 80, 50).drawFrame(10, HSV(120 * enemy.type, 1.0, 0.8)).draw(Color(255, 255 - enemy.attack * 3, 255 - enemy.attack));
-
-
-
-
 
     switch (enemy.type) {
     case 0:

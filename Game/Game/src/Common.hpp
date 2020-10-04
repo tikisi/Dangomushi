@@ -23,13 +23,22 @@ enum class State
 struct GameData
 {
     int SelectNum;  // キャラクターの種類
-    double highscore = 0;
-    int dataLv = 1;
+    uint32 highscore;
+    uint32 dataLv;
+    uint32 releasedChara;   // 解放されたキャラ
 };
 
 // シーン管理クラス
 using MyApp = SceneManager<State, GameData>;
 
 // 画面サイズ
-constexpr int WINDOW_WIDTH = 800;
-constexpr int WINDOW_HEIGHT = 600;
+inline constexpr int WINDOW_WIDTH = 800;
+inline constexpr int WINDOW_HEIGHT = 600;
+
+
+// セーブデータファイル
+extern String saveDataPath;
+
+void LoadSaveData(GameData& gameData);
+
+void WriteSaveData(const GameData& gameData);
