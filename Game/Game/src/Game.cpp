@@ -96,8 +96,8 @@ void Game::backDraw() const {
     // 到達バー背景
     Rect(700, 0, 100, 600).draw(ColorF(0, 0, 0, 0.7));
     // 到達バーの区切り表示
-    for(int i = 1; i <= 5; i++) {
-        Rect(700, 600 - i * 100, 100, 5).draw(Palette::Green); 
+    for (int i = 1; i <= 5; i++) {
+        Rect(700, 600 - i * 100, 100, 5).draw(Palette::Green);
     }
     // 到達バー
     Rect(705, 600 + 600.0 / 60000.0 * player.posY, 90, 5).draw(Palette::Red);
@@ -252,8 +252,8 @@ void Game::playerUpdate() {
 
     // 落ちたとき
     if (player.posY > player.lowest + 300) {
-        changeScene(State::GameOver);
-        //changeScene(State::BattleScene);
+        //changeScene(State::GameOver);
+        changeScene(State::BattleScene);
     }
 }
 
@@ -594,8 +594,8 @@ void Game::enemyUpdate() {
 
     //レーザーでゲームオーバー
     Line lazer(0, enemy.drawPosY + 30, 650, enemy.drawPosY + 30);
-    if (50 < enemy.attack && enemy.attack < 100 && 
-        lazer.intersects(playerrect) && 
+    if (50 < enemy.attack && enemy.attack < 100 &&
+        lazer.intersects(playerrect) &&
         enemy.type == 0) {
         changeScene(State::GameOver);
     }
