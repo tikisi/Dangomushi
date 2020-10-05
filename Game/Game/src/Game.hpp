@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Background.hpp"
 #include "Common.hpp"
 #include "Player.hpp"
@@ -139,4 +139,6 @@ public:
     void generateLv4();
     void generateLv5Init();
     void generateLv5();
+    void generateLv6Init();
+    void generateLv6();
 };

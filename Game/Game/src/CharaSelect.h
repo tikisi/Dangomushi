@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include"Common.hpp"
 
 class CharaSelect : public MyApp::Scene
@@ -6,7 +6,7 @@ class CharaSelect : public MyApp::Scene
 private:
 
     int SelectNUM = 1;
-    int species = 3;
+    int species = 5;
 
     Texture model_player, model_sub, pickup_sub;
     Texture s1dango, s2dango, j1dango, j2dango, j3dango;
