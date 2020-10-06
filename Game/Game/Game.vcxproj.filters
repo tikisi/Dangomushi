@@ -398,6 +398,9 @@
     <ClCompile Include="src\BattleScene\ShotGenerator.cpp">
       <Filter>Header Files\BattleScene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.hpp">
@@ -416,9 +419,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Item.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CharaSelect.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Enemy.hpp">
@@ -449,6 +449,9 @@
       <Filter>Header Files\BattleScene</Filter>
     </ClInclude>
     <ClInclude Include="src\Asset.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CharaSelect.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
