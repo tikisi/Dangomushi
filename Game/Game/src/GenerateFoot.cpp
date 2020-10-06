@@ -1,34 +1,29 @@
 ﻿#include "Game.hpp"
 
-void Game::generate() {
-    // Lvに変更があったとき
-    if (nLv != Lv) {
-        Lv = nLv;
-        footWidth = 7.0;
-    }
-    
+void Game::switchGenerateFoot(const int Lv) {
     switch (Lv) {
-        case 1:
-            generateLv1();
-            break;
-        case 2:
-            generateLv2();
-            break;
-        case 3:
-            generateLv3();
-            break;
-        case 4:
-            generateLv4();
-            break;
-        case 5:
-            generateLv5();
-            break;
-        case 6:
-            generateLv6();
+    case 1:
+        generateFoot = std::bind(&Game::generateLv1, this);
+        break;
+    case 2:
+        generateFoot = std::bind(&Game::generateLv2, this);
+        break;
+    case 3:
+        generateFoot = std::bind(&Game::generateLv3, this);
+        break;
+    case 4:
+        generateFoot = std::bind(&Game::generateLv4, this);
+        break;
+    case 5:
+        generateFoot = std::bind(&Game::generateLv5, this);
+        break;
+    case 6:
+        generateFoot = std::bind(&Game::generateLv6, this);
+        break;
     }
 }
 
-void Game::generateInit() {
+void Game::generateInit(const int Lv) {
     switch (Lv) {
         case 1:
             generateLv1Init();
@@ -45,14 +40,19 @@ void Game::generateInit() {
         case 5:
             generateLv5Init();
             break;
+        case 6:
+            generateLv6Init();
+            break;
     }
+
+    switchGenerateFoot(Lv);
 }
 
 
 void Game::generateLv1Init() {
     footWidth = 5.0;
     foots[0].type = Foot::Type::norm;
-    foots[0].height = 30;
+    foots[0].height = 30.0;
     foots[0].dirR = -Math::HalfPi - 0.2;
     foots[0].dirL = foots[0].dirR + (Math::Pi / footWidth);
     foots[0].posY = player.posY + 10;
@@ -62,8 +62,8 @@ void Game::generateLv1Init() {
     for (int i = 1; i < FT_NUM; i++) {
         footWidth += 0.05;
         foots[i].type = Foot::Type::norm;
-        foots[i].height = 30;
-        
+        foots[i].height = 30.0;
+
         if (RandomBool()) {
             foots[i].dirR = foots[i - 1].dirL + Math::Pi / 5 + Random<double>(Math::Pi / 7);
             foots[i].dirL = foots[i].dirR + (Math::Pi / footWidth);
@@ -80,11 +80,7 @@ void Game::generateLv1Init() {
 }
 
 // ビームが出るのは途中からにしたい
-void Game::generateLv1() {
-    
-    if(KeyZ.down()) enemyOn(0, 100);
-    if(KeyX.down()) enemyOff();
-    
+int Game::generateLv1() {
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].drawPosY > 1000) {
             // 足場の幅更新
@@ -101,16 +97,20 @@ void Game::generateLv1() {
                 foots[i].dirR = foots[i].dirL - (Math::Pi / footWidth);
             }
             foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - (3 * foots[i].height + Random<double>(60));
-            
-            player.lowest = foots[i != FT_NUM - 1 ? i + 1 : 0].posY;
+            foots[i].height = 30.0;
+
+            return i;
         }
     }
+
+    return -1;
 }
 
 void Game::generateLv2Init() {
     foots[0].dirL = 4.98;
     foots[0].dirR = 4.53;
     foots[0].posY = player.posY + 10;
+    foots[0].height = 60;
     foots[0].type = Foot::Type::ice;
     foots[0].time = 0.0;
     foots[0].withDraw = 0.0;
@@ -124,11 +124,10 @@ void Game::generateLv2Init() {
         
         foots[i].time = 0.0;
         foots[i].withDraw = 0.0;
-        player.lowest = foots[i != FT_NUM - 1 ? i + 1 : 0].posY;
     }
 }
 
-void Game::generateLv2() {
+int Game::generateLv2() {
     if (KeyN.down())enemyInit(0);
     if (KeyM.down())enemyInit(1);
     for (int i = 0; i < FT_NUM; i++) {
@@ -140,21 +139,28 @@ void Game::generateLv2() {
             foots[i].dirL = foots[i].dirR + 0.5;
             
             foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - 50;
-            player.lowest = foots[i != FT_NUM - 1 ? i + 1 : 0].posY;
+            return i;
         }
     }
+
+    return -1;
 }
 
 void Game::generateLv3Init() {
     if (KeyN.down())enemyInit(0);
     if (KeyM.down())enemyInit(1);
-    //    foots[0].dirR = -Math::HalfPi - 0.2;
-    //    foots[0].dirL = foots[0].dirR + (Math::Pi / 7);
     foots[0].dirL = 4.98;
     foots[0].dirR = 4.53;
     foots[0].posY = player.posY + 10;
-    foots[0].drawPosY = foots[0].posY - player.posY;
+    foots[0].type = Foot::Type::ice;
+    foots[0].height = 30;
+    foots[0].time = 0.0;
+    foots[0].withDraw = 0.0;
+
     for (int i = 1; i < FT_NUM; i++) {
+        foots[i].type = Foot::Type::ice;
+        foots[i].height = 30;
+
         if (RandomBool()) {
             foots[i].dirR = foots[i - 1].dirL + Math::Pi / 6 + Random<double>(Math::Pi / 3);
             foots[i].dirL = foots[i].dirR + 1.2;
@@ -164,13 +170,17 @@ void Game::generateLv3Init() {
             foots[i].dirR = foots[i].dirL - 1.2;
         }
         foots[i].posY = foots[i - 1].posY - (3 * foots[i].height + Random<double>(20));
-        player.lowest = 0;
+
+        foots[i].time = 0.0;
+        foots[i].withDraw = 0.0;
     }
 }
 
-void Game::generateLv3() {
+int Game::generateLv3() {
     for (int i = 0; i < FT_NUM; i++) {
         foots[i].type = Foot::Type::ice;
+        foots[i].height = 30;
+
         if (foots[i].drawPosY > 1000) {
             if (RandomBool()) {
                 foots[i].dirR = foots[i != 0 ? i - 1 : FT_NUM - 1].dirL + Math::Pi / 6 + Random<double>(Math::Pi / 3);
@@ -181,11 +191,15 @@ void Game::generateLv3() {
                 foots[i].dirR = foots[i].dirL - 1.2;
             }
             foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - (3 * foots[i].height + Random<double>(20));
-            
-            
-            player.lowest = foots[i != FT_NUM - 1 ? i + 1 : 0].posY;
+            foots[0].height = 30;
+
+            foots[i].time = 0.0;
+            foots[i].withDraw = 0.0;
+            return i;
         }
     }
+
+    return -1;
 }
 
 // Lv1の氷version (横の間隔を狭めて、縦の間隔を広げる)
@@ -193,18 +207,17 @@ void Game::generateLv3() {
 void Game::generateLv4Init() {
     // footWidth = 5.0;
     foots[0].type = Foot::Type::ice;
-    foots[0].height = 30;
     foots[0].dirR = -Math::HalfPi - 0.2;
     foots[0].dirL = foots[0].dirR + (Math::Pi / footWidth);
     foots[0].posY = player.posY + 10;
+    foots[0].height = 30.0;
     foots[0].time = 0.0;
     foots[0].withDraw = 0.0;
     
     for (int i = 1; i < FT_NUM; i++) {
         footWidth += 0.05;
         foots[i].type = Foot::Type::ice;
-        foots[i].height = 30;
-        
+
         if (RandomBool()) {
             foots[i].dirR = foots[i - 1].dirL + Math::Pi / 5 + Random<double>(Math::Pi / 7.4);
             foots[i].dirL = foots[i].dirR + (Math::Pi / footWidth);
@@ -213,6 +226,7 @@ void Game::generateLv4Init() {
             foots[i].dirL = foots[i - 1].dirR - Math::Pi / 5 + Random<double>(Math::Pi / 7.4);
             foots[i].dirR = foots[i].dirL - (Math::Pi / footWidth);
         }
+        foots[i].height = 30.0;
         foots[i].posY = foots[i - 1].posY - (4.5 * foots[i].height + Random<double>(40));
         
         foots[i].time = 0.0;
@@ -220,7 +234,7 @@ void Game::generateLv4Init() {
     }
 }
 
-void Game::generateLv4() {
+int Game::generateLv4() {
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].drawPosY > 1000) {
             // 足場の幅更新
@@ -236,10 +250,14 @@ void Game::generateLv4() {
                 foots[i].dirL = foots[i != 0 ? i - 1 : FT_NUM - 1].dirR - Math::Pi / 5 + Random<double>(Math::Pi / 7.4);
                 foots[i].dirR = foots[i].dirL - (Math::Pi / footWidth);
             }
+            foots[i].height = 30.0;
             foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - (4.5 * foots[i].height + Random<double>(40));
-            player.lowest = foots[i != FT_NUM - 1 ? i + 1 : 0].posY;
+
+            return i;
         }
     }
+
+    return -1;
 }
 
 // LV1の２段に一つ引っ込むversion
@@ -247,9 +265,9 @@ void Game::generateLv4() {
 void Game::generateLv5Init() {
     footWidth = 5.0;
     foots[0].type = Foot::Type::norm;
-    foots[0].height = 30;
     foots[0].dirR = -Math::HalfPi - 0.2;
     foots[0].dirL = foots[0].dirR + (Math::Pi / footWidth);
+    foots[0].height = 30.0;
     foots[0].posY = player.posY + 10;
     foots[0].time = 0.0;
     foots[0].withDraw = 0.0;
@@ -259,7 +277,7 @@ void Game::generateLv5Init() {
         if (foots[i - 1].type == Foot::Type::norm) foots[i].type = Foot::Type::pull;
         else foots[i].type = Foot::Type::norm;
         foots[i].height = 30;
-        
+
         if (RandomBool()) {
             foots[i].dirR = foots[i - 1].dirL + Math::Pi / 5 + Random<double>(Math::Pi / 7);
             foots[i].dirL = foots[i].dirR + (Math::Pi / footWidth);
@@ -268,14 +286,14 @@ void Game::generateLv5Init() {
             foots[i].dirL = foots[i - 1].dirR - Math::Pi / 5 + Random<double>(Math::Pi / 7);
             foots[i].dirR = foots[i].dirL - (Math::Pi / footWidth);
         }
-        
+        foots[i].height = 30.0;
         foots[i].posY = foots[i - 1].posY - (3 * foots[i].height + Random<double>(60));
         foots[i].time = 0.0;
         foots[i].withDraw = 0.0;
     }
 }
 
-void Game::generateLv5() {
+int Game::generateLv5() {
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].drawPosY > 1000) {
             // 足場の幅更新
@@ -298,8 +316,12 @@ void Game::generateLv5() {
             foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - (3 * foots[i].height + Random<double>(60));
             
             player.lowest = foots[i != FT_NUM - 1 ? i + 1 : 0].posY;
+
+            return i;
         }
     }
+
+    return -1;
 }
 
 void Game::generateLv6Init() {
@@ -333,7 +355,7 @@ void Game::generateLv6Init() {
     }
 }
 
-void Game::generateLv6() {
+int Game::generateLv6() {
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].drawPosY > 1000) {
             // 足場の幅更新
@@ -353,10 +375,11 @@ void Game::generateLv6() {
                 foots[i].dirL = foots[i != 0 ? i - 1 : FT_NUM - 1].dirR - Math::Pi / 5 + Random<double>(Math::Pi / 7);
                 foots[i].dirR = foots[i].dirL - (Math::Pi / footWidth);
             }
+            foots[i].height = 30.0;
             foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - (3 * foots[i].height + Random<double>(60));
-            
-            player.lowest = foots[i != FT_NUM - 1 ? i + 1 : 0].posY;
+            return i;
         }
     }
-    
+
+    return -1;
 }
