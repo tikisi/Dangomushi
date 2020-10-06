@@ -22,12 +22,20 @@ enum class State
 // ゲームデータ
 struct GameData
 {
-    int SelectNum;  // キャラクターの種類
+    uint32 SelectNum;  // 選択したキャラクター
     int death = 0;
+
     uint32 highscore;
     uint32 dataLv;
     uint32 releasedChara;   // 解放されたキャラ
     uint32 selectedLv;  // 選択されたLv
+    GameData() {
+        SelectNum = 1;
+        death = 0;
+        dataLv = 1;
+        highscore = 0;
+        releasedChara = 0;
+    }
 };
 
 // シーン管理クラス
