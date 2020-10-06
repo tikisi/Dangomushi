@@ -250,7 +250,7 @@ void Game::playerUpdate() {
         getData().dataLv = -(int)player.posY / 5000 + 1;
         AudioAsset(U"Main_BGM").stop();
         //changeScene(State::GameOver);
-        changeScene(State::BattleScene);
+        //changeScene(State::BattleScene);
     }
 }
 
@@ -398,6 +398,9 @@ void Game::footUpdate() {
                 break;
             case 4:
                 if(nLv<5)nLv = 5;
+                break;
+            case 5:
+                if (nLv < 6)nLv = 6;
                 break;
                 
             default:
@@ -558,26 +561,26 @@ void Game::enemyUpdate() {
     if (enemy.drawPosY > 900 && !enemyWait) {
         enemyTime++;
     }
-    
-    if(enemyPeriod < enemyTime) {
+
+    if (enemyPeriod < enemyTime) {
         enemyInit(enemy.type);
         enemyTime = 0;
     }
-    
-    
+
+
     if (enemy.attack < 0)enemy.attack++;
-    
+
     enemy.move = sin(texturetime / 10.0) * 10;
-    
+
     if (-5 < player.posY - enemy.posY && player.posY - enemy.posY < 5 && enemy.attack == 0 && player.isGround)enemy.attack++;
     if (enemy.posY > player.posY - 500 && enemy.attack <= 0 && !enemyWait) {
         enemy.posY += (player.posY - enemy.posY) / 50.0;
     }
     if (enemy.attack > 0)enemy.attack++;
     if (enemy.attack > 100)enemy.attack = 100;
-    
+
     enemy.drawPosY = enemy.posY - player.posY + player.drawPosY + enemy.move - 30;
-    
+
     if (texturetime % 50 < 25) {
         crow = crow1;
         crowcharge = crowcharge1;
@@ -588,29 +591,29 @@ void Game::enemyUpdate() {
     }
     if (texturetime % 8 < 4) cubiccharge = cubicBlue;
     else cubiccharge = cubicRed;
-    
-    
+
+
     if (50 < enemy.attack && enemy.type == 1) {
         enemyrect = RectF(600 - (enemy.attack - 50) * 14, enemy.drawPosY, 100, 60);
     }
     else {
         enemyrect = RectF(600, enemy.drawPosY, 100, 60);
     }
-    
+
     Rect playerrect(335, 385, 30, 30);
-    
+
     //カラスにあたると吹っ飛ぶ
     if (enemyrect.intersects(playerrect)) {
         player.speedX = -0.1;
         player.speedY = 2;
     }
-    
+    /*
     //レーザーでゲームオーバー
     Line lazer(0, enemy.drawPosY + 30, 650, enemy.drawPosY + 30);
     if (50 < enemy.attack && enemy.attack < 100 && lazer.intersects(playerrect) && enemy.type == 0)changeScene(State::GameOver);
     getData().dataLv = -(int)player.posY / 5000 + 1;
+    */
 }
-
 void Game::enemyDraw() const {
     //    if (enemy.attack < 0 || 50 < enemy.attack)RectF(700, enemy.drawPosY, 80, 50).drawFrame(10, HSV(120 * enemy.type, 1.0, 0.8)).draw(Palette::White);
     //    else RectF(700, enemy.drawPosY, 80, 50).drawFrame(10, HSV(120 * enemy.type, 1.0, 0.8)).draw(Color(255, 255 - enemy.attack * 3, 255 - enemy.attack));
