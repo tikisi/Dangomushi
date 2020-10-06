@@ -46,6 +46,11 @@ namespace StageSelect {
             .drawFrame(0, 3, Palette::Lightyellow);
         // ハイスコア
         FontAsset(U"font40")(U"ハイスコア " + Format(gameData.highscore)).drawAt(center - Point(0, windowSize.y / 2 - 30 - 20), Palette::White);
+    
+        // 選択中のキャラ
+        Point charBoxPos = center - Point(-260, windowSize.y / 2 - 30 - 20);
+        Rect(Arg::center(charBoxPos), charaBoxSize).drawFrame(0, 3, Palette::White);
+        TextureAsset(U"player" + Format(gameData.SelectNum) + Format((int)Periodic::Square0_1(0.3s) + 1)).drawAt(charBoxPos);
 
         // Line
         Point startPos = center - Point(0, windowSize.y / 2) + Point(0, 100);
@@ -59,7 +64,7 @@ namespace StageSelect {
         startPos += Point(0, 25 + 20);
         Point delta(0, 25 + 20);
 
-        uint32 Lv = gameData.dataLv;
+        int Lv = (int)gameData.dataLv;
         for (int i = 1; i <= Lv; i++) {
             if (i != 7)
                 FontAsset(U"font25")(U"Level " + Format(i)).drawAt(startPos + (i - 1) * delta, Palette::White);

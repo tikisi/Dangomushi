@@ -98,7 +98,6 @@ public:
     }
 
     ~CharaSelect() {
-        getData().SelectNum = SelectNUM;
         getData().selectedLv = stageSelecter;
     }
 
@@ -108,6 +107,7 @@ public:
             // キャラ選択完了
             if (SelectNUM <= species) {
                 if ((SimpleGUI::Button(U"Start", Point(500, 500), unspecified)) || KeyEnter.down()) {
+                    getData().SelectNum = SelectNUM;
                     isWindow = true;
                 }
             }

@@ -56,5 +56,6 @@ void WriteSaveData(const GameData& gameData);
 namespace StageSelect {
     inline constexpr Point windowSize = Point(640, 480);
     inline constexpr Point btnSize = Point(150, 25);
+    inline constexpr Point charaBoxSize = Point(60 ,60);
     void DrawWindow(const GameData& gameData, const uint32 selecter);
 }
