@@ -11,7 +11,7 @@
 # include "Title.hpp"
 # include "Game.hpp"
 # include "GameOver.hpp"
-# include "CharaSelect.h"
+# include "CharaSelect.hpp"
 # include "Asset.hpp"
 # include "BattleScene/BattleScene.hpp"
 
@@ -19,25 +19,27 @@ void Main()
 {
     // （Esc キーで終了しないようにする場合はコメントを外す）
     //System::SetTerminationTriggers(UserAction::CloseButtonClicked);
-    
+
     // タイトルを設定
     Window::SetTitle(U"ダンゴムシ");
     // 画面サイズを変更
     Window::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
     Scene::Resize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    
+    // フレームレートを60に固定
+    Graphics::SetTargetFrameRateHz(60);
+
     // シーンと遷移時の色を設定
     MyApp manager;
     manager
-    .add<Title>(State::Title)
-    .add<Game>(State::Game)
-    .add<BattleScene>(State::BattleScene)
-    .add<CharaSelect>(State::CharaSelect)
-    .add<GameOver>(State::GameOver);
+        .add<Title>(State::Title)
+        .add<Game>(State::Game)
+        .add<BattleScene>(State::BattleScene)
+        .add<CharaSelect>(State::CharaSelect)
+        .add<GameOver>(State::GameOver);
 
-    
+
     AssetRegister();
-    
+
     while (System::Update())
     {
         if (!manager.update())

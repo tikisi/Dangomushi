@@ -236,6 +236,7 @@
     <ClCompile Include="src\BattleScene\BattleScene.cpp" />
     <ClCompile Include="src\BattleScene\ShotGenerator.cpp" />
     <ClCompile Include="src\BattleScene\ShotManager.cpp" />
+    <ClCompile Include="src\Common.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameOver.cpp" />
     <ClCompile Include="src\GenerateFoot.cpp" />
@@ -251,7 +252,7 @@
     <ClInclude Include="src\BattleScene\ShotGenerator.hpp" />
     <ClInclude Include="src\BattleScene\ShotManager.hpp" />
     <ClInclude Include="src\BattleScene\Stage.hpp" />
-    <ClInclude Include="src\CharaSelect.h" />
+    <ClInclude Include="src\CharaSelect.hpp" />
     <ClInclude Include="src\Common.hpp" />
     <ClInclude Include="src\Enemy.hpp" />
     <ClInclude Include="src\Foot.hpp" />
