@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "Background.hpp"
 #include "Common.hpp"
 #include "Player.hpp"
@@ -41,6 +41,17 @@ private:
     Texture dango3;
     Texture dango4;
     Texture dango5;
+    
+    Texture walking1;
+    Texture walking2;
+    Texture walking3;
+    Texture walking4;
+    Texture spinning1;
+    Texture spinning2;
+    Texture spinning3;
+    Texture spinning4;
+    
+    
     Texture dango;
     
     // 敵

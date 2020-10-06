@@ -1,4 +1,4 @@
-﻿# include "Game.hpp"
+# include "Game.hpp"
 
 
 Game::Game(const InitData& init) : font30(30), nextEnemy(false), IScene(init) {
@@ -222,26 +222,52 @@ void Game::playerUpdate() {
     if (player.isGround) {
         // プレイヤーの歩くアニメーション
         double b = towerDir;
-        bool walkflag = 0;
+//        bool walkflag = 0;
+//        while (b > 0) {
+//            walkflag = !walkflag;
+//            if (walkflag)dango = dango1;
+//            else dango = dango2;
+//            b -= Math::TwoPi / 144.0;
+//        }
+        
+        int texChangeNum = 3;
         while (b > 0) {
-            walkflag = !walkflag;
-            if (walkflag)dango = dango1;
-            else dango = dango2;
-            b -= Math::TwoPi / 144.0;
+            texChangeNum = texChangeNum > 3 ? texChangeNum == 0 : texChangeNum + 1;
+            b -= Math::TwoPi / 72.0;
         }
         
-        if (walkflag == player.damageFlag && player.footType == Foot::Type::spike) {
-            player.HP -= 10;
-            player.damageFlag = !player.damageFlag;
+        switch (texChangeNum) {
+            case 1:
+                dango=walking1;
+                break;
+            case 2:
+                dango=walking2;
+                break;
+            case 3:
+                dango=walking3;
+                break;
+            case 4:
+                dango=walking4;
+                break;
+            default:
+                break;
         }
+        
+//        if (walkflag == player.damageFlag && player.footType == Foot::Type::spike) {
+//            player.HP -= 10;
+//            player.damageFlag = !player.damageFlag;
+//        }
+        
     }
     else {
         player.spinCount++;
-        if (player.spinCount > 15)player.spinCount = 6;
+        if (player.spinCount > 20)player.spinCount = 1;
         
-        if (player.jump) dango = dango3;
-        else if (player.spinCount <= 10)dango = dango4;
-        else dango = dango5;
+        //if (player.jump) dango = spinning1;
+        if (player.spinCount <= 5)dango = spinning1;
+        else if (player.spinCount <= 10)dango = spinning2;
+        else if (player.spinCount <= 15)dango = spinning3;
+        else dango = spinning4;
     }
     
     if (player.posY > player.lowest + 300) {
@@ -663,9 +689,19 @@ bool Game::isFront(double arg) {
 }
 
 void Game::loadPlayer(int selectNum) {
-    dango1 = TextureAsset(U"player" + Format(selectNum) + Format(1));
-    dango2 = TextureAsset(U"player" + Format(selectNum) + Format(2));
-    dango3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
-    dango4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
-    dango5 = TextureAsset(U"player" + Format(selectNum) + Format(5));
+//    dango1 = TextureAsset(U"player" + Format(selectNum) + Format(1));
+//    dango2 = TextureAsset(U"player" + Format(selectNum) + Format(2));
+//    dango3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
+//    dango4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
+//    dango5 = TextureAsset(U"player" + Format(selectNum) + Format(5));
+    
+    walking1 = TextureAsset(U"player" + Format(selectNum) + Format(1));
+    walking2 = TextureAsset(U"player" + Format(selectNum) + Format(2));
+    walking3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
+    walking4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
+    
+    spinning1 = TextureAsset(U"player" + Format(selectNum) + Format(5));
+    spinning2 = TextureAsset(U"player" + Format(selectNum) + Format(6));
+    spinning3 = TextureAsset(U"player" + Format(selectNum) + Format(7));
+    spinning4 = TextureAsset(U"player" + Format(selectNum) + Format(8));
 }

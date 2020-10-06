@@ -1,4 +1,4 @@
-﻿#include "BattleScene.hpp"
+#include "BattleScene.hpp"
 using namespace Battle;
 
 BattleScene::BattleScene(const InitData& init)
@@ -69,7 +69,7 @@ void BattleScene::stageUpdate() {
 void BattleScene::stageDraw() const {
     background.drawAt(400,300);
     for (int i = 0; i < STAGE_NUM; i++) {
-        Rect(stage[i].rect.x + 3, stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h / 2.0 - stage[i].rect.h, stage[i].rect.w - 6 , stage[i].rect.h).draw(Palette::Black) ;
+//        Rect(stage[i].rect.x + 3, stage[i].centerY + stage[i].r * sin(stage[i].arg) - stage[i].rect.h / 2.0 - stage[i].rect.h, stage[i].rect.w - 6 , stage[i].rect.h).draw(Palette::Black) ;
         stage[i].rect.draw(Palette::Brown);
     }
 }
@@ -190,13 +190,22 @@ void BattleScene::playerInit() {
     player.HP = 5;
     player.protectedCounter = 0;
 
-    //int selectNum = getData().SelectNum;
-    int selectNum = 1;
-    dango1 = TextureAsset(U"player" + Format(selectNum) + Format(1));
-    dango2 = TextureAsset(U"player" + Format(selectNum) + Format(2));
-    dango3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
-    dango4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
-    dango5 = TextureAsset(U"player" + Format(selectNum) + Format(5));
+    int selectNum = getData().SelectNum;
+    //    dango1 = TextureAsset(U"player" + Format(selectNum) + Format(1));
+    //    dango2 = TextureAsset(U"player" + Format(selectNum) + Format(2));
+    //    dango3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
+    //    dango4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
+    //    dango5 = TextureAsset(U"player" + Format(selectNum) + Format(5));
+        
+        walking1 = TextureAsset(U"player" + Format(selectNum) + Format(1));
+        walking2 = TextureAsset(U"player" + Format(selectNum) + Format(2));
+        walking3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
+        walking4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
+        
+        spinning1 = TextureAsset(U"player" + Format(selectNum) + Format(5));
+        spinning2 = TextureAsset(U"player" + Format(selectNum) + Format(6));
+        spinning3 = TextureAsset(U"player" + Format(selectNum) + Format(7));
+        spinning4 = TextureAsset(U"player" + Format(selectNum) + Format(8));
     background = Texture(U"pixelwhite.png");
 
     TextureAsset::Register(U"heart", U"pixelheart.png");
@@ -265,11 +274,13 @@ void BattleScene::playerUpdate() {
     if (player.isGround) {
         // 歩行中のアニメーション
         static int animCounter = 0;
-        if (animCounter < 15) dango = dango1;
-        else dango = dango2;
+        if (animCounter < 10) dango = walking1;
+        else if (animCounter < 20) dango = walking2;
+        else if (animCounter < 30) dango = walking3;
+        else dango = walking4;
 
         if ((KeyRight | KeyLeft).pressed()) {
-            if (animCounter++ == 30) animCounter = 0;
+            if (animCounter++ == 40) animCounter = 0;
         }
 
         if (KeyRight.pressed()) player.isRight = true;
@@ -278,17 +289,21 @@ void BattleScene::playerUpdate() {
     else {
         // ジャンプ中のアニメーション
         player.spinCount++;
-        if (player.spinCount > 15)player.spinCount = 6;
-        if (player.jump) dango = dango3;
-        else if (player.spinCount <= 10)dango = dango4;
-        else dango = dango5;
+//        if (player.spinCount > 15)player.spinCount = 6;
+//        if (player.jump) dango = dango3;
+//        else if (player.spinCount <= 10)dango = dango4;
+//        else dango = dango5;
+        if (player.spinCount > 20)player.spinCount = 1;
+        if (player.spinCount <= 5)dango = spinning1;
+        else if (player.spinCount <= 10)dango = spinning2;
+        else if (player.spinCount <= 15)dango = spinning3;
+        else dango = spinning4;
     }
 }
 
 void BattleScene::playerDraw() const {
     // 無敵状態の時は点滅する
     if (player.protectedCounter == 0 || Periodic::Square0_1(0.5s)) {
-        player.rect.draw(Palette::Gray);
         if (player.isRight) dango.mirrored().drawAt(player.rect.pos + player.rect.size / 2.0);
         else dango.drawAt(player.rect.pos + player.rect.size / 2.0);
     }
