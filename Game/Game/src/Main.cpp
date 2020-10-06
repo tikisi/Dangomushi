@@ -13,6 +13,7 @@
 # include "GameOver.hpp"
 # include "CharaSelect.h"
 # include "Asset.hpp"
+# include "GameClear.hpp"
 # include "BattleScene/BattleScene.hpp"
 
 void Main()
@@ -33,7 +34,8 @@ void Main()
     .add<Game>(State::Game)
     .add<BattleScene>(State::BattleScene)
     .add<CharaSelect>(State::CharaSelect)
-    .add<GameOver>(State::GameOver);
+    .add<GameOver>(State::GameOver)
+    .add<GameClear>(State::GameClear);
 
     
     AssetRegister();

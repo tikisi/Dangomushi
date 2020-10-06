@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2358A9A424E1729600F246E9 /* GenerateFoot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2358A9A324E1729600F246E9 /* GenerateFoot.cpp */; };
+		238BF30A252C637A00FC134D /* GameClear.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 238BF308252C637A00FC134D /* GameClear.cpp */; };
 		23A5B5C92517C4EE009D0629 /* ShotGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A5B5C52517C4ED009D0629 /* ShotGenerator.cpp */; };
 		23A5B5CA2517C4EE009D0629 /* ShotManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23A5B5C82517C4EE009D0629 /* ShotManager.cpp */; };
 		23C1191D2512CFD5008F1D19 /* BattleScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 23C1191B2512CFD5008F1D19 /* BattleScene.cpp */; };
@@ -49,6 +50,8 @@
 /* Begin PBXFileReference section */
 		2358A9A224DFDFE500F246E9 /* Enemy.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Enemy.hpp; sourceTree = "<group>"; };
 		2358A9A324E1729600F246E9 /* GenerateFoot.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenerateFoot.cpp; sourceTree = "<group>"; };
+		238BF308252C637A00FC134D /* GameClear.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GameClear.cpp; sourceTree = "<group>"; };
+		238BF309252C637A00FC134D /* GameClear.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GameClear.hpp; sourceTree = "<group>"; };
 		23900DC124D3C5EB0026C163 /* Foot.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Foot.hpp; sourceTree = "<group>"; };
 		23900DC224D3C5F40026C163 /* Player.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Player.hpp; sourceTree = "<group>"; };
 		23900DCB24D6A3FA0026C163 /* Item.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Item.hpp; sourceTree = "<group>"; };
@@ -201,6 +204,8 @@
 				2C971A5A239732F900E66570 /* Title.cpp */,
 				23D18B6B24F2174C00606D8A /* GameOver.cpp */,
 				23D18B6C24F2174C00606D8A /* GameOver.hpp */,
+				238BF308252C637A00FC134D /* GameClear.cpp */,
+				238BF309252C637A00FC134D /* GameClear.hpp */,
 				2C971A56239732F900E66570 /* Title.hpp */,
 			);
 			path = src;
@@ -310,6 +315,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2358A9A424E1729600F246E9 /* GenerateFoot.cpp in Sources */,
+				238BF30A252C637A00FC134D /* GameClear.cpp in Sources */,
 				23A5B5CA2517C4EE009D0629 /* ShotManager.cpp in Sources */,
 				23D18B6D24F2174C00606D8A /* GameOver.cpp in Sources */,
 				2C971A5C239732F900E66570 /* Title.cpp in Sources */,

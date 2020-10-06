@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Background.hpp"
 #include "Common.hpp"
 #include "Player.hpp"

@@ -1,4 +1,4 @@
-#include "BattleScene.hpp"
+﻿#include "BattleScene.hpp"
 using namespace Battle;
 
 BattleScene::BattleScene(const InitData& init)
@@ -81,7 +81,7 @@ void BattleScene::bossInit() {
 
     boss.state = BossState::DownStop;
     boss.nState = boss.state;
-    boss.HP = 5;
+    boss.HP = 1;
     boss.isLeft = true;
     
     boss.animCount = 0;
@@ -326,7 +326,11 @@ void BattleScene::shotUpdate() {
         Array<Shot*>& shots = shotManager.getShots();
         for (auto it = shots.begin(); it != shots.end(); it++) {
             if ((*it)->getCircle().intersects(player.rect)) {
-                if (--player.HP == 0) changeScene(State::GameOver);
+                if (--player.HP == 0) {
+                    getData().death++;
+                    changeScene(State::GameOver);
+                }
+                    
                 player.protectedCounter = 1;
                 delete* it;
                 shots.erase(it);
@@ -356,13 +360,19 @@ void BattleScene::bossIntersects() {
         if (player.rect.intersects(RectF(boss.rect.pos + Vec2(boss.rect.w / 6.0, 0),
             boss.rect.size - Vec2(boss.rect.w / 3.0, 0)))) {
             boss.nState = BossState::DownToUp1;
-            if (--boss.HP == 0) changeScene(State::GameClear);
+            if (--boss.HP == 0) {
+                if(getData().SelectNum == 3)getData().SelectNum++;
+                changeScene(State::GameClear);
+            }
             player.speedY *= -1;
             player.speedX *= -1;
         }
         // ぶつかったとき
         else {
-            if (--player.HP == 0) changeScene(State::GameOver);
+            if (--player.HP == 0) {
+                getData().death++;
+                changeScene(State::GameOver);
+            }
             player.protectedCounter = 1;
         }
     }
