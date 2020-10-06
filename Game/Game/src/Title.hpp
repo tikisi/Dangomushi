@@ -14,9 +14,7 @@ private:
 	static inline constexpr uint32 btnHeight = 35;
 	static inline constexpr uint32 btnMargin = 30;
 
-	static inline constexpr Point windowSize = Point(640, 480);
-	static inline constexpr Point btnSize2 = Point(150, 25);
-
+	// カーソルの位置
 	uint32 selecter1;
 	uint32 selecter2;
 	bool isWindow;	// 小窓が出ているか

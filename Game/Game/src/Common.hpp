@@ -37,10 +37,16 @@ using MyApp = SceneManager<State, GameData>;
 inline constexpr int WINDOW_WIDTH = 800;
 inline constexpr int WINDOW_HEIGHT = 600;
 
-
 // セーブデータファイル
 extern String saveDataPath;
 
 void LoadSaveData(GameData& gameData);
 
 void WriteSaveData(const GameData& gameData);
+
+// ステージ選択Window用
+namespace StageSelect {
+    inline constexpr Point windowSize = Point(640, 480);
+    inline constexpr Point btnSize = Point(150, 25);
+    void DrawWindow(const GameData& gameData, const uint32 selecter);
+}

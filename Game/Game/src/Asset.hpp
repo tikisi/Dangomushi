@@ -67,4 +67,8 @@ void AssetRegister() {
     AudioAsset::Register(U"chakuchi", U"Sounds/SE/chakuchi.mp3");
     AudioAsset::Register(U"damage", U"Sounds/SE/damage.mp3");
     AudioAsset::Register(U"kaiten", U"Sounds/SE/kaiten.mp3");
+
+    // Font
+    FontAsset::Register(U"font25", 25);
+    FontAsset::Register(U"font40", 40);
 }
