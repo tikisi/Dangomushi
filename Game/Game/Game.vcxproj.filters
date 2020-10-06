@@ -401,6 +401,9 @@
     <ClCompile Include="src\Common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\GameClear.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Game.hpp">
@@ -452,6 +455,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\CharaSelect.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameClear.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
