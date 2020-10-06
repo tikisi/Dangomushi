@@ -2,7 +2,8 @@
 
 void GameOver::update()
 {
-    backTexture.draw(0, 0);
+    gameOverTex.draw(0, 0);
+    //gameClearTex
     if (SimpleGUI::ButtonAt(U"タイトルへ", Scene::Center().movedBy(0, 200))) {
         AudioAsset(U"GameOver_BGM").stop();
         changeScene(State::Title);

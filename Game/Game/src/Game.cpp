@@ -96,6 +96,18 @@ void Game::backDraw() const {
     texture1.resized(1000, 1000).draw(-150, back.Pos1, ColorF(1.0, back.alpha));
     Rect(700, 0, 100, 600).draw(ColorF(0, 0, 0, 0.7));
     Rect(705, 600 + 600.0 / 60000.0 * player.posY, 90, 5).draw(Palette::Red);
+    
+    if(getData().dataLv < 5) Line(700, 100, 800, 100).draw(3, Palette::Lime);
+    else Line(700, 100, 800, 100).draw(3, Palette::Green);
+    if(getData().dataLv < 4) Line(700, 200, 800, 200).draw(3, Palette::Lime);
+    else Line(700, 200, 800, 200).draw(3, Palette::Green);
+    if(getData().dataLv < 3) Line(700, 300, 800, 300).draw(3, Palette::Lime);
+    else Line(700, 300, 800, 300).draw(3, Palette::Green);
+    if(getData().dataLv < 2) Line(700, 400, 800, 400).draw(3, Palette::Lime);
+    else Line(700, 400, 800, 400).draw(3, Palette::Green);
+    if(getData().dataLv < 1) Line(700, 500, 800, 500).draw(3, Palette::Lime);
+    else Line(700, 500, 800, 500).draw(3, Palette::Green);
+    
 #ifdef DEBUG
     Print << back.alpha;
 #endif
@@ -162,6 +174,7 @@ void Game::playerInit() {
 
 
 void Game::playerUpdate() {
+    if(player.posY < -60000)changeScene(State::BattleScene);
     
     // デバッグ用
     if (KeyUp.pressed()) {
@@ -222,26 +235,52 @@ void Game::playerUpdate() {
     if (player.isGround) {
         // プレイヤーの歩くアニメーション
         double b = towerDir;
-        bool walkflag = 0;
+//        bool walkflag = 0;
+//        while (b > 0) {
+//            walkflag = !walkflag;
+//            if (walkflag)dango = dango1;
+//            else dango = dango2;
+//            b -= Math::TwoPi / 144.0;
+//        }
+        
+        int texChangeNum = 3;
         while (b > 0) {
-            walkflag = !walkflag;
-            if (walkflag)dango = dango1;
-            else dango = dango2;
-            b -= Math::TwoPi / 144.0;
+            texChangeNum = texChangeNum > 3 ? texChangeNum == 0 : texChangeNum + 1;
+            b -= Math::TwoPi / 72.0;
         }
         
-        if (walkflag == player.damageFlag && player.footType == Foot::Type::spike) {
-            player.HP -= 10;
-            player.damageFlag = !player.damageFlag;
+        switch (texChangeNum) {
+            case 1:
+                dango=walking1;
+                break;
+            case 2:
+                dango=walking2;
+                break;
+            case 3:
+                dango=walking3;
+                break;
+            case 4:
+                dango=walking4;
+                break;
+            default:
+                break;
         }
+        
+//        if (walkflag == player.damageFlag && player.footType == Foot::Type::spike) {
+//            player.HP -= 10;
+//            player.damageFlag = !player.damageFlag;
+//        }
+        
     }
     else {
         player.spinCount++;
-        if (player.spinCount > 15)player.spinCount = 6;
+        if (player.spinCount > 20)player.spinCount = 1;
         
-        if (player.jump) dango = dango3;
-        else if (player.spinCount <= 10)dango = dango4;
-        else dango = dango5;
+        //if (player.jump) dango = spinning1;
+        if (player.spinCount <= 5)dango = spinning1;
+        else if (player.spinCount <= 10)dango = spinning2;
+        else if (player.spinCount <= 15)dango = spinning3;
+        else dango = spinning4;
     }
     
     if (player.posY > player.lowest + 300) {
@@ -249,8 +288,9 @@ void Game::playerUpdate() {
         //getData().dataLv = Lv;
         getData().dataLv = -(int)player.posY / 5000 + 1;
         AudioAsset(U"Main_BGM").stop();
-        //changeScene(State::GameOver);
-        changeScene(State::BattleScene);
+        getData().death++;
+        changeScene(State::GameOver);
+        //changeScene(State::BattleScene);
     }
 }
 
@@ -433,10 +473,10 @@ void Game::footDrawBefore() const {
         
         // 左右の壁の描画
         if (!foots[i].isFrontL && foots[i].dirL > Math::HalfPi) {
-            drawBox(foots[i].posRootXL, foots[i].drawPosY, foots[i].posXL, foots[i].height).draw(footcolor);
+            drawBox(foots[i].posRootXL, foots[i].drawPosY, foots[i].posXL, foots[i].height).draw(footcolor).drawFrame(5, 0, Palette::Black);
         }
         if (!foots[i].isFrontR && foots[i].dirR < Math::HalfPi) {
-            drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, foots[i].height).draw(footcolor);
+            drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, foots[i].height).draw(footcolor).drawFrame(5, 0, Palette::Black);
         }
     }
 }
@@ -466,10 +506,10 @@ void Game::footDraw() const {
         
         // 左右の壁の描画
         if (foots[i].isFrontL && foots[i].dirL < Math::HalfPi * 3) {
-            drawBox(foots[i].posRootXL, foots[i].drawPosY, foots[i].posXL, foots[i].height).draw(footcolor).drawFrame(5, 0, Palette::Black).drawFrame(5, 0, Palette::Black);
+            drawBox(foots[i].posRootXL, foots[i].drawPosY, foots[i].posXL, foots[i].height).draw(footcolor).drawFrame(5, 0, Palette::Black);
         }
         if (foots[i].isFrontR && foots[i].dirR > Math::HalfPi * 3) {
-            drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, foots[i].height).draw(footcolor).drawFrame(5, 0, Palette::Black).drawFrame(5, 0, Palette::Black);
+            drawBox(foots[i].posRootXR, foots[i].drawPosY, foots[i].posXR, foots[i].height).draw(footcolor).drawFrame(5, 0, Palette::Black);
         }
         
         
@@ -607,7 +647,10 @@ void Game::enemyUpdate() {
     
     //レーザーでゲームオーバー
     Line lazer(0, enemy.drawPosY + 30, 650, enemy.drawPosY + 30);
-    if (50 < enemy.attack && enemy.attack < 100 && lazer.intersects(playerrect) && enemy.type == 0)changeScene(State::GameOver);
+    if (50 < enemy.attack && enemy.attack < 100 && lazer.intersects(playerrect) && enemy.type == 0){
+        getData().death++;
+        changeScene(State::GameOver);
+    }
     getData().dataLv = -(int)player.posY / 5000 + 1;
 }
 
@@ -663,9 +706,19 @@ bool Game::isFront(double arg) {
 }
 
 void Game::loadPlayer(int selectNum) {
-    dango1 = TextureAsset(U"player" + Format(selectNum) + Format(1));
-    dango2 = TextureAsset(U"player" + Format(selectNum) + Format(2));
-    dango3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
-    dango4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
-    dango5 = TextureAsset(U"player" + Format(selectNum) + Format(5));
+//    dango1 = TextureAsset(U"player" + Format(selectNum) + Format(1));
+//    dango2 = TextureAsset(U"player" + Format(selectNum) + Format(2));
+//    dango3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
+//    dango4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
+//    dango5 = TextureAsset(U"player" + Format(selectNum) + Format(5));
+    
+    walking1 = TextureAsset(U"player" + Format(selectNum) + Format(1));
+    walking2 = TextureAsset(U"player" + Format(selectNum) + Format(2));
+    walking3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
+    walking4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
+    
+    spinning1 = TextureAsset(U"player" + Format(selectNum) + Format(5));
+    spinning2 = TextureAsset(U"player" + Format(selectNum) + Format(6));
+    spinning3 = TextureAsset(U"player" + Format(selectNum) + Format(7));
+    spinning4 = TextureAsset(U"player" + Format(selectNum) + Format(8));
 }
