@@ -314,8 +314,8 @@ public:
             font30(U"txt1").draw(40, 150, Palette::White);
         }
         else if (SelectNUM == 2) {
-            font60(U"エビ").drawAt(200, 100, Palette::White);
-            font30(U"txt2").draw(40, 150, Palette::White);
+            //font60(U"エビ").drawAt(200, 100, Palette::White);
+            //font30(U"txt2").draw(40, 150, Palette::White);
         }
         else if (SelectNUM == 3) {
             font60(U"ヤドカリ").drawAt(200, 100, Palette::White);
