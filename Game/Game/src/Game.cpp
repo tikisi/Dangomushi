@@ -179,7 +179,7 @@ void Game::playerInit() {
 
 
 void Game::playerUpdate() {
-    if(player.posY < -60000)changeScene(State::BattleScene);
+    if(player.posY < -60000)changeScene(State::BattleScene, 0);
         // デバッグ用
     if (KeyUp.pressed()) {
         player.speedY = 20;
@@ -291,7 +291,7 @@ void Game::playerUpdate() {
     if (player.posY > player.lowest + 300) {
         //changeScene(State::GameOver);
         getData().death++;
-        changeScene(State::BattleScene);
+        changeScene(State::BattleScene, 0);
     }
 }
 

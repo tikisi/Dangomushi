@@ -244,7 +244,7 @@ public:
             if (KeyDown.down() && stageSelecter != getData().dataLv) stageSelecter++;
 
             if (KeyEnter.down()) {
-                changeScene(State::Game);
+                changeScene(State::Game, 0);
             }
         }
 

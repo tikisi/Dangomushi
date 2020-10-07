@@ -8,7 +8,7 @@ void Title::update()
 
         if ((KeyEnter | KeyZ).down()) {
             if (selecter1 == 0) isWindow = true;
-            else changeScene(State::CharaSelect);
+            else changeScene(State::CharaSelect, 0);
         }
     }
     else {
@@ -17,7 +17,7 @@ void Title::update()
         if (KeyDown.down() && selecter2 != getData().dataLv) selecter2++;
 
         if (KeyEnter.down()) {
-            changeScene(State::Game);
+            changeScene(State::Game, 0);
         }
     }
 
