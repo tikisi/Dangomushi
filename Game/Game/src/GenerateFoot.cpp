@@ -179,7 +179,6 @@ void Game::generateLv3Init() {
 int Game::generateLv3() {
     for (int i = 0; i < FT_NUM; i++) {
         foots[i].type = Foot::Type::ice;
-        foots[i].height = 30;
 
         if (foots[i].drawPosY > 1000) {
             if (RandomBool()) {
@@ -191,7 +190,7 @@ int Game::generateLv3() {
                 foots[i].dirR = foots[i].dirL - 1.2;
             }
             foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - (3 * foots[i].height + Random<double>(20));
-            foots[0].height = 30;
+            foots[i].height = 30;
 
             foots[i].time = 0.0;
             foots[i].withDraw = 0.0;
