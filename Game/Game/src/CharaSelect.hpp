@@ -27,6 +27,10 @@ private:
     Font font30;
     Font font60;
 
+    // Stage選択Window
+    bool isWindow;  // ステージ選択Windowを表示するか
+    uint32 stageSelecter;
+
 public:
 
     CharaSelect(const InitData& init)
@@ -88,142 +92,160 @@ public:
         speedY = 0;
         posX = 550;
         posY = 410;
+
+        isWindow = false;
+        stageSelecter = 1;
+    }
+
+    ~CharaSelect() {
+        getData().selectedLv = stageSelecter;
     }
 
     void update() override
     {
-        if (SelectNUM <= species) {
-            if ((SimpleGUI::Button(U"Start", Point(500, 500), unspecified)) || KeyEnter.down()) {
-                getData().SelectNum = SelectNUM;
-                changeScene(State::Game);
-                //Scene::SetBackground(ColorF(Palette::Black));
-                //ClearPrint();
+        if (isWindow == false) {
+            // キャラ選択完了
+            if (SelectNUM <= species) {
+                if ((SimpleGUI::Button(U"Start", Point(500, 500), unspecified)) || KeyEnter.down()) {
+                    getData().SelectNum = SelectNUM;
+                    isWindow = true;
+                }
             }
-        }
-        // キャラ切り替え
-        if (KeyUp.down()) SelectNUM--;
-        if (KeyDown.down()) SelectNUM++;
 
-        if (SelectNUM < 1) SelectNUM = 5;
-        if (5 < SelectNUM) SelectNUM = 1;
+            // キャラ切り替え
+            if (KeyUp.down()) SelectNUM--;
+            if (KeyDown.down()) SelectNUM++;
 
-        // 左右の向き
-        if (KeyLeft.pressed() && !KeyRight.pressed()) orLeft = true;
-        else if (!KeyLeft.pressed() && KeyRight.pressed()) orLeft = false;
+            if (SelectNUM < 1) SelectNUM = 5;
+            if (5 < SelectNUM) SelectNUM = 1;
 
-        // 歩くアニメーション
-        if ((KeyLeft.pressed() && !KeyRight.pressed()) || (!KeyLeft.pressed() && KeyRight.pressed())) {
-            walkCount++;
+            // 左右の向き
+            if (KeyLeft.pressed() && !KeyRight.pressed()) orLeft = true;
+            else if (!KeyLeft.pressed() && KeyRight.pressed()) orLeft = false;
 
-            if (orLeft && speedX == 0) speedX = -0.8;
-            if (!orLeft && speedX == 0) speedX = 0.8;
+            // 歩くアニメーション
+            if ((KeyLeft.pressed() && !KeyRight.pressed()) || (!KeyLeft.pressed() && KeyRight.pressed())) {
+                walkCount++;
 
-            if (orLeft) speedX -= 0.1;
-            else speedX += 0.1;
+                if (orLeft && speedX == 0) speedX = -0.8;
+                if (!orLeft && speedX == 0) speedX = 0.8;
+
+                if (orLeft) speedX -= 0.1;
+                else speedX += 0.1;
+            }
+            else {
+                speedX = 0;
+            }
+            posX += speedX;
+
+            if (10 < walkCount) walkCount = 0;
+
+            if (posX < 435) {
+                posX = 435;
+                speedX = 0;
+            }
+            if (665 < posX) {
+                posX = 665;
+                speedX = 0;
+            }
+
+            // 跳ぶアニメーション
+            if (posY == 410 && KeySpace.down()) {
+                speedY += 10.0 * 1.2;
+                jumpCount = 1;
+                spinCount = 1;
+            }
+            if (1 <= jumpCount) {
+                jumpCount++;
+                spinCount++;
+
+                if (KeySpace.pressed() && jumpCount <= 9) {
+                    speedY += 0.7 * 1.2;
+                }
+                speedY -= 0.4;
+                speedY *= 0.98;
+                posY -= speedY;
+            }
+            if (410 < posY) {
+                jumpCount = 0;
+                spinCount = 0;
+                speedY = 0;
+                posY = 410;
+            }
+
+
+            if (SelectNUM == 1) {
+                pickup_sub = s1dango;
+
+                if (16 < spinCount) spinCount = 6;
+
+                if (11 <= spinCount) model_player = j3dango;
+                else if (6 <= spinCount) model_player = j2dango;
+                else if (1 <= spinCount) model_player = j1dango;
+                else if (walkCount <= 5) model_player = s1dango;
+                else if (walkCount <= 10) model_player = s2dango;
+            }
+            if (SelectNUM == 2) {
+                pickup_sub = s1ebi;
+
+                if (21 < spinCount) spinCount = 1;
+
+                if (16 <= spinCount) model_player = j4ebi;
+                else if (11 <= spinCount) model_player = j3ebi;
+                else if (6 <= spinCount) model_player = j2ebi;
+                else if (1 <= spinCount) model_player = j1ebi;
+                else if (walkCount <= 5) model_player = s1ebi;
+                else if (walkCount <= 10) model_player = s2ebi;
+            }
+            if (SelectNUM == 3) {
+                pickup_sub = s1yado;
+
+                if (21 < spinCount) spinCount = 1;
+
+                if (16 <= spinCount) model_player = j4yado;
+                else if (11 <= spinCount) model_player = j3yado;
+                else if (6 <= spinCount) model_player = j2yado;
+                else if (1 <= spinCount) model_player = j1yado;
+                else if (walkCount <= 5) model_player = s1yado;
+                else if (walkCount <= 10) model_player = s2yado;
+            }
+            if (SelectNUM == 4) {
+                pickup_sub = s1gdango;
+
+                if (26 < spinCount) spinCount = 1;
+
+                if (21 <= spinCount) model_player = j1gdango;
+                else if (16 <= spinCount) model_player = j2gdango;
+                else if (11 <= spinCount) model_player = j3gdango;
+                else if (6 <= spinCount) model_player = j4gdango;
+                else if (1 <= spinCount) model_player = j5gdango;
+                else if (walkCount <= 2) model_player = s1gdango;
+                else if (walkCount <= 4) model_player = s2gdango;
+                else if (walkCount <= 6) model_player = s3gdango;
+                else if (walkCount <= 8) model_player = s4gdango;
+                else if (walkCount <= 10) model_player = s5gdango;
+            }
+            if (SelectNUM == 5) {
+                pickup_sub = s1kurowa;
+
+                if (21 < spinCount) spinCount = 1;
+
+                if (16 <= spinCount) model_player = j4kurowa;
+                else if (11 <= spinCount) model_player = j3kurowa;
+                else if (6 <= spinCount) model_player = j2kurowa;
+                else if (1 <= spinCount) model_player = j1kurowa;
+                else if (walkCount <= 5) model_player = s1kurowa;
+                else if (walkCount <= 10) model_player = s2kurowa;
+            }
         }
         else {
-            speedX = 0;
-        }
-        posX += speedX;
+            if ((KeyEscape | KeyBackspace).down()) isWindow = false;
+            if (KeyUp.down() && stageSelecter != 1) stageSelecter--;
+            if (KeyDown.down() && stageSelecter != getData().dataLv) stageSelecter++;
 
-        if (10 < walkCount) walkCount = 0;
-
-        if (posX < 435) {
-            posX = 435;
-            speedX = 0;
-        }
-        if (665 < posX) {
-            posX = 665;
-            speedX = 0;
-        }
-
-        // 跳ぶアニメーション
-        if (posY == 410 && KeySpace.down()) {
-            speedY += 10.0 * 1.2;
-            jumpCount = 1;
-            spinCount = 1;
-        }
-        if (1 <= jumpCount) {
-            jumpCount++;
-            spinCount++;
-
-            if (KeySpace.pressed() && jumpCount <= 9) {
-                speedY += 0.7 * 1.2;
+            if (KeyEnter.down()) {
+                changeScene(State::Game);
             }
-            speedY -= 0.4;
-            speedY *= 0.98;
-            posY -= speedY;
-        }
-        if (410 < posY) {
-            jumpCount = 0;
-            spinCount = 0;
-            speedY = 0;
-            posY = 410;
-        }
-
-
-        if (SelectNUM == 1) {
-            pickup_sub = s1dango;
-
-            if (16 < spinCount) spinCount = 6;
-
-            if (11 <= spinCount) model_player = j3dango;
-            else if (6 <= spinCount) model_player = j2dango;
-            else if (1 <= spinCount) model_player = j1dango;
-            else if (walkCount <= 5) model_player = s1dango;
-            else if (walkCount <= 10) model_player = s2dango;
-        }
-        if (SelectNUM == 2) {
-            pickup_sub = s1ebi;
-
-            if (21 < spinCount) spinCount = 1;
-
-            if (16 <= spinCount) model_player = j4ebi;
-            else if (11 <= spinCount) model_player = j3ebi;
-            else if (6 <= spinCount) model_player = j2ebi;
-            else if (1 <= spinCount) model_player = j1ebi;
-            else if (walkCount <= 5) model_player = s1ebi;
-            else if (walkCount <= 10) model_player = s2ebi;
-        }
-        if (SelectNUM == 3) {
-            pickup_sub = s1yado;
-
-            if (21 < spinCount) spinCount = 1;
-
-            if (16 <= spinCount) model_player = j4yado;
-            else if (11 <= spinCount) model_player = j3yado;
-            else if (6 <= spinCount) model_player = j2yado;
-            else if (1 <= spinCount) model_player = j1yado;
-            else if (walkCount <= 5) model_player = s1yado;
-            else if (walkCount <= 10) model_player = s2yado;
-        }
-        if (SelectNUM == 4) {
-            pickup_sub = s1gdango;
-
-            if (26 < spinCount) spinCount = 1;
-
-            if (21 <= spinCount) model_player = j1gdango;
-            else if (16 <= spinCount) model_player = j2gdango;
-            else if (11 <= spinCount) model_player = j3gdango;
-            else if (6 <= spinCount) model_player = j4gdango;
-            else if (1 <= spinCount) model_player = j5gdango;
-            else if (walkCount <= 2) model_player = s1gdango;
-            else if (walkCount <= 4) model_player = s2gdango;
-            else if (walkCount <= 6) model_player = s3gdango;
-            else if (walkCount <= 8) model_player = s4gdango;
-            else if (walkCount <= 10) model_player = s5gdango;
-        }
-        if (SelectNUM == 5) {
-            pickup_sub = s1kurowa;
-
-            if (21 < spinCount) spinCount = 1;
-
-            if (16 <= spinCount) model_player = j4kurowa;
-            else if (11 <= spinCount) model_player = j3kurowa;
-            else if (6 <= spinCount) model_player = j2kurowa;
-            else if (1 <= spinCount) model_player = j1kurowa;
-            else if (walkCount <= 5) model_player = s1kurowa;
-            else if (walkCount <= 10) model_player = s2kurowa;
         }
 
 #ifdef DEBUG
@@ -292,8 +314,8 @@ public:
             font30(U"txt1").draw(40, 150, Palette::White);
         }
         else if (SelectNUM == 2) {
-            font60(U"エビ").drawAt(200, 100, Palette::White);
-            font30(U"txt2").draw(40, 150, Palette::White);
+            //font60(U"エビ").drawAt(200, 100, Palette::White);
+            //font30(U"txt2").draw(40, 150, Palette::White);
         }
         else if (SelectNUM == 3) {
             font60(U"ヤドカリ").drawAt(200, 100, Palette::White);
@@ -308,5 +330,10 @@ public:
             font30(U"txt5").draw(40, 150, Palette::White);
         }
         else font60(U"???").drawAt(200, 100, Palette::White);
+
+        // ステージ選択画面
+        if (isWindow) {
+            StageSelect::DrawWindow(getData(), stageSelecter);
+        }
     }
 };

@@ -390,3 +390,6 @@ AS_DEBUG/
 
 include/
 lib/
+
+## original
+Game/Game/App/data.bin

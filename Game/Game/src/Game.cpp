@@ -392,7 +392,7 @@ void Game::footInit() {
     // 足場の初期化
     Lv = getData().selectedLv;
 
-    player.lowest = (Lv - 1) * 10000;
+    player.lowest = -(Lv - 1) * 10000;
     player.posY = -(Lv - 1) * 10000;
     footWidth = 7.0;
     generateInit(Lv);
@@ -588,12 +588,11 @@ void Game::enemyUpdate() {
     if (enemy.drawPosY > 900 && !enemyWait) {
         enemyTime++;
     }
-    
-    if(enemyPeriod < enemyTime) {
+
+    if (enemyPeriod < enemyTime) {
         enemyInit(enemy.type);
         enemyTime = 0;
     }
-    
     if (enemy.attack < 0)enemy.attack++;
 
     enemy.move = sin(texturetime / 10.0) * 10;
@@ -639,7 +638,8 @@ void Game::enemyUpdate() {
     if (50 < enemy.attack && enemy.attack < 100 && lazer.intersects(playerrect) && enemy.type == 0){
         getData().death++;
         changeScene(State::GameOver);
-    }}
+    }
+}
 
 void Game::enemyDraw() const {
     //    if (enemy.attack < 0 || 50 < enemy.attack)RectF(700, enemy.drawPosY, 80, 50).drawFrame(10, HSV(120 * enemy.type, 1.0, 0.8)).draw(Palette::White);
