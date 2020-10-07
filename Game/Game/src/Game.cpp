@@ -95,23 +95,20 @@ void Game::backDraw() const {
 
     // 到達バー背景
     Rect(700, 0, 100, 600).draw(ColorF(0, 0, 0, 0.7));
-    // 到達バーの区切り表示
-    for (int i = 1; i <= 5; i++) {
-        Rect(700, 600 - i * 100, 100, 5).draw(Palette::Green);
-    }
+    
+    if(player.posY > -50000) Line(700, 100, 800, 100).draw(3, Palette::Lime);
+    else Line(700, 100, 800, 100).draw(3, Palette::Green);
+    if(player.posY > -40000) Line(700, 200, 800, 200).draw(3, Palette::Lime);
+    else Line(700, 200, 800, 200).draw(3, Palette::Green);
+    if(player.posY > -30000) Line(700, 300, 800, 300).draw(3, Palette::Lime);
+    else Line(700, 300, 800, 300).draw(3, Palette::Green);
+    if(player.posY > -20000) Line(700, 400, 800, 400).draw(3, Palette::Lime);
+    else Line(700, 400, 800, 400).draw(3, Palette::Green);
+    if(player.posY > -10000) Line(700, 500, 800, 500).draw(3, Palette::Lime);
+    else Line(700, 500, 800, 500).draw(3, Palette::Green);
+    
     // 到達バー
     Rect(705, 600 + 600.0 / 60000.0 * player.posY, 90, 5).draw(Palette::Red);
-    
-    if(getData().dataLv < 5) Line(700, 100, 800, 100).draw(3, Palette::Lime);
-    else Line(700, 100, 800, 100).draw(3, Palette::Green);
-    if(getData().dataLv < 4) Line(700, 200, 800, 200).draw(3, Palette::Lime);
-    else Line(700, 200, 800, 200).draw(3, Palette::Green);
-    if(getData().dataLv < 3) Line(700, 300, 800, 300).draw(3, Palette::Lime);
-    else Line(700, 300, 800, 300).draw(3, Palette::Green);
-    if(getData().dataLv < 2) Line(700, 400, 800, 400).draw(3, Palette::Lime);
-    else Line(700, 400, 800, 400).draw(3, Palette::Green);
-    if(getData().dataLv < 1) Line(700, 500, 800, 500).draw(3, Palette::Lime);
-    else Line(700, 500, 800, 500).draw(3, Palette::Green);
     
 #ifdef DEBUG
     Print << back.alpha;

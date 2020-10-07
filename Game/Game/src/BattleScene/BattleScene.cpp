@@ -1,4 +1,4 @@
-﻿#include "BattleScene.hpp"
+#include "BattleScene.hpp"
 using namespace Battle;
 
 BattleScene::BattleScene(const InitData& init)
@@ -352,7 +352,7 @@ void BattleScene::bossIntersects() {
         // 踏めたとき
         if (player.rect.intersects(RectF(boss.rect.pos + Vec2(boss.rect.w / 6.0, 0),
             boss.rect.size - Vec2(boss.rect.w / 3.0, 0)))) {
-            player.speedY *= -1;
+            //player.speedY *= -1;
             player.speedX *= -1;
             shotManager.deleteAll();
             boss.nState = BossState::DownToUp1;
@@ -362,6 +362,7 @@ void BattleScene::bossIntersects() {
         }
         // ぶつかったとき
         else {
+            
             if (--player.HP == 0) {
                 getData().death++;
                 changeScene(State::GameOver);
@@ -369,6 +370,11 @@ void BattleScene::bossIntersects() {
             player.protectedCounter = 1;
         }
     }
+    
+    if(player.rect.intersects((boss.rect.left())))player.speedX = -5;
+    if(player.rect.intersects((boss.rect.right())))player.speedX = 5;
+    if(player.rect.intersects((boss.rect.top())))player.speedY = -5;
+    
 }
 
 
