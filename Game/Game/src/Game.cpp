@@ -95,6 +95,7 @@ void Game::backDraw() const {
 
     // 到達バー背景
     Rect(700, 0, 100, 600).draw(ColorF(0, 0, 0, 0.7));
+
     // 到達バーの区切り表示
     for (int i = 1; i <= 5; i++) {
         Rect(700, 600 - i * 100, 100, 5).draw(Palette::Green);
@@ -395,6 +396,7 @@ void Game::footInit() {
     player.lowest = (Lv - 1) * 10000;
     player.posY = -(Lv - 1) * 10000;
     footWidth = 7.0;
+    isReachEnemyPos = false;
     generateInit(Lv);
 }
 
@@ -433,7 +435,9 @@ void Game::footUpdate() {
         // Lvに変更があったとき
         if (nLv != Lv) {
             Lv = std::max(nLv, Lv); // レベルが下がらないように
-            footWidth = 7.0;
+            if(Lv == 1) footWidth = 7.0;
+            else if(Lv == 4) footWidth = 5.0;
+            isReachEnemyPos = false;
             switchGenerateFoot(Lv);
         }
     }

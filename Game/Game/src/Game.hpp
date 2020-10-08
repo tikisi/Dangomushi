@@ -73,6 +73,7 @@ private:
     Foot foots[FT_NUM];
     Texture footTextures[FT_TEX_NUM];
     double footWidth; // 足場の横幅
+    bool isReachEnemyPos; // 敵が出現する位置まで到達したか
     int Lv;
 
 
