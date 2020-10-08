@@ -24,7 +24,7 @@ Game::Game(const InitData& init) : font30(30), nextEnemy(false), IScene(init) {
     cubic = cubicBlue;
 
     AudioAsset(U"Main_BGM").setLoop(true);
-    //AudioAsset(U"Main_BGM").play();
+    AudioAsset(U"Main_BGM").play();
 
     // プレイヤー初期化
     playerInit();
@@ -190,13 +190,10 @@ void Game::playerUpdate() {
     if (KeySpace.down()) {
         player.spinCount = 0;
         if (player.isGround) {
-            //AudioAsset(U"spin").play();
-            //static const Audio spin(U"example/kaiten.mp3");
-            //spin.play();
             player.jump = 1;
             player.speedY += 5.0;
             player.updateWidth(30, TW_CENTER_X);
-            //AudioAsset(U"kaiten").play();
+            AudioAsset(U"kaiten").play();
         }
     }
 
@@ -325,7 +322,7 @@ void Game::collisionY() {
                         player.speedX *= 0.2;
                         player.updateWidth(50, TW_CENTER_X);
                         AudioAsset(U"kaiten").stop();
-                        //AudioAsset(U"chakuchi").play();
+                        AudioAsset(U"chakuchi").play();
                     }
                     break;
                 }
