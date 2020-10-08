@@ -168,6 +168,7 @@ void Game::towerDraw() const {
 
 void Game::playerInit() {
     loadPlayer(getData().SelectNum);
+    dango = walking1;
 
     player.drawPosX = TW_CENTER_X;  // 塔の中心
     player.drawPosY = 400;
@@ -180,7 +181,7 @@ void Game::playerInit() {
 
 
 void Game::playerUpdate() {
-    if(player.posY < -60000)changeScene(State::BattleScene, 0);
+    if(player.posY < -60000)changeScene(State::BattleScene);
         // デバッグ用
     if (KeyUp.pressed()) {
         player.speedY = 20;
@@ -267,12 +268,6 @@ void Game::playerUpdate() {
             default:
                 break;
         }
-        
-//        if (walkflag == player.damageFlag && player.footType == Foot::Type::spike) {
-//            player.HP -= 10;
-//            player.damageFlag = !player.damageFlag;
-//        }
-        
     }
     else {
         player.spinCount++;
@@ -289,7 +284,7 @@ void Game::playerUpdate() {
     if (player.posY > player.lowest + 300) {
         //changeScene(State::GameOver);
         getData().death++;
-        changeScene(State::BattleScene, 0);
+        changeScene(State::BattleScene);
     }
 }
 
