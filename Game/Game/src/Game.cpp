@@ -182,10 +182,10 @@ void Game::playerInit() {
 
 void Game::playerUpdate() {
     if(player.posY < -60000)changeScene(State::BattleScene);
-        // デバッグ用
-    if (KeyUp.pressed()) {
+#ifdef DEBUG
+    if (KeyUp.pressed()) 
         player.speedY = 20;
-    }
+#endif
 
     // ジャンプ
     if (KeySpace.down()) {
