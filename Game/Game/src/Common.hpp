@@ -1,7 +1,7 @@
 ﻿
 # pragma once
 # include <Siv3D.hpp> // OpenSiv3D v0.4.2
-# define DEBUG
+#define DEBUG
 
 // シーンの名前
 enum class State
@@ -34,7 +34,7 @@ struct GameData
         death = 0;
         dataLv = 1;
         highscore = 0;
-        releasedChara = 0;
+        releasedChara = 3;
     }
 };
 

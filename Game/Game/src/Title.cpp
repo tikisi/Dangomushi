@@ -17,7 +17,8 @@ void Title::update()
         if (KeyDown.down() && selecter2 != getData().dataLv) selecter2++;
 
         if (KeyEnter.down()) {
-            changeScene(State::Game);
+            if(selecter2 != 7) changeScene(State::Game);
+            else changeScene(State::BattleScene);
         }
     }
 

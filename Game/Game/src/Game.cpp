@@ -24,7 +24,7 @@ Game::Game(const InitData& init) : font30(30), nextEnemy(false), IScene(init) {
     cubic = cubicBlue;
 
     AudioAsset(U"Main_BGM").setLoop(true);
-    //AudioAsset(U"Main_BGM").play();
+    AudioAsset(U"Main_BGM").play();
 
     // プレイヤー初期化
     playerInit();
@@ -164,6 +164,7 @@ void Game::towerDraw() const {
 
 void Game::playerInit() {
     loadPlayer(getData().SelectNum);
+    dango = walking1;
 
     player.drawPosX = TW_CENTER_X;  // 塔の中心
     player.drawPosY = 400;
@@ -177,22 +178,19 @@ void Game::playerInit() {
 
 void Game::playerUpdate() {
     if(player.posY < -60000)changeScene(State::BattleScene);
-        // デバッグ用
-    if (KeyUp.pressed()) {
+#ifdef DEBUG
+    if (KeyUp.pressed()) 
         player.speedY = 20;
-    }
+#endif
 
     // ジャンプ
     if (KeySpace.down()) {
         player.spinCount = 0;
         if (player.isGround) {
-            //AudioAsset(U"spin").play();
-            //static const Audio spin(U"example/kaiten.mp3");
-            //spin.play();
             player.jump = 1;
             player.speedY += 5.0;
             player.updateWidth(30, TW_CENTER_X);
-            //AudioAsset(U"kaiten").play();
+            AudioAsset(U"kaiten").play();
         }
     }
 
@@ -266,12 +264,6 @@ void Game::playerUpdate() {
             default:
                 break;
         }
-        
-//        if (walkflag == player.damageFlag && player.footType == Foot::Type::spike) {
-//            player.HP -= 10;
-//            player.damageFlag = !player.damageFlag;
-//        }
-        
     }
     else {
         player.spinCount++;
@@ -321,7 +313,7 @@ void Game::collisionY() {
                         player.speedX *= 0.2;
                         player.updateWidth(50, TW_CENTER_X);
                         AudioAsset(U"kaiten").stop();
-                        //AudioAsset(U"chakuchi").play();
+                        AudioAsset(U"chakuchi").play();
                     }
                     break;
                 }
@@ -392,6 +384,7 @@ void Game::footInit() {
     player.lowest = -(Lv - 1) * 10000;
     player.posY = -(Lv - 1) * 10000;
     footWidth = 7.0;
+    isReachEnemyPos = false;
     generateInit(Lv);
 }
 
@@ -430,7 +423,9 @@ void Game::footUpdate() {
         // Lvに変更があったとき
         if (nLv != Lv) {
             Lv = std::max(nLv, Lv); // レベルが下がらないように
-            footWidth = 7.0;
+            if(Lv == 1) footWidth = 7.0;
+            else if(Lv == 4) footWidth = 5.0;
+            isReachEnemyPos = false;
             switchGenerateFoot(Lv);
         }
     }

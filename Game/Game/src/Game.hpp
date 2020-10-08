@@ -73,6 +73,7 @@ private:
     Foot foots[FT_NUM];
     Texture footTextures[FT_TEX_NUM];
     double footWidth; // 足場の横幅
+    bool isReachEnemyPos; // 敵が出現する位置まで到達したか
     int Lv;
 
 
@@ -88,6 +89,8 @@ public:
         getData().highscore = 
             Max(getData().highscore, (uint32)(player.posY < 0 ? -player.posY : 0));
         getData().dataLv = Max((uint32)Lv, getData().dataLv);
+        if(getData().dataLv > 3) getData().releasedChara = Max(getData().releasedChara, 4U);
+        if(getData().dataLv > 7) getData().releasedChara = 5;
         // セーブ
         WriteSaveData(getData());
 
