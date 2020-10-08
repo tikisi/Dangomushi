@@ -34,7 +34,7 @@ struct GameData
         death = 0;
         dataLv = 1;
         highscore = 0;
-        releasedChara = 0;
+        releasedChara = 3;
     }
 };
 

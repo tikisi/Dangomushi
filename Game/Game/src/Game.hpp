@@ -89,6 +89,8 @@ public:
         getData().highscore = 
             Max(getData().highscore, (uint32)(player.posY < 0 ? -player.posY : 0));
         getData().dataLv = Max((uint32)Lv, getData().dataLv);
+        if(getData().dataLv > 3) getData().releasedChara = Max(getData().releasedChara, 4U);
+        if(getData().dataLv > 7) getData().releasedChara = 5;
         // セーブ
         WriteSaveData(getData());
 

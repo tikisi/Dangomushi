@@ -10,7 +10,7 @@ void LoadSaveData(GameData& gameData) {
     if (!reader) {
         gameData.dataLv = 1;
         gameData.highscore = 0;
-        gameData.releasedChara = 0;
+        gameData.releasedChara = 3;
         return;
     }
 
@@ -21,7 +21,7 @@ void LoadSaveData(GameData& gameData) {
         gameData.highscore = 0;
     }
     if (reader.read(gameData.releasedChara) == false) {
-        gameData.releasedChara = 0;
+        gameData.releasedChara = 3;
     }
 }
 
@@ -35,7 +35,6 @@ void WriteSaveData(const GameData& gameData) {
     writer.write(gameData.dataLv);
     writer.write(gameData.highscore);
     writer.write(gameData.releasedChara);
-
 }
 
 namespace StageSelect {

@@ -6,7 +6,7 @@ class CharaSelect : public MyApp::Scene
 private:
 
     int SelectNUM = 1;
-    int species = 5;
+    int species;
 
     Texture model_player, model_sub, pickup_sub;
     Texture s1dango, s2dango, j1dango, j2dango, j3dango;
@@ -36,12 +36,12 @@ public:
     CharaSelect(const InitData& init)
         : font30(30), font60(60), IScene(init)
     {
-
         //if(species=<4)
         //ボス倒したら
         //species++;
         //早くクリアしたら
         //species++;
+        species = getData().releasedChara;
 
 
         // 一回だけ 
@@ -82,7 +82,6 @@ public:
         j2kurowa = Texture(U"player/kurowassan/j2kurowassan.png");
         j3kurowa = Texture(U"player/kurowassan/j3kurowassan.png");
         j4kurowa = Texture(U"player/kurowassan/j4kurowassan.png");
-
 
         walkCount = 0;
         jumpCount = 0;

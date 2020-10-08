@@ -289,7 +289,7 @@ void Game::playerUpdate() {
     }
 
     // 落ちたとき
-    if (-player.posY < player.lowest - 500) {
+    if (player.posY > player.lowest + 300) {
         //changeScene(State::GameOver);
         getData().death++;
         changeScene(State::BattleScene, 0);
@@ -393,7 +393,7 @@ void Game::footInit() {
     // 足場の初期化
     Lv = getData().selectedLv;
 
-    player.lowest = (Lv - 1) * 10000;
+    player.lowest = -(Lv - 1) * 10000;
     player.posY = -(Lv - 1) * 10000;
     footWidth = 7.0;
     isReachEnemyPos = false;

@@ -330,8 +330,6 @@ int Game::generateLv5() {
             }
             foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - (3 * foots[i].height + Random<double>(60));
 
-            player.lowest = foots[i != FT_NUM - 1 ? i + 1 : 0].posY;
-
             return i;
         }
     }
