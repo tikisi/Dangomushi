@@ -1,4 +1,4 @@
-#include "BattleScene.hpp"
+﻿#include "BattleScene.hpp"
 using namespace Battle;
 
 BattleScene::BattleScene(const InitData& init)
