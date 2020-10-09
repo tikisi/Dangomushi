@@ -381,6 +381,7 @@ int Game::generateLv5() {
 
 
 void Game::generateLv6Init() {
+    footWidth = 0.6;
     foots[0].type = Foot::Type::norm;
     foots[0].dirL = 5.28;
     foots[0].dirR = 4.23;
