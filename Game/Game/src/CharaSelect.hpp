@@ -95,6 +95,8 @@ public:
 
         isWindow = false;
         stageSelecter = getData().selectedLv;
+
+        CharaSelect::update();
     }
 
     ~CharaSelect() {
