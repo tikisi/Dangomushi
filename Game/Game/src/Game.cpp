@@ -428,6 +428,7 @@ void Game::footUpdate() {
             Lv = std::max(nLv, Lv); // レベルが下がらないように
             if(Lv == 1) footWidth = 7.0;
             else if(Lv == 4) footWidth = 5.0;
+            else if(Lv == 6) footWidth = 0.6 ;
             isReachEnemyPos = false;
             enemyOff();
             switchGenerateFoot(Lv);
