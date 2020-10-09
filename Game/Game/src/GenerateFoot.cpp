@@ -81,10 +81,11 @@ void Game::generateLv1Init() {
 
 // ビームが出るのは途中からにしたい
 int Game::generateLv1() {
-    if (!isReachEnemyPos && ((int)-player.posY + 2) % 10000 > 5000) {
-        isReachEnemyPos = true;
-        enemyOn(0, 300);
-    }
+//    if (!isReachEnemyPos && ((int)-player.posY + 2) % 10000 > 5000) {
+//        isReachEnemyPos = true;
+//        enemyOn(0, 300);
+//    }
+    enemyOn(0,300);
 
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].drawPosY > 1000) {
@@ -197,7 +198,7 @@ void Game::generateLv3Init() {
             foots[i].dirR = foots[i].dirL - (Math::Pi / footWidth);
         }
         foots[i].height = 30.0;
-        foots[i].posY = foots[i - 1].posY - (3 * foots[i].height + Random<double>(60));
+        foots[i].posY = foots[i - 1].posY - (5 * foots[i].height + Random<double>(60));
         foots[i].time = 0.0;
         foots[i].withDraw = 0.0;
     }
@@ -228,7 +229,7 @@ int Game::generateLv3() {
                 foots[i].dirL = foots[i != 0 ? i - 1 : FT_NUM - 1].dirR - Math::Pi / 5 + Random<double>(Math::Pi / 7);
                 foots[i].dirR = foots[i].dirL - (Math::Pi / footWidth);
             }
-            foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - (3 * foots[i].height + Random<double>(60));
+            foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - (5 * foots[i].height + Random<double>(60));
             return i;
         }
     }

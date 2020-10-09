@@ -9,6 +9,7 @@ struct Player {
     double speedY = 0.0;      // 縦移動の速度
     double accY = 0.4;    // 加速度Y
     double posY;    // 計算上の位置Y
+    double footstime = 0;
 
     double drawPosX;    // 画面上での描画座標X
     double drawPosY;    // 画面上での描画座標Y

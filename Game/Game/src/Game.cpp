@@ -389,6 +389,8 @@ void Game::footInit() {
 }
 
 void Game::footUpdate() {
+    player.footstime += 0.02;
+    if (player.footstime > Math::TwoPi) player.footstime -= Math::TwoPi;
     // 回転
     for (int i = 0; i < FT_NUM; i++) {
         foots[i].dirR = rotate(foots[i].dirR);
@@ -401,10 +403,8 @@ void Game::footUpdate() {
         foots[i].isFrontR = isFront(foots[i].dirR);
         foots[i].isFrontL = isFront(foots[i].dirL);
         foots[i].drawPosY = foots[i].posY + (player.drawPosY - player.posY);
-        foots[i].time += 0.02;
-        if (foots[i].time > Math::TwoPi) foots[i].time -= Math::TwoPi;
 
-        if (foots[i].type == 1) foots[i].withDraw = cos(foots[i].time) * 50;
+        if (foots[i].type == 1) foots[i].withDraw = cos(player.footstime) * 50;
 
         if (foots[i].type == 0 && foots[i].posY > player.posY + 10) foots[i].withDraw += 0.0;
 
@@ -437,7 +437,7 @@ void Game::footDrawBefore() const {
 
         switch (foots[i].type) {
         case Foot::norm:
-            footcolor = Color(10, 50 + foots[i].withDraw * 1.5, 50 + foots[i].withDraw * 1.5);
+            footcolor = Color(10, 90 + foots[i].withDraw * 1.5, 50 + foots[i].withDraw * 1.5);
             break;
         case Foot::pull:
             footcolor = Color(170, 100 + foots[i].withDraw * 1.5, 100 + foots[i].withDraw * 1.5);
@@ -446,10 +446,10 @@ void Game::footDrawBefore() const {
             footcolor = Color(0, 100 + foots[i].withDraw * 1.5, 100 + foots[i].withDraw * 1.5);
             break;
         case Foot::ice:
-            footcolor = Color(140, 210, 255);
+            footcolor = Color(140, 210, 255, 200);
             break;
         case Foot::bounce:
-            footcolor = Color(60, 60, 60);
+            footcolor = Color(30, 30, 30);
             break;
         }
 
@@ -470,7 +470,7 @@ void Game::footDraw() const {
 
         switch (foots[i].type) {
         case Foot::norm:
-            footcolor = Color(10, 50 + foots[i].withDraw * 1.5, 50 + foots[i].withDraw * 1.5);
+            footcolor = Color(10, 90 + foots[i].withDraw * 1.5, 50 + foots[i].withDraw * 1.5);
             break;
         case Foot::pull:
             footcolor = Color(170, 100 + foots[i].withDraw * 1.5, 100 + foots[i].withDraw * 1.5);
@@ -479,10 +479,10 @@ void Game::footDraw() const {
             footcolor = Color(0, 100 + foots[i].withDraw * 1.5, 100 + foots[i].withDraw * 1.5);
             break;
         case Foot::ice:
-            footcolor = Color(140, 210, 255);
+            footcolor = Color(140, 210, 255, 200);
             break;
         case Foot::bounce:
-            footcolor = Color(60, 60, 60);
+            footcolor = Color(30, 30, 30);
             break;
         }
 
@@ -589,7 +589,7 @@ void Game::enemyUpdate() {
 
     enemy.move = sin(texturetime / 10.0) * 10;
 
-    if (-5 < player.posY - enemy.posY && player.posY - enemy.posY < 5 && enemy.attack == 0 && player.isGround)enemy.attack++;
+    if (-8 < player.posY - enemy.posY && player.posY - enemy.posY < 8 && enemy.attack == 0 && player.isGround)enemy.attack++;
     if (enemy.posY > player.posY - 500 && enemy.attack <= 0 && !enemyWait) {
         enemy.posY += (player.posY - enemy.posY) / 50.0;
     }

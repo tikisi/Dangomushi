@@ -4,7 +4,7 @@ void GameClear::update()
 {
     gameClearTex.draw(0, 0);
     //gameClearTex
-    if (SimpleGUI::ButtonAt(U"タイトルへ", Scene::Center().movedBy(-100, 200))) {
+    if (SimpleGUI::ButtonAt(U"タイトルへ", Scene::Center().movedBy(-100, 200)) || KeyEnter.down()) {
         AudioAsset(U"GameOver_BGM").stop();
         changeScene(State::Title);
     }
