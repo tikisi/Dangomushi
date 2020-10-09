@@ -37,6 +37,10 @@ Game::Game(const InitData& init) : font30(30), nextEnemy(false), IScene(init) {
 
     // 敵の初期化
     enemyInit(0);
+
+    
+    // updateを呼ばないと初期化されない変数が存在するので
+    Game::update();
 }
 
 
