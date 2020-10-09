@@ -37,6 +37,7 @@ Game::Game(const InitData& init) : font30(30), nextEnemy(false), IScene(init) {
 
     // 敵の初期化
     enemyInit(0);
+    enemyOff();
     
     // updateを呼ばないと初期化されない変数が存在するので
     Game::update();
@@ -572,7 +573,7 @@ void Game::itemDraw() const {
 void Game::enemyInit(bool type) {
     enemy.isRight = RandomBool(0.5);
     enemy.type = type;
-    enemy.posY = player.posY - 600;
+    enemy.posY = player.posY + 600;
     enemy.attack = -300;
     enemy.move = 0;
 }
