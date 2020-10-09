@@ -35,6 +35,7 @@ struct GameData
         dataLv = 1;
         highscore = 0;
         releasedChara = 3;
+        selectedLv = 1;
     }
 };
 
