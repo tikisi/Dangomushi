@@ -42,8 +42,7 @@ public:
         //species++;
         //早くクリアしたら
         //species++;
-        //species = getData().releasedChara;
-        species = 5;
+        species = getData().releasedChara;
 
 
         // 一回だけ 
