@@ -73,7 +73,7 @@ void BattleScene::bossInit() {
 
     boss.state = BossState::DownStop;
     boss.nState = boss.state;
-    boss.HP = 1;
+    boss.HP = 5;
     boss.isLeft = true;
 
     boss.animCount = 0;

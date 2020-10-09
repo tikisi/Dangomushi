@@ -281,9 +281,9 @@ void Game::playerUpdate() {
 
     // 落ちたとき
     if (player.posY > player.lowest + 300) {
-        //changeScene(State::GameOver);
+        changeScene(State::GameOver);
         getData().death++;
-        changeScene(State::BattleScene);
+        //changeScene(State::BattleScene);
     }
 }
 
