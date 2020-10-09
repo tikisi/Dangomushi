@@ -42,7 +42,8 @@ public:
         //species++;
         //早くクリアしたら
         //species++;
-        species = getData().releasedChara;
+        //species = getData().releasedChara;
+        species = 5;
 
 
         // 一回だけ 
@@ -316,23 +317,23 @@ public:
         //名前と説明
         if (SelectNUM == 1) {
             font60(U"ダンゴムシ").drawAt(200, 100, Palette::White);
-            font30(U"txt1").draw(40, 150, Palette::White);
+            font20(U"エビが最強って\n何かエビデンスあるんですか？").draw(40, 150, Palette::White);
         }
         else if (SelectNUM == 2) {
-            //font60(U"エビ").drawAt(200, 100, Palette::White);
-            //font30(U"txt2").draw(40, 150, Palette::White);
+            font60(U"エビ").drawAt(200, 100, Palette::White);
+            font20(U"それってあなたの感想ですよね？").draw(40, 150, Palette::White);
         }
         else if (SelectNUM == 3) {
             font60(U"ヤドカリ").drawAt(200, 100, Palette::White);
-            font30(U"txt3").draw(40, 150, Palette::White);
+            font20(U"(^_-)-☆").draw(40, 150, Palette::White);
         }
         else if (SelectNUM == 4 && 4 <= species) {
             font60(U"虹ダンゴムシ").drawAt(200, 100, Palette::White);
-            font30(U"txt4").draw(40, 150, Palette::White);
+            font20(U"１６８０万色\n（具体的には16777216色）の輝き").draw(40, 150, Palette::White);
         }
         else if (SelectNUM == 5 && 5 <= species) {
             font60(U"クロワッサン").drawAt(200, 100, Palette::White);
-            font30(U"txt5").draw(40, 150, Palette::White);
+            font20(U"あのー、…何だろう、\nウソつくのやめてもらっていいすか？\nあなた五色ですよね？").draw(40, 150, Palette::White);
         }
         else font60(U"???").drawAt(200, 100, Palette::White);
 
