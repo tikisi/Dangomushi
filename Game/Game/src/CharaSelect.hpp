@@ -26,6 +26,7 @@ private:
 
     Font font30;
     Font font60;
+    Font font20;
 
     // Stage選択Window
     bool isWindow;  // ステージ選択Windowを表示するか
@@ -34,7 +35,7 @@ private:
 public:
 
     CharaSelect(const InitData& init)
-        : font30(30), font60(60), IScene(init)
+        : font30(30), font60(60), font20(20, Typeface::Bold), IScene(init)
     {
 
         //if(species=<4)
@@ -105,8 +106,12 @@ public:
     {
         if (isWindow == false) {
             // キャラ選択完了
-            if (SelectNUM <= species) {
-                if ((SimpleGUI::Button(U"Start", Point(500, 500), unspecified)) || KeyEnter.down()) {
+            if (SelectNUM <= species){
+                RoundRect(450, 495,220,45,10).draw(Palette::White);
+                font20(U"[Enter] GameStart").draw(460, 500, Palette::Black);
+
+                if (KeyEnter.down()) {
+                    RoundRect(450, 495, 220, 45, 10).drawFrame(3, 3, Palette::Yellow);
                     getData().SelectNum = SelectNUM;
                     isWindow = true;
                 }
