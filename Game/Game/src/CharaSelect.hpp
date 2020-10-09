@@ -47,43 +47,43 @@ public:
 
 
         // 一回だけ 
-        s1dango = Texture(U"player/dangomushi/s1dangomushi.png");
-        s2dango = Texture(U"player/dangomushi/s2dangomushi.png");
-        j1dango = Texture(U"player/dangomushi/j1dangomushi.png");
-        j2dango = Texture(U"player/dangomushi/j2dangomushi.png");
-        j3dango = Texture(U"player/dangomushi/j3dangomushi.png");
+        s1dango = TextureAsset(U"player11");
+        s2dango = TextureAsset(U"player12");
+        j1dango = TextureAsset(U"player15");
+        j2dango = TextureAsset(U"player14");
+        j3dango = TextureAsset(U"player15");
 
-        s1ebi = Texture(U"player/ebi/s1ebi.png");
-        s2ebi = Texture(U"player/ebi/s2ebi.png");
-        j1ebi = Texture(U"player/ebi/j1ebi.png");
-        j2ebi = Texture(U"player/ebi/j2ebi.png");
-        j3ebi = Texture(U"player/ebi/j3ebi.png");
-        j4ebi = Texture(U"player/ebi/j4ebi.png");
+        s1ebi = TextureAsset(U"player21");
+        s2ebi = TextureAsset(U"player22");
+        j1ebi = TextureAsset(U"player25");
+        j2ebi = TextureAsset(U"player26");
+        j3ebi = TextureAsset(U"player27");
+        j4ebi = TextureAsset(U"player28");
 
-        s1yado = Texture(U"player/yadokari/s1yadokari.png");
-        s2yado = Texture(U"player/yadokari/s2yadokari.png");
-        j1yado = Texture(U"player/yadokari/j1yadokari.png");
-        j2yado = Texture(U"player/yadokari/j2yadokari.png");
-        j3yado = Texture(U"player/yadokari/j3yadokari.png");
-        j4yado = Texture(U"player/yadokari/j4yadokari.png");
+        s1yado = TextureAsset(U"player31");
+        s2yado = TextureAsset(U"player32");
+        j1yado = TextureAsset(U"player35");
+        j2yado = TextureAsset(U"player36");
+        j3yado = TextureAsset(U"player37");
+        j4yado = TextureAsset(U"player38");
 
-        s1gdango = Texture(U"player/gdangomushi/s1gdangomushi.png");
-        s2gdango = Texture(U"player/gdangomushi/s2gdangomushi.png");
-        s3gdango = Texture(U"player/gdangomushi/s3gdangomushi.png");
-        s4gdango = Texture(U"player/gdangomushi/s4gdangomushi.png");
-        s5gdango = Texture(U"player/gdangomushi/s5gdangomushi.png");
-        j1gdango = Texture(U"player/gdangomushi/j1gdangomushi.png");
-        j2gdango = Texture(U"player/gdangomushi/j2gdangomushi.png");
-        j3gdango = Texture(U"player/gdangomushi/j3gdangomushi.png");
-        j4gdango = Texture(U"player/gdangomushi/j4gdangomushi.png");
-        j5gdango = Texture(U"player/gdangomushi/j5gdangomushi.png");
+        s1gdango = TextureAsset(U"player41");
+        s2gdango = TextureAsset(U"player42");
+        s3gdango = TextureAsset(U"player43");
+        s4gdango = TextureAsset(U"player44");
+        s5gdango = TextureAsset(U"player41");
+        j1gdango = TextureAsset(U"player45");
+        j2gdango = TextureAsset(U"player46");
+        j3gdango = TextureAsset(U"player47");
+        j4gdango = TextureAsset(U"player48");
+        j5gdango = TextureAsset(U"player45");
 
-        s1kurowa = Texture(U"player/kurowassan/s1kurowassan.png");
-        s2kurowa = Texture(U"player/kurowassan/s2kurowassan.png");
-        j1kurowa = Texture(U"player/kurowassan/j1kurowassan.png");
-        j2kurowa = Texture(U"player/kurowassan/j2kurowassan.png");
-        j3kurowa = Texture(U"player/kurowassan/j3kurowassan.png");
-        j4kurowa = Texture(U"player/kurowassan/j4kurowassan.png");
+        s1kurowa = TextureAsset(U"player51");
+        s2kurowa = TextureAsset(U"player52");
+        j1kurowa = TextureAsset(U"player55");
+        j2kurowa = TextureAsset(U"player56");
+        j3kurowa = TextureAsset(U"player57");
+        j4kurowa = TextureAsset(U"player58");
 
         walkCount = 0;
         jumpCount = 0;
@@ -96,6 +96,8 @@ public:
 
         isWindow = false;
         stageSelecter = getData().selectedLv;
+
+        CharaSelect::update();
     }
 
     ~CharaSelect() {

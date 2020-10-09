@@ -14,7 +14,7 @@ private:
 
 public:
 
-    GameOver(const InitData& init) : gameOverTex(U"GameOverBack.png"), gameClearTex(U"StageClear.jpeg"), font50(50), font20(20, Typeface::Bold), IScene(init) {
+    GameOver(const InitData& init) : gameOverTex(U"asset/GameOverBack.png"), gameClearTex(U"asset/StageClear.jpeg"), font50(50), font20(20, Typeface::Bold), IScene(init) {
         AudioAsset(U"GameOver_BGM").play();
     }
 

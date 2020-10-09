@@ -3,24 +3,24 @@
 
 Game::Game(const InitData& init) : font30(30), nextEnemy(false), IScene(init) {
     // 背景読み込み
-    ground = Texture(U"ground.png");
-    sunset = Texture(U"pixelsunset.png");
-    earth = Texture(U"earthh.png");
-    white = Texture(U"pixelwhite.png");
+    ground = Texture(U"asset/ground.png");
+    sunset = Texture(U"asset/pixelsunset.png");
+    earth = Texture(U"asset/earthh.png");
+    white = Texture(U"asset/pixelwhite.png");
 
     // 塔読み込み
     for (int i = 0; i < TW_NUM; i++) {
-        tower[i] = Texture(U"tower" + Format(i + 1) + U".png");
+        tower[i] = Texture(U"asset/tower" + Format(i + 1) + U".png");
     }
 
     // 敵読み込み
-    crow1 = Texture(U"crow1.png");
-    crow2 = Texture(U"crow2.png");
-    crowcharge1 = Texture(U"crowcharge1.png");
-    crowcharge2 = Texture(U"crowcharge2.png");
+    crow1 = Texture(U"asset/enemy/crow1.png");
+    crow2 = Texture(U"asset/enemy/crow2.png");
+    crowcharge1 = Texture(U"asset/enemy/crowcharge1.png");
+    crowcharge2 = Texture(U"asset/enemy/crowcharge2.png");
 
-    cubicRed = Texture(U"boxRed.png");
-    cubicBlue = Texture(U"boxBlue.png");
+    cubicRed = Texture(U"asset/enemy/boxRed.png");
+    cubicBlue = Texture(U"asset/enemy/boxBlue.png");
     cubic = cubicBlue;
 
     AudioAsset(U"Main_BGM").setLoop(true);

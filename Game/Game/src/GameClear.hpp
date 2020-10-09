@@ -13,7 +13,7 @@ private:
 
 public:
 
-    GameClear(const InitData& init) : gameClearTex(U"GameClear.jpg"), font50(50), font20(20, Typeface::Bold), IScene(init) {
+    GameClear(const InitData& init) : gameClearTex(U"asset/GameClear.jpg"), font50(50), font20(20, Typeface::Bold), IScene(init) {
         AudioAsset(U"GameOver_BGM").play();
     }
 

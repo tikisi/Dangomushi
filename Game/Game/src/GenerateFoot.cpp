@@ -381,6 +381,7 @@ int Game::generateLv5() {
 
 
 void Game::generateLv6Init() {
+    footWidth = 0.6;
     foots[0].type = Foot::Type::norm;
     foots[0].dirL = 5.28;
     foots[0].dirR = 4.23;
@@ -390,13 +391,13 @@ void Game::generateLv6Init() {
     foots[0].withDraw = 0.0;
 
     for (int i = 1; i < FT_NUM; i++) {
-        footWidth -= 0.003;
-        foots[i].height = 100;
+        footWidth -= 0.002;
+        foots[i].height = 70;
         foots[i].type = Foot::Type::ice;
         foots[i].dirR = foots[i != 0 ? i - 1 : FT_NUM - 1].dirL + Math::Pi / 5 + Random<double>(Math::Pi / 2);
         //foots[i].dirL = foots[i].dirR + 0.2;
         foots[i].dirL = foots[i].dirR + footWidth;
-        foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - 50;
+        foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - Random<int>(40,50);
 
         foots[i].time = 0.0;
         foots[i].withDraw = 0.0;
@@ -406,15 +407,15 @@ void Game::generateLv6Init() {
 int Game::generateLv6() {
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].drawPosY > 1000) {
-            footWidth -= 0.003;
+            footWidth -= 0.002;
             foots[i].type = Foot::Type::ice;
-            foots[i].height = 100;
+            foots[i].height = 70;
 
             foots[i].dirR = foots[i != 0 ? i - 1 : FT_NUM - 1].dirL + Math::Pi / 5 + Random<double>(Math::Pi / 2);
             //foots[i].dirL = foots[i].dirR + 0.2;
             foots[i].dirL = foots[i].dirR + footWidth;
 
-            foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - 50;
+            foots[i].posY = foots[i != 0 ? i - 1 : FT_NUM - 1].posY - Random<int>(40,50);
             foots[i].time = 0.0;
             foots[i].withDraw = 0.0;
             return i;

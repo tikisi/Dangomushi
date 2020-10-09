@@ -199,9 +199,9 @@ void BattleScene::playerInit() {
         spinning3 = TextureAsset(U"player" + Format(selectNum) + Format(7));
         spinning4 = TextureAsset(U"player" + Format(selectNum) + Format(8));
     dango = walking1;
-    background = Texture(U"pixelwhite.png");
+    background = Texture(U"asset/pixelwhite.png");
 
-    TextureAsset::Register(U"heart", U"pixelheart.png");
+    TextureAsset::Register(U"heart", U"asset/pixelheart.png");
 }
 
 void BattleScene::playerUpdate() {
