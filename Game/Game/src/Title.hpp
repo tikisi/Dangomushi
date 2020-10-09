@@ -21,7 +21,7 @@ private:
 
 public:
 
-	Title(const InitData& init) : backTexture(U"Title.png") ,font40(40), font30(30), font25(25), IScene(init) {
+	Title(const InitData& init) : backTexture(U"asset/Title.png") ,font40(40), font30(30), font25(25), IScene(init) {
 		Scene::SetBackground(Palette::Black);
 		LoadSaveData(getData());
 
