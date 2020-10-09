@@ -426,6 +426,7 @@ void Game::footUpdate() {
             if(Lv == 1) footWidth = 7.0;
             else if(Lv == 4) footWidth = 5.0;
             isReachEnemyPos = false;
+            enemyOff();
             switchGenerateFoot(Lv);
         }
     }

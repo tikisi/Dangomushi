@@ -81,11 +81,9 @@ void Game::generateLv1Init() {
 
 // ビームが出るのは途中からにしたい
 int Game::generateLv1() {
-//    if (!isReachEnemyPos && ((int)-player.posY + 2) % 10000 > 5000) {
-//        isReachEnemyPos = true;
-//        enemyOn(0, 300);
-//    }
-    enemyOn(0,300);
+    if (((int)-player.posY + 2) > 5000) {
+        enemyOn(0, 300);
+    }
 
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].drawPosY > 1000) {
@@ -143,11 +141,10 @@ void Game::generateLv2Init() {
 }
 
 int Game::generateLv2() {
-    /*// 敵の生成
-    if (!isReachEnemyPos && (int)-player.posY % 10000 > 2000) {
-        isReachEnemyPos = true;
+    // 敵の生成
+    if ((int)-player.posY > (Lv - 1) * 10000 + 2000) {
         enemyOn(1, 300);
-    }*/
+    }
     for (int i = 0; i < FT_NUM; i++) {
         if (foots[i].drawPosY > 1000) {
 
@@ -205,8 +202,7 @@ void Game::generateLv3Init() {
 }
 
 int Game::generateLv3() {
-    if (!isReachEnemyPos && ((int)-player.posY + 2) % 10000 > 1000) {
-        isReachEnemyPos = true;
+    if (((int)-player.posY + 2) > (Lv - 1) * 10000 + 1000) {
         enemyOn(1, 300);
     }
     for (int i = 0; i < FT_NUM; i++) {
@@ -270,8 +266,7 @@ void Game::generateLv4Init() {
 }
 
 int Game::generateLv4() {
-    if (!isReachEnemyPos && ((int)-player.posY + 2) % 10000 > 5000) {
-        isReachEnemyPos = true;
+    if ((int)-player.posY + 2 > (Lv - 1) * 10000 + 5000) {
         enemyOn(1, 300);
     }
 
