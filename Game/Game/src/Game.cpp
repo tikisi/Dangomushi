@@ -37,7 +37,8 @@ Game::Game(const InitData& init) : font30(30), nextEnemy(false), IScene(init) {
 
     // 敵の初期化
     enemyInit(0);
-    
+    enemyOff();
+
     // updateを呼ばないと初期化されない変数が存在するので
     Game::update();
 }
@@ -98,21 +99,21 @@ void Game::backDraw() const {
 
     // 到達バー背景
     Rect(700, 0, 100, 600).draw(ColorF(0, 0, 0, 0.7));
-    
-    if(player.posY > -50000) Line(700, 100, 800, 100).draw(3, Palette::Lime);
+
+    if (player.posY > -50000) Line(700, 100, 800, 100).draw(3, Palette::Lime);
     else Line(700, 100, 800, 100).draw(3, Palette::Green);
-    if(player.posY > -40000) Line(700, 200, 800, 200).draw(3, Palette::Lime);
+    if (player.posY > -40000) Line(700, 200, 800, 200).draw(3, Palette::Lime);
     else Line(700, 200, 800, 200).draw(3, Palette::Green);
-    if(player.posY > -30000) Line(700, 300, 800, 300).draw(3, Palette::Lime);
+    if (player.posY > -30000) Line(700, 300, 800, 300).draw(3, Palette::Lime);
     else Line(700, 300, 800, 300).draw(3, Palette::Green);
-    if(player.posY > -20000) Line(700, 400, 800, 400).draw(3, Palette::Lime);
+    if (player.posY > -20000) Line(700, 400, 800, 400).draw(3, Palette::Lime);
     else Line(700, 400, 800, 400).draw(3, Palette::Green);
-    if(player.posY > -10000) Line(700, 500, 800, 500).draw(3, Palette::Lime);
+    if (player.posY > -10000) Line(700, 500, 800, 500).draw(3, Palette::Lime);
     else Line(700, 500, 800, 500).draw(3, Palette::Green);
-    
+
     // 到達バー
     Rect(705, 600 + 600.0 / 60000.0 * player.posY, 90, 5).draw(Palette::Red);
-    
+
 #ifdef DEBUG
     Print << back.alpha;
 #endif
@@ -180,9 +181,9 @@ void Game::playerInit() {
 
 
 void Game::playerUpdate() {
-    if(player.posY < -60000)changeScene(State::BattleScene);
+    if (player.posY < -60000)changeScene(State::BattleScene);
 #ifdef DEBUG
-    if (KeyUp.pressed()) 
+    if (KeyUp.pressed())
         player.speedY = 20;
 #endif
 
@@ -237,41 +238,41 @@ void Game::playerUpdate() {
     if (player.isGround) {
         // プレイヤーの歩くアニメーション
         double b = towerDir;
-//        bool walkflag = 0;
-//        while (b > 0) {
-//            walkflag = !walkflag;
-//            if (walkflag)dango = dango1;
-//            else dango = dango2;
-//            b -= Math::TwoPi / 144.0;
-//        }
-        
+        //        bool walkflag = 0;
+        //        while (b > 0) {
+        //            walkflag = !walkflag;
+        //            if (walkflag)dango = dango1;
+        //            else dango = dango2;
+        //            b -= Math::TwoPi / 144.0;
+        //        }
+
         int texChangeNum = 3;
         while (b > 0) {
             texChangeNum = texChangeNum > 3 ? texChangeNum == 0 : texChangeNum + 1;
             b -= Math::TwoPi / 72.0;
         }
-        
+
         switch (texChangeNum) {
-            case 1:
-                dango=walking1;
-                break;
-            case 2:
-                dango=walking2;
-                break;
-            case 3:
-                dango=walking3;
-                break;
-            case 4:
-                dango=walking4;
-                break;
-            default:
-                break;
+        case 1:
+            dango = walking1;
+            break;
+        case 2:
+            dango = walking2;
+            break;
+        case 3:
+            dango = walking3;
+            break;
+        case 4:
+            dango = walking4;
+            break;
+        default:
+            break;
         }
     }
     else {
         player.spinCount++;
         if (player.spinCount > 20)player.spinCount = 1;
-        
+
         //if (player.jump) dango = spinning1;
         if (player.spinCount <= 5)dango = spinning1;
         else if (player.spinCount <= 10)dango = spinning2;
@@ -284,6 +285,10 @@ void Game::playerUpdate() {
         changeScene(State::GameOver);
         getData().death++;
         //changeScene(State::BattleScene);
+    }
+
+    if (player.posY < 0) {
+        dataLv = Max(dataLv, ((int)-player.posY / 10000) + 1);
     }
 }
 
@@ -383,6 +388,7 @@ void Game::footInit() {
 
     // 足場の初期化
     Lv = getData().selectedLv;
+    dataLv = Lv;
 
     player.lowest = -(Lv - 1) * 10000;
     player.posY = -(Lv - 1) * 10000;
@@ -426,8 +432,8 @@ void Game::footUpdate() {
         // Lvに変更があったとき
         if (nLv != Lv) {
             Lv = std::max(nLv, Lv); // レベルが下がらないように
-            if(Lv == 1) footWidth = 7.0;
-            else if(Lv == 4) footWidth = 5.0;
+            if (Lv == 1) footWidth = 7.0;
+            else if (Lv == 4) footWidth = 5.0;
             isReachEnemyPos = false;
             enemyOff();
             switchGenerateFoot(Lv);
@@ -572,7 +578,7 @@ void Game::itemDraw() const {
 void Game::enemyInit(bool type) {
     enemy.isRight = RandomBool(0.5);
     enemy.type = type;
-    enemy.posY = player.posY - 600;
+    enemy.posY = player.posY + 600;
     enemy.attack = -300;
     enemy.move = 0;
 }
@@ -631,7 +637,7 @@ void Game::enemyUpdate() {
 
     //レーザーでゲームオーバー
     Line lazer(0, enemy.drawPosY + 30, 650, enemy.drawPosY + 30);
-    if (50 < enemy.attack && enemy.attack < 100 && lazer.intersects(playerrect) && enemy.type == 0){
+    if (50 < enemy.attack && enemy.attack < 100 && lazer.intersects(playerrect) && enemy.type == 0) {
         getData().death++;
         changeScene(State::GameOver);
     }
@@ -657,11 +663,11 @@ void Game::enemyDraw() const {
     }
 }
 
-void Game::enemyOff(){
+void Game::enemyOff() {
     enemyWait = 1;
 }
 
-void Game::enemyOn(bool type, int period){
+void Game::enemyOn(bool type, int period) {
     enemyWait = 0;
     enemyPeriod = period;
     enemy.type = type;
@@ -685,12 +691,12 @@ bool Game::isFront(double arg) {
     else return false;
 }
 
-void Game::loadPlayer(int selectNum) {    
+void Game::loadPlayer(int selectNum) {
     walking1 = TextureAsset(U"player" + Format(selectNum) + Format(1));
     walking2 = TextureAsset(U"player" + Format(selectNum) + Format(2));
     walking3 = TextureAsset(U"player" + Format(selectNum) + Format(3));
     walking4 = TextureAsset(U"player" + Format(selectNum) + Format(4));
-    
+
     spinning1 = TextureAsset(U"player" + Format(selectNum) + Format(5));
     spinning2 = TextureAsset(U"player" + Format(selectNum) + Format(6));
     spinning3 = TextureAsset(U"player" + Format(selectNum) + Format(7));
