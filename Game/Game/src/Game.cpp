@@ -36,7 +36,7 @@ Game::Game(const InitData& init) : font30(30), nextEnemy(false), IScene(init) {
     itemInit();
 
     // 敵の初期化
-    //    enemyInit(0);
+    enemyInit(0);
 }
 
 
