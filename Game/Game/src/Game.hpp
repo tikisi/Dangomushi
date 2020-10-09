@@ -74,7 +74,8 @@ private:
     Texture footTextures[FT_TEX_NUM];
     double footWidth; // 足場の横幅
     bool isReachEnemyPos; // 敵が出現する位置まで到達したか
-    int Lv;
+    int Lv;         // 足場生成レベル
+    int dataLv;     // 到達LV
 
 
     // アイテム
@@ -88,7 +89,9 @@ public:
         // ハイスコア更新
         getData().highscore = 
             Max(getData().highscore, (uint32)(player.posY < 0 ? -player.posY : 0));
-        getData().dataLv = Max((uint32)Lv, getData().dataLv);
+        getData().dataLv = Max(getData().dataLv, 
+            (uint32)dataLv
+        );
         if(getData().dataLv > 3) getData().releasedChara = Max(getData().releasedChara, 4U);
         if(getData().dataLv > 7) getData().releasedChara = 5;
         // セーブ
