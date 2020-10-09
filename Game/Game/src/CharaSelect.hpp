@@ -94,7 +94,7 @@ public:
         posY = 410;
 
         isWindow = false;
-        stageSelecter = 1;
+        stageSelecter = getData().selectedLv;
     }
 
     ~CharaSelect() {

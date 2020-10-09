@@ -26,7 +26,7 @@ public:
 		LoadSaveData(getData());
 
 		selecter1 = 0; 
-		selecter2 = 1;
+		selecter2 = getData().selectedLv;
 		isWindow = false;
 
 		AudioAsset(U"Title").setLoop(true);
