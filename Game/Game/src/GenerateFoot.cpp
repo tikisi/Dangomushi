@@ -275,6 +275,7 @@ int Game::generateLv4() {
             // 足場の幅更新
             if (footWidth > 9.0) footWidth = 9.0;
             else footWidth += 0.05;
+            foots[i].withDraw = 0.0;
 
             foots[i].type = Foot::Type::ice;
 
