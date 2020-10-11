@@ -90,7 +90,7 @@ public:
         orLeft = true;
         speedX = 0;
         speedY = 0;
-        posX = 550;
+        posX = 400;
         posY = 410;
 
         isWindow = false;
@@ -108,11 +108,11 @@ public:
         if (isWindow == false) {
             // キャラ選択完了
             if (SelectNUM <= species){
-                RoundRect(450, 495,220,45,10).draw(Palette::White);
-                font20(U"[Enter] GameStart").draw(460, 500, Palette::Black);
+                RoundRect(300, 495,220,45,10).draw(Palette::White);
+                font20(U"[Enter] GameStart").draw(310, 500, Palette::Black);
 
                 if (KeyEnter.down()) {
-                    RoundRect(450, 495, 220, 45, 10).drawFrame(3, 3, Palette::Yellow);
+                    RoundRect(300, 495, 220, 45, 10).drawFrame(3, 3, Palette::Yellow);
                     getData().SelectNum = SelectNUM;
                     isWindow = true;
                 }
@@ -146,12 +146,12 @@ public:
 
             if (10 < walkCount) walkCount = 0;
 
-            if (posX < 435) {
-                posX = 435;
+            if (posX < 285) {
+                posX = 285;
                 speedX = 0;
             }
-            if (665 < posX) {
-                posX = 665;
+            if (515 < posX) {
+                posX = 515;
                 speedX = 0;
             }
 
@@ -270,7 +270,7 @@ public:
         Scene::SetBackground(ColorF(Palette::Black));
 
         //モデルの動く枠
-        Rect(400, 100, 300, 360).draw(Palette::Blue).drawFrame(5, 0, Palette::White);
+        Rect(250, 100, 300, 360).draw(Palette::Blue).drawFrame(5, 0, Palette::White);
 
         if (SelectNUM <= species) {
             if (orLeft) model_player.scaled(1.2).drawAt(posX, posY);
@@ -281,42 +281,42 @@ public:
             else model_player.mirrored().scaled(1.2).drawAt(posX, posY, Palette::Black);
         }
 
-        Triangle(550, 110, 540, 115, 560, 115).draw(Palette::White);
-        Triangle(550, 450, 540, 445, 560, 445).draw(Palette::White);
+        Triangle(400, 110, 390, 115, 410, 115).draw(Palette::White);
+        Triangle(400, 450, 390, 445, 410, 445).draw(Palette::White);
 
         //キャラ一覧部分
         for (int i = 1; i <= 5; i++) {
-            Rect(Arg::center(750, 60 + 80 * i), 60, 60).draw(Palette::Skyblue);
+            Rect(Arg::center(600, 60 + 80 * i), 60, 60).draw(Palette::Skyblue);
         }
-        Rect(Arg::center(750, 60 + 80 * SelectNUM), 80, 80).draw(Palette::Lemonchiffon); //.drawFrame(3, 0, Palette::Yellow);
+        Rect(Arg::center(600, 60 + 80 * SelectNUM), 80, 80).draw(Palette::Lemonchiffon); //.drawFrame(3, 0, Palette::Yellow);
 
-        s1dango.scaled(0.7).drawAt(750, 140);
+        s1dango.scaled(0.7).drawAt(600, 140);
 
-        s1ebi.scaled(0.7).drawAt(750, 220);
+        s1ebi.scaled(0.7).drawAt(600, 220);
 
-        s1yado.scaled(0.7).drawAt(750, 300);
+        s1yado.scaled(0.7).drawAt(600, 300);
 
         if (species < 4) {
-            s1gdango.scaled(0.7).drawAt(750, 380, Palette::Black);
+            s1gdango.scaled(0.7).drawAt(600, 380, Palette::Black);
         }
         else {
-            s1gdango.scaled(0.7).drawAt(750, 380);
+            s1gdango.scaled(0.7).drawAt(600, 380);
         }
 
         if (species < 5) {
-            s1kurowa.scaled(0.7).drawAt(750, 460, Palette::Black);
+            s1kurowa.scaled(0.7).drawAt(600, 460, Palette::Black);
         }
         else {
-            s1kurowa.scaled(0.7).drawAt(750, 460);
+            s1kurowa.scaled(0.7).drawAt(600, 460);
         }
         //選択中のキャラ
         if (SelectNUM <= species)
-            pickup_sub.scaled(0.7 * 1.4).drawAt(750, 60 + 80 * SelectNUM);
+            pickup_sub.scaled(0.7 * 1.4).drawAt(600, 60 + 80 * SelectNUM);
         else
-            pickup_sub.scaled(0.7 * 1.4).drawAt(750, 60 + 80 * SelectNUM, Palette::Black);
+            pickup_sub.scaled(0.7 * 1.4).drawAt(600, 60 + 80 * SelectNUM, Palette::Black);
 
         //名前と説明
-        if (SelectNUM == 1) {
+        /*if (SelectNUM == 1) {
             font60(U"ダンゴムシ").drawAt(200, 100, Palette::White);
             font20(U"エビが最強って\n何かエビデンスあるんですか？").draw(40, 150, Palette::White);
         }
@@ -336,7 +336,7 @@ public:
             font60(U"クロワッサン").drawAt(200, 100, Palette::White);
             font20(U"あのー、…何だろう、\nウソつくのやめてもらっていいすか？\nあなた五色ですよね？").draw(40, 150, Palette::White);
         }
-        else font60(U"???").drawAt(200, 100, Palette::White);
+        else font60(U"???").drawAt(200, 100, Palette::White);*/
 
         // ステージ選択画面
         if (isWindow) {
