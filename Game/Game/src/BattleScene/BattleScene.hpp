@@ -35,6 +35,7 @@ private:
     
 public:
     BattleScene(const InitData& init);
+    ~BattleScene() {WriteSaveData(getData());}
 
     void update() override;
 

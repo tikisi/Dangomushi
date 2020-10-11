@@ -93,7 +93,6 @@ public:
             (uint32)dataLv
         );
         if(getData().dataLv > 3) getData().releasedChara = Max(getData().releasedChara, 4U);
-        if(getData().dataLv > 7) getData().releasedChara = 5;
         // セーブ
         WriteSaveData(getData());
 

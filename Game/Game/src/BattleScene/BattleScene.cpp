@@ -358,6 +358,7 @@ void BattleScene::bossIntersects() {
             shotManager.deleteAll();
             boss.nState = BossState::DownToUp1;
             if (--boss.HP == 0) {
+                getData().releasedChara = 5U;
                 changeScene(State::GameClear);
             }
         }
