@@ -49,7 +49,7 @@ public:
         s1dango = TextureAsset(U"player11");
         s2dango = TextureAsset(U"player12");
         j1dango = TextureAsset(U"player15");
-        j2dango = TextureAsset(U"player14");
+        j2dango = TextureAsset(U"player16");
         j3dango = TextureAsset(U"player15");
 
         s1ebi = TextureAsset(U"player21");
