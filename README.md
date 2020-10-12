@@ -4,3 +4,6 @@
 <div align="center">
 <img src="https://user-images.githubusercontent.com/47716155/95663278-e3289200-0b78-11eb-9262-cdfe1683b35c.png" width="300">
 </div>
+
+以下からダウンロードできます。
+http://pandd.sakura.ne.jp/games/gakusai/PandD2020Autumn.zip
